@@ -11,6 +11,7 @@
 # =====================================================================
 $ErrorActionPreference = "Continue"
 $Root = Split-Path -Parent $PSScriptRoot
+try { Start-Transcript -Path (Join-Path $Root "start.log") -Force | Out-Null } catch { }
 
 if (-not (Test-Path (Join-Path $Root ".env"))) {
     Write-Host "[ERREUR] Fichier .env absent : lancez d'abord scripts\setup.ps1" -ForegroundColor Red
@@ -66,3 +67,4 @@ if ($frontOk) {
     Start-Process "http://localhost:61748"
 }
 Write-Host "Au premier demarrage, le mot de passe admin est celui de ADMIN_PASSWORD dans .env" -ForegroundColor Gray
+try { Stop-Transcript | Out-Null } catch { }

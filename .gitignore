@@ -90,3 +90,7 @@ nlp/tests/__pycache__/
 .venv/
 nlp/.venv/
 scripts/local-config.ps1
+
+# Journaux des scripts
+setup.log
+start.log

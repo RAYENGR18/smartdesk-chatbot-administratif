@@ -34,11 +34,14 @@ Navigateur ──► Frontend Angular 21  (http://localhost:61748)
 Prérequis : **Java 17+**, **Node.js 22 LTS**, **Python 3.12**, **PostgreSQL 18** —
 détails dans [INSTALL.md](INSTALL.md).
 
-```powershell
-# 1. Installation (une seule fois) : .env, base de données, dépendances
-powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
+1. **Première fois** : double-cliquer sur `scripts\installer.cmd`
+   (crée `.env`, la base de données, installe les dépendances puis lance l'application).
+2. **Les fois suivantes** : double-cliquer sur `scripts\demarrer.cmd`.
 
-# 2. Lancement des 3 services
+Équivalent en ligne de commande :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
 powershell -ExecutionPolicy Bypass -File scripts\start.ps1
 ```
 

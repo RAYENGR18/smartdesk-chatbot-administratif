@@ -26,10 +26,18 @@ $ErrorActionPreference = "Continue"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
+# Journal de l'installation (les mots de passe saisis n'y apparaissent pas)
+try { Start-Transcript -Path (Join-Path $Root "setup.log") -Force | Out-Null } catch { }
+
 function Write-Step([string]$msg) { Write-Host ""; Write-Host "==> $msg" -ForegroundColor Cyan }
 function Write-Ok([string]$msg) { Write-Host "    [OK] $msg" -ForegroundColor Green }
 function Write-Warn([string]$msg) { Write-Host "    [!] $msg" -ForegroundColor Yellow }
-function Fail([string]$msg) { Write-Host ""; Write-Host "[ERREUR] $msg" -ForegroundColor Red; exit 1 }
+function Fail([string]$msg) {
+    Write-Host ""; Write-Host "[ERREUR] $msg" -ForegroundColor Red
+    Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
+    try { Stop-Transcript | Out-Null } catch { }
+    exit 1
+}
 
 function New-Secret([int]$bytes = 48) {
     $b = New-Object byte[] $bytes
@@ -146,7 +154,10 @@ if (Test-Path $envFile) {
 
     Write-Host "    Cle Groq (https://console.groq.com/keys) - collez-la puis Entree," -ForegroundColor Gray
     Write-Host "    ou laissez vide pour la renseigner plus tard dans .env :" -ForegroundColor Gray
-    $groq = Read-Host "    GROQ_API_KEY"
+    $groqSecure = Read-Host "    GROQ_API_KEY" -AsSecureString
+    $gbstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($groqSecure)
+    $groq = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($gbstr)
+    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($gbstr)
     if ($groq) {
         $groq = $groq.Trim()
         $content = $content -replace '(?m)^GROQ_API_KEY=[^\r\n]*', ("GROQ_API_KEY=" + $groq)
@@ -262,5 +273,7 @@ if ($generatedAdminPassword) {
 if (-not $envValues["GROQ_API_KEY"]) {
     Write-Warn "GROQ_API_KEY est vide : renseignez-la dans .env pour activer les reponses de l'IA."
 }
-Write-Host "  Lancement : powershell -ExecutionPolicy Bypass -File scripts\start.ps1" -ForegroundColor Cyan
+Write-Host "  Lancement : double-cliquez sur scripts\demarrer.cmd" -ForegroundColor Cyan
 Write-Host ""
+try { Stop-Transcript | Out-Null } catch { }
+exit 0

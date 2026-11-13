@@ -15,11 +15,10 @@ le script d'installation vous le demandera une fois pour créer la base.
 
 ## 2. Installation automatique
 
-Dans PowerShell, depuis le dossier du projet :
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
-```
+Double-cliquez sur **`scripts\installer.cmd`** (ou, dans PowerShell depuis le dossier du projet :
+`powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`).
+Les saisies (mot de passe `postgres`, clé Groq) sont masquées : rien ne s'affiche pendant la frappe, c'est normal.
+Le déroulé est enregistré dans `setup.log` (sans les mots de passe).
 
 Le script :
 
@@ -41,9 +40,7 @@ powershell -ExecutionPolicy Bypass -File scripts\setup.ps1 -SkipDatabase
 
 ## 3. Lancement
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\start.ps1
-```
+Double-cliquez sur **`scripts\demarrer.cmd`** (ou `powershell -ExecutionPolicy Bypass -File scripts\start.ps1`).
 
 Trois fenêtres s'ouvrent (NLP, backend, frontend), puis le navigateur sur
 http://localhost:61748.
