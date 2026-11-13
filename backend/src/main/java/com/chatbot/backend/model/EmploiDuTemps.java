@@ -1,6 +1,7 @@
 package com.chatbot.backend.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -45,9 +46,19 @@ public class EmploiDuTemps {
     @JoinColumn(name = "filiere_id", nullable = false)
     private Filiere filiere;
 
-    // Professeur assigné
+    // Niveau d'études concerné (L1, L2, M1...) : un étudiant ne voit que
+    // les créneaux de SA filière et de SON niveau
+    @Column(length = 10)
+    private String niveau;
+
+    // Professeur assigné (seuls ses nom et prénom sont exposés dans l'emploi du temps)
     @ManyToOne
     @JoinColumn(name = "professeur_id")
+    @JsonIgnoreProperties(value = {"email", "cin", "phone", "address", "gender", "nationality", "birthDate",
+            "birthPlace", "studentId", "fieldOfStudy", "academicLevel", "academicYear", "institution",
+            "faculty", "department", "filieresProfesseur", "matieresEnseignees", "fatherName", "motherName",
+            "bacType", "scholarship", "additionalInfo", "createdAt", "filiere", "niveau", "role",
+            "hibernateLazyInitializer", "handler"}, allowSetters = true)
     private User professeur;
 
     // Groupe (ex: Groupe A, Groupe B pour les TD)

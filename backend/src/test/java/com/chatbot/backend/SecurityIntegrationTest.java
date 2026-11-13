@@ -1,6 +1,11 @@
 package com.chatbot.backend;
 
+import com.chatbot.backend.model.Filiere;
 import com.chatbot.backend.model.Notification;
+import com.chatbot.backend.registre.RegistreEtablissement;
+import com.chatbot.backend.registre.RegistreEtablissementRepository;
+import com.chatbot.backend.registre.TypePersonne;
+import com.chatbot.backend.repository.FiliereRepository;
 import com.chatbot.backend.model.User;
 import com.chatbot.backend.repository.NotificationRepository;
 import com.chatbot.backend.repository.UserRepository;
@@ -43,6 +48,10 @@ class SecurityIntegrationTest {
     private UserRepository userRepository;
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private RegistreEtablissementRepository registreRepository;
+    @Autowired
+    private FiliereRepository filiereRepository;
 
     private String adminToken;
 
@@ -66,33 +75,51 @@ class SecurityIntegrationTest {
         return "Bearer " + token;
     }
 
-    /** Crée une identité via l'admin, inscrit le compte et renvoie son token. */
+    /** Ajoute la personne au registre de l'établissement, inscrit le compte et renvoie son token. */
     private String registerUser(String role) throws Exception {
         String suffix = UUID.randomUUID().toString().substring(0, 8);
-        String cin = "CIN" + suffix;
+        String cin = "T" + suffix.toUpperCase().replaceAll("[^A-Z0-9]", "0");
+        boolean etudiant = role.equals("USER");
+        Filiere filiere = filiereTest();
 
-        MvcResult idRes = mvc.perform(post("/api/admin/identities/generate")
-                        .header("Authorization", bearer(adminToken))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json.writeValueAsString(Map.of(
-                                "role", role, "firstName", "Prenom", "lastName", "Nom" + suffix, "cin", cin))))
-                .andExpect(status().isOk())
-                .andReturn();
-        String identifier = json.readTree(idRes.getResponse().getContentAsString()).get("identifier").asText();
+        RegistreEtablissement r = new RegistreEtablissement();
+        r.setCin(cin);
+        r.setNom("Nom" + suffix);
+        r.setPrenom("Prenom");
+        r.setType(etudiant ? TypePersonne.ETUDIANT : TypePersonne.PROFESSEUR);
+        if (etudiant) {
+            r.setFiliere(filiere.getCode());
+            r.setNiveau("L1");
+        }
+        registreRepository.save(r);
 
         String username = role.toLowerCase() + suffix;
+        Map<String, Object> body = new java.util.HashMap<>(Map.of(
+                "username", username,
+                "email", username + "@test.local",
+                "password", "Motdepasse-123",
+                "cin", cin,
+                "firstName", "Prenom",
+                "lastName", "Nom" + suffix,
+                "role", role));
+        if (etudiant) {
+            body.put("filiereId", filiere.getId());
+            body.put("niveau", "L1");
+        }
         mvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json.writeValueAsString(Map.of(
-                                "username", username,
-                                "email", username + "@test.local",
-                                "password", "Motdepasse-123",
-                                "cin", cin,
-                                "studentId", identifier,
-                                "role", role,
-                                "fieldOfStudy", "LIG"))))
+                        .content(json.writeValueAsString(body)))
                 .andExpect(status().isOk());
         return login(username, "Motdepasse-123");
+    }
+
+    private Filiere filiereTest() {
+        return filiereRepository.findByCode("TESTF").orElseGet(() -> {
+            Filiere f = new Filiere();
+            f.setCode("TESTF");
+            f.setNom("Filiere de test");
+            return filiereRepository.save(f);
+        });
     }
 
     private JsonNode me(String token) throws Exception {
@@ -230,15 +257,15 @@ class SecurityIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.writeValueAsString(Map.of(
                                 "username", "pirate", "email", "pirate@test.local",
-                                "password", "Motdepasse-123", "cin", "123",
-                                "studentId", "000000000000", "role", "ADMIN"))))
+                                "password", "Motdepasse-123", "cin", "12345678",
+                                "firstName", "A", "lastName", "B", "role", "ADMIN"))))
                 .andExpect(status().isBadRequest());
         // Mot de passe trop court
         mvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.writeValueAsString(Map.of(
                                 "username", "court", "email", "court@test.local",
-                                "password", "123", "cin", "123", "studentId", "1"))))
+                                "password", "123", "cin", "12345678", "firstName", "A", "lastName", "B"))))
                 .andExpect(status().isBadRequest());
     }
 

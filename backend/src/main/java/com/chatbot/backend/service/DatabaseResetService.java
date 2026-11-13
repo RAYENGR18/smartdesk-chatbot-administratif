@@ -27,20 +27,22 @@ public class DatabaseResetService {
     private final FiliereRepository filiereRepository;
     private final SalleRepository salleRepository;
     private final NotificationRepository notificationRepository;
-    private final UniversityIdentityRepository universityIdentityRepository;
     private final DocumentService documentService;
+    private final com.chatbot.backend.presence.PresenceRepository presenceRepository;
+    private final com.chatbot.backend.presence.ScanRfidRepository scanRfidRepository;
 
     @Transactional
     public void resetAll() {
         documentRepository.findAll().forEach(documentService::deleteFileQuietly);
 
         // Ordre : d'abord les entités qui référencent les autres
+        presenceRepository.deleteAllInBatch();
+        scanRfidRepository.deleteAllInBatch();
         noteRepository.deleteAllInBatch();
         chatMessageRepository.deleteAllInBatch();
         documentRepository.deleteAllInBatch();
         emploiDuTempsRepository.deleteAllInBatch();
         notificationRepository.deleteAllInBatch();
-        universityIdentityRepository.deleteAllInBatch();
 
         // Comptes non-admin (les tables de liaison sont vidées via l'entité)
         List<User> nonAdmins = userRepository.findAll().stream()

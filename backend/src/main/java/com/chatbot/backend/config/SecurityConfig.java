@@ -96,6 +96,9 @@ public class SecurityConfig {
                         // ── Public ─────────────────────────────────────────────
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/filieres", "/api/auth/niveaux").permitAll()
+                        // Lecteur RFID : authentifié par sa clé d'appareil (X-Device-Key), pas par JWT
+                        .requestMatchers(HttpMethod.POST, "/api/iot/rfid/scan").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
                         .requestMatchers("/error").permitAll()
 
@@ -112,6 +115,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/filieres/**", "/api/matieres/**", "/api/salles/**").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.PUT, "/api/filieres/**", "/api/matieres/**", "/api/salles/**").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.DELETE, "/api/filieres/**", "/api/matieres/**", "/api/salles/**").hasRole(ADMIN)
+                        .requestMatchers("/api/planning/filiere/**").hasAnyRole(ADMIN, "PROFESSEUR")
                         .requestMatchers("/api/planning/creneaux/**", "/api/planning/generer",
                                 "/api/planning/all", "/api/planning/salle/**",
                                 "/api/planning/salles-disponibles").hasRole(ADMIN)

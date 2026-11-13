@@ -36,6 +36,10 @@ public class Matiere {
     @Enumerated(EnumType.STRING)
     private TypeMatiere type = TypeMatiere.CM;
 
+    // Niveau d'études (L1, L2, M1...) ; vide = matière commune à tous les niveaux
+    @Column(length = 10)
+    private String niveau;
+
     // Many-to-Many: une matiere peut appartenir a plusieurs filieres
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

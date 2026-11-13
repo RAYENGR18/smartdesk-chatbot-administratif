@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -24,8 +23,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private static final SecureRandom RANDOM = new SecureRandom();
-
     private final UserRepository userRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final DocumentRepository documentRepository;
@@ -33,7 +30,6 @@ public class AdminController {
     private final SalleRepository salleRepository;
     private final MatiereRepository matiereRepository;
     private final EmploiDuTempsRepository emploiDuTempsRepository;
-    private final UniversityIdentityRepository universityIdentityRepository;
     private final DatabaseResetService resetService;
     private final UserAdminService userAdminService;
 
@@ -147,57 +143,8 @@ public class AdminController {
         return ResponseEntity.ok(userRepository.findByRole(User.Role.PROFESSEUR));
     }
 
-    // GÉNÉRER UN IDENTIFIANT D'INSCRIPTION UNIQUE
-    @PostMapping("/identities/generate")
-    public ResponseEntity<Map<String, String>> generateIdentity(@RequestBody IdentityRequest request) {
-        String role = request.getRole() != null ? request.getRole().trim().toUpperCase() : "USER";
-        if (!role.equals("USER") && !role.equals("PROFESSEUR")) {
-            throw ApiException.badRequest("Rôle invalide. Utilisez USER ou PROFESSEUR.");
-        }
-        String cin = request.getCin() == null ? "" : request.getCin().trim();
-        if (cin.isEmpty() || cin.length() > 30) {
-            throw ApiException.badRequest("Le CIN est obligatoire (30 caractères maximum).");
-        }
-        String firstName = request.getFirstName() == null ? "" : request.getFirstName().trim();
-        String lastName = request.getLastName() == null ? "" : request.getLastName().trim();
-        if (firstName.isEmpty() || lastName.isEmpty() || firstName.length() > 100 || lastName.length() > 100) {
-            throw ApiException.badRequest("Le nom et le prénom sont obligatoires.");
-        }
-
-        // 12 chiffres pour un étudiant, 8 pour un professeur (générateur cryptographique)
-        int length = role.equals("USER") ? 12 : 8;
-        String identifier;
-        do {
-            identifier = randomDigits(length);
-        } while (universityIdentityRepository.existsByIdentifier(identifier));
-
-        UniversityIdentity identity = UniversityIdentity.builder()
-                .identifier(identifier)
-                .role(role)
-                .firstName(firstName)
-                .lastName(lastName)
-                .cin(cin)
-                .isUsed(false)
-                .build();
-        universityIdentityRepository.save(identity);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("identifier", identifier);
-        response.put("message", "Identifiant généré avec succès");
-        return ResponseEntity.ok(response);
-    }
-
     private User findUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> ApiException.notFound("Utilisateur non trouvé."));
-    }
-
-    private static String randomDigits(int length) {
-        StringBuilder sb = new StringBuilder(length);
-        sb.append(1 + RANDOM.nextInt(9)); // pas de zéro en tête
-        for (int i = 1; i < length; i++) {
-            sb.append(RANDOM.nextInt(10));
-        }
-        return sb.toString();
     }
 }

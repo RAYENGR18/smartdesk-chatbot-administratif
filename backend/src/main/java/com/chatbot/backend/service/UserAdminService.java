@@ -32,6 +32,8 @@ public class UserAdminService {
     private final NoteRepository noteRepository;
     private final EmploiDuTempsRepository emploiDuTempsRepository;
     private final DocumentService documentService;
+    private final com.chatbot.backend.presence.PresenceRepository presenceRepository;
+    private final com.chatbot.backend.presence.ScanRfidRepository scanRfidRepository;
 
     @Transactional
     public void deleteUser(Long id, AuthenticatedUser me) {
@@ -50,6 +52,8 @@ public class UserAdminService {
         noteRepository.deleteAllByEtudiantId(user.getId());
         noteRepository.detachProfesseur(user.getId());
         emploiDuTempsRepository.detachProfesseur(user.getId());
+        presenceRepository.deleteAllByProfesseurId(user.getId());
+        scanRfidRepository.detachProfesseur(user.getId());
 
         List<DocumentRequest> docs = documentRepository.findByUserId(user.getId());
         docs.forEach(documentService::deleteFileQuietly);

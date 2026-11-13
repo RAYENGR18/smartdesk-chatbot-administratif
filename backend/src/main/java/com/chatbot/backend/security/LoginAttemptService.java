@@ -42,14 +42,20 @@ public class LoginAttemptService {
     }
 
     public void loginFailed(String username, String ip) {
+        failed(username, ip, maxAttempts);
+    }
+
+    /** Échec d'une autre opération sensible (ex. vérification d'identité à l'inscription). */
+    public void failed(String key, String ip, int max) {
+        int limite = Math.max(1, max);
         Instant now = Instant.now();
-        attempts.compute(key(username, ip), (k, a) -> {
+        attempts.compute(key(key, ip), (k, a) -> {
             // Fenêtre de comptage = durée du blocage
             if (a == null || a.firstFailure().plus(lockDuration).isBefore(now)) {
                 a = new Attempts(0, now, null);
             }
             int count = a.count() + 1;
-            Instant lockedUntil = count >= maxAttempts ? now.plus(lockDuration) : a.lockedUntil();
+            Instant lockedUntil = count >= limite ? now.plus(lockDuration) : a.lockedUntil();
             return new Attempts(count, a.firstFailure(), lockedUntil);
         });
         // Nettoyage simple pour éviter une croissance infinie de la map

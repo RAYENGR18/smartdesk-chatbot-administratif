@@ -27,6 +27,14 @@ public class PlanningService {
         return emploiDuTempsRepository.findByFiliereIdOrderByJourAscHeureDebutAsc(filiereId);
     }
 
+    /** Créneaux d'une filière pour un niveau précis (niveau vide = tous les niveaux, vue admin). */
+    public List<EmploiDuTemps> getPlanningByFiliereEtNiveau(Long filiereId, String niveau) {
+        if (niveau == null || niveau.isBlank()) {
+            return getPlanningByFiliere(filiereId);
+        }
+        return emploiDuTempsRepository.findByFiliereIdAndNiveauOrderByJourAscHeureDebutAsc(filiereId, niveau);
+    }
+
     // ============================================
     // RÉCUPÉRER LE PLANNING PAR PROFESSEUR
     // ============================================
@@ -64,6 +72,17 @@ public class PlanningService {
                     " est déjà occupée à cet horaire le " + creneau.getJour());
         }
 
+        // Vérifier conflit de groupe (même filière et même niveau)
+        if (creneau.getFiliere() != null && creneau.getNiveau() != null) {
+            List<EmploiDuTemps> conflitsGroupe = emploiDuTempsRepository.findConflitsGroupe(
+                    creneau.getFiliere().getId(), creneau.getNiveau(), creneau.getJour(),
+                    creneau.getHeureDebut(), creneau.getHeureFin());
+            if (!conflitsGroupe.isEmpty()) {
+                throw new RuntimeException("Conflit : la filière " + creneau.getFiliere().getNom() + " ("
+                        + creneau.getNiveau() + ") a déjà un cours à cet horaire le " + creneau.getJour());
+            }
+        }
+
         // Vérifier conflit de professeur
         if (creneau.getProfesseur() != null) {
             List<EmploiDuTemps> conflitsProf = emploiDuTempsRepository.findConflitsProfesseur(
@@ -90,10 +109,14 @@ public class PlanningService {
             Long matiereId,
             Long salleId,
             Long filiereId,
+            String niveau,
             Long professeurId,
             String groupe,
             String semestre
     ) {
+        if (!heureFin.isAfter(heureDebut)) {
+            throw new RuntimeException("L'heure de fin doit être après l'heure de début");
+        }
         Matiere matiere = matiereRepository.findById(matiereId)
                 .orElseThrow(() -> new RuntimeException("Matière non trouvée"));
         Salle salle = salleRepository.findById(salleId)
@@ -114,6 +137,7 @@ public class PlanningService {
         creneau.setMatiere(matiere);
         creneau.setSalle(salle);
         creneau.setFiliere(filiere);
+        creneau.setNiveau(niveau);
         creneau.setProfesseur(professeur);
         creneau.setGroupe(groupe);
         creneau.setSemestre(semestre);
@@ -142,17 +166,21 @@ public class PlanningService {
     private static final int MAX_CRENEAUX_PAR_PROF_PAR_SEMAINE = 8;
 
     @Transactional
-    public List<EmploiDuTemps> genererPlanningAutomatique(Long filiereId, String semestre) {
+    public List<EmploiDuTemps> genererPlanningAutomatique(Long filiereId, String niveau, String semestre) {
         filiereRepository.findById(filiereId)
                 .orElseThrow(() -> new RuntimeException("Filière non trouvée"));
 
-        // Supprimer l'ancien planning de cette filière avant de régénérer
-        emploiDuTempsRepository.deleteByFiliereId(filiereId);
+        // Supprimer l'ancien planning de cette filière POUR CE NIVEAU avant de régénérer
+        emploiDuTempsRepository.deleteByFiliereIdAndNiveau(filiereId, niveau);
+        emploiDuTempsRepository.flush();
 
-        List<Matiere> matieres = matiereRepository.findByAnyFiliereId(filiereId);
+        // Matières de la filière pour ce niveau (ou communes à tous les niveaux)
+        List<Matiere> matieres = matiereRepository.findByAnyFiliereId(filiereId).stream()
+                .filter(m -> m.getNiveau() == null || m.getNiveau().isBlank() || m.getNiveau().equals(niveau))
+                .collect(Collectors.toList());
         List<Salle> sallesDisponibles = salleRepository.findByDisponible(true);
 
-        if (matieres.isEmpty()) throw new RuntimeException("Aucune matière pour cette filière");
+        if (matieres.isEmpty()) throw new RuntimeException("Aucune matière pour cette filière et ce niveau");
         if (sallesDisponibles.isEmpty()) throw new RuntimeException("Aucune salle disponible");
 
         EmploiDuTemps.Jour[] jours = {
@@ -222,7 +250,7 @@ public class PlanningService {
                 try {
                     EmploiDuTemps creneau = creerCreneau(
                             jour, debut, fin,
-                            matiere.getId(), salle.getId(), filiereId,
+                            matiere.getId(), salle.getId(), filiereId, niveau,
                             profChoisi.getId(), "Groupe A", semestre
                     );
                     planning.add(creneau);

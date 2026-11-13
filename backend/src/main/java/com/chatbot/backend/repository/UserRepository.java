@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     java.util.List<User> findByRole(com.chatbot.backend.model.User.Role role);
     Optional<User> findByCinIgnoreCase(String cin);
     boolean existsByEmailIgnoreCase(String email);
+    Optional<User> findByStudentId(String studentId);
+    Optional<User> findByRfidUid(String rfidUid);
     boolean existsByEmailIgnoreCaseAndIdNot(String email, Long id);
     long countByRole(com.chatbot.backend.model.User.Role role);
 }

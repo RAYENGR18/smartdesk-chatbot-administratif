@@ -54,3 +54,19 @@ app:
   security:
     max-login-attempts: ${MAX_LOGIN_ATTEMPTS:5}
     login-lock-minutes: ${LOGIN_LOCK_MINUTES:15}
+  # Fuseau horaire de l'établissement (pointage des présences)
+  timezone: ${APP_TIMEZONE:Africa/Tunis}
+  registre:
+    # local   = registre importé (Excel/CSV) ou données de démonstration
+    # externe = base de données de la faculté, en lecture seule (voir README)
+    mode: ${REGISTRE_MODE:local}
+    externe:
+      url: ${REGISTRE_DB_URL:}
+      username: ${REGISTRE_DB_USERNAME:}
+      password: ${REGISTRE_DB_PASSWORD:}
+      requete: ${REGISTRE_DB_REQUETE:}
+  rfid:
+    # Clé partagée avec le programme de pointage (en-tête X-Device-Key)
+    device-key: ${RFID_DEVICE_KEY:}
+    # Deux passages du même badge à moins de N secondes = un seul passage
+    anti-rebond-secondes: ${RFID_ANTI_REBOND_SECONDES:60}

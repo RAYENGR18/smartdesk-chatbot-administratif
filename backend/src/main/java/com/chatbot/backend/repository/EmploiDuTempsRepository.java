@@ -50,6 +50,22 @@ public interface EmploiDuTempsRepository extends JpaRepository<EmploiDuTemps, Lo
     // Supprimer tout le planning d'une filière (avant régénération)
     void deleteByFiliereId(Long filiereId);
 
+    // Emploi du temps d'une filière pour UN niveau (ce que voit l'étudiant)
+    List<EmploiDuTemps> findByFiliereIdAndNiveauOrderByJourAscHeureDebutAsc(Long filiereId, String niveau);
+
+    void deleteByFiliereIdAndNiveau(Long filiereId, String niveau);
+
+    // Conflit de groupe : la même filière/niveau a déjà cours à cet horaire
+    @Query("SELECT e FROM EmploiDuTemps e WHERE e.filiere.id = :filiereId AND e.niveau = :niveau " +
+           "AND e.jour = :jour AND e.heureDebut < :heureFin AND e.heureFin > :heureDebut")
+    List<EmploiDuTemps> findConflitsGroupe(
+            @Param("filiereId") Long filiereId,
+            @Param("niveau") String niveau,
+            @Param("jour") EmploiDuTemps.Jour jour,
+            @Param("heureDebut") LocalTime heureDebut,
+            @Param("heureFin") LocalTime heureFin
+    );
+
     @org.springframework.data.jpa.repository.Modifying
     @Query("UPDATE EmploiDuTemps e SET e.professeur = null WHERE e.professeur.id = :userId")
     int detachProfesseur(@Param("userId") Long userId);

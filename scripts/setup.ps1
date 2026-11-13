@@ -74,12 +74,28 @@ foreach ($dir in @("$env:USERPROFILE\.jdks", "C:\Program Files\Java", "C:\Progra
             ForEach-Object { $candidates += $_.FullName }
     }
 }
+# Versions LTS d'abord (Spring Boot 3.5 / Lombok : 17 a 25 supportes)
+$found = @()
 foreach ($c in $candidates) {
     $exe = Join-Path $c "bin\java.exe"
-    if ((Test-Path $exe) -and ((Get-JavaMajor $exe) -ge 17)) { $JavaHome = $c; break }
+    if (Test-Path $exe) {
+        $major = Get-JavaMajor $exe
+        if ($major -ge 17) { $found += [pscustomobject]@{ Home = $c; Major = $major } }
+    }
+}
+foreach ($preferred in @(21, 17, 25)) {
+    $match = $found | Where-Object { $_.Major -eq $preferred } | Select-Object -First 1
+    if ($match) { $JavaHome = $match.Home; break }
+}
+if (-not $JavaHome) {
+    $match = $found | Where-Object { $_.Major -le 25 } | Sort-Object Major -Descending | Select-Object -First 1
+    if (-not $match) { $match = $found | Select-Object -First 1 }
+    if ($match) { $JavaHome = $match.Home }
 }
 if (-not $JavaHome) { Fail "Java 17 ou plus est introuvable. Installez par exemple Temurin 21 : https://adoptium.net" }
-Write-Ok "Java $(Get-JavaMajor (Join-Path $JavaHome 'bin\java.exe')) : $JavaHome"
+$javaMajor = Get-JavaMajor (Join-Path $JavaHome 'bin\java.exe')
+Write-Ok "Java $javaMajor : $JavaHome"
+if ($javaMajor -gt 25) { Write-Warn "Java $javaMajor est plus recent que ce que supporte Spring Boot 3.5 : installez Java 21 (https://adoptium.net) en cas d'erreur de compilation." }
 
 # Node.js 20.19+ / 22.12+ (exige par Angular 21)
 $node = Get-Command node -ErrorAction SilentlyContinue
@@ -95,11 +111,12 @@ Write-Ok "Node.js $nodeVersion"
 $PythonExe = $null
 $py = Get-Command py -ErrorAction SilentlyContinue
 if ($py) {
+    $installed = (& py -0 2>&1 | Out-String)
     foreach ($v in @("3.12", "3.11", "3.13")) {
-        try {
-            $exe = (& py "-$v" -c "import sys; print(sys.executable)" 2>$null)
-            if ($LASTEXITCODE -eq 0 -and $exe) { $PythonExe = $exe.Trim(); break }
-        } catch { }
+        if ($installed -match [regex]::Escape("-V:$v") -or $installed -match ("-" + [regex]::Escape($v) + "\b")) {
+            $exe = (& py "-$v" -c "import sys; print(sys.executable)" 2>&1 | Out-String).Trim()
+            if ($LASTEXITCODE -eq 0 -and (Test-Path $exe)) { $PythonExe = $exe; break }
+        }
     }
 }
 if (-not $PythonExe) {
@@ -142,14 +159,34 @@ Write-Step "Fichier .env"
 
 $envFile = Join-Path $Root ".env"
 $generatedAdminPassword = $null
+$secretKeys = @("DB_PASSWORD", "JWT_SECRET", "NLP_API_KEY", "RFID_DEVICE_KEY")
 if (Test-Path $envFile) {
-    Write-Ok ".env existe deja : conserve tel quel"
+    # Ajoute les nouvelles cles de .env.example absentes du .env (mise a jour du projet)
+    $existing = Get-Content $envFile -Encoding UTF8 -Raw
+    $added = @()
+    foreach ($line in (Get-Content (Join-Path $Root ".env.example") -Encoding UTF8)) {
+        if ($line -match '^([A-Z_]+)=(.*)$') {
+            $key = $Matches[1]; $default = $Matches[2]
+            if ($existing -notmatch "(?m)^$key=") {
+                if ($secretKeys -contains $key) { $default = New-Secret 32 }
+                $existing = $existing.TrimEnd() + "`r`n$key=$default`r`n"
+                $added += $key
+            }
+        }
+    }
+    if ($added.Count -gt 0) {
+        [System.IO.File]::WriteAllText($envFile, $existing, (New-Object System.Text.UTF8Encoding($false)))
+        Write-Ok (".env complete avec : " + ($added -join ", "))
+    } else {
+        Write-Ok ".env existe deja : conserve tel quel"
+    }
 } else {
     $content = Get-Content (Join-Path $Root ".env.example") -Raw -Encoding UTF8
     $generatedAdminPassword = New-Secret 12
     $content = $content -replace '(?m)^DB_PASSWORD=[^\r\n]*', ("DB_PASSWORD=" + (New-Secret 24))
     $content = $content -replace '(?m)^JWT_SECRET=[^\r\n]*', ("JWT_SECRET=" + (New-Secret 48))
     $content = $content -replace '(?m)^NLP_API_KEY=[^\r\n]*', ("NLP_API_KEY=" + (New-Secret 32))
+    $content = $content -replace '(?m)^RFID_DEVICE_KEY=[^\r\n]*', ("RFID_DEVICE_KEY=" + (New-Secret 32))
     $content = $content -replace '(?m)^ADMIN_PASSWORD=[^\r\n]*', ("ADMIN_PASSWORD=" + $generatedAdminPassword)
 
     Write-Host "    Cle Groq (https://console.groq.com/keys) - collez-la puis Entree," -ForegroundColor Gray
@@ -186,6 +223,14 @@ if (-not $SkipDatabase) {
     }
     if (-not $dbPassword -or $dbPassword.Contains("'")) { Fail "DB_PASSWORD vide ou invalide dans .env" }
 
+    # Base deja configuree ? (connexion avec le compte applicatif du .env)
+    $env:PGPASSWORD = $dbPassword
+    $appCheck = (& $Psql -h $PgHost -p "$PgPort" -U $dbUser -d $dbName -tAq -c "SHOW server_version" 2>$null)
+    $appOk = ($LASTEXITCODE -eq 0)
+    Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
+    if ($appOk) {
+        Write-Ok "Base '$dbName' deja prete (PostgreSQL $("$appCheck".Trim()))"
+    } else {
     Write-Host "    Mot de passe de l'utilisateur '$PgAdmin' choisi a l'installation de PostgreSQL :" -ForegroundColor Gray
     $secure = Read-Host "    Mot de passe $PgAdmin" -AsSecureString
     $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
@@ -221,8 +266,11 @@ if (-not $SkipDatabase) {
         $schemaArgs = @("-h", $PgHost, "-p", "$PgPort", "-U", $PgAdmin, "-d", $dbName, "-v", "ON_ERROR_STOP=1", "-tAq")
         & $Psql @schemaArgs -c "ALTER SCHEMA public OWNER TO $dbUser" | Out-Null
         Write-Ok "Schema public attribue a $dbUser"
+        $ver = (& $Psql @schemaArgs -c "SHOW server_version")
+        Write-Ok "Serveur PostgreSQL $("$ver".Trim()) sur le port $PgPort"
     } finally {
         Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
+    }
     }
 }
 
@@ -236,8 +284,10 @@ if (-not $SkipDependencies) {
     }
     $venvPython = Join-Path $venv "Scripts\python.exe"
     & $venvPython -m pip install --upgrade pip --quiet
-    & $venvPython -m pip install -r (Join-Path $Root "nlp\requirements.txt")
-    if ($LASTEXITCODE -ne 0) { Fail "Installation des dependances Python impossible." }
+    $pipLog = Join-Path $Root "pip-install.log"
+    Write-Host "    (journal : pip-install.log)" -ForegroundColor Gray
+    & $venvPython -m pip install -r (Join-Path $Root "nlp\requirements.txt") *> $pipLog
+    if ($LASTEXITCODE -ne 0) { Get-Content $pipLog -Tail 25; Fail "Installation des dependances Python impossible (detail : pip-install.log)." }
     & $venvPython -m spacy download fr_core_news_sm
     if ($LASTEXITCODE -ne 0) { Write-Warn "Modele spaCy non installe : le service fonctionnera sans extraction d'entites." }
     Write-Ok "Dependances Python installees"
@@ -245,8 +295,14 @@ if (-not $SkipDependencies) {
     Write-Step "Frontend : dependances npm"
     Push-Location (Join-Path $Root "frontend")
     try {
-        & npm ci --no-audit --no-fund
-        if ($LASTEXITCODE -ne 0) { Fail "npm ci a echoue." }
+        $npmLog = Join-Path $Root "npm-install.log"
+        Write-Host "    (journal : npm-install.log)" -ForegroundColor Gray
+        & npm ci --no-audit --no-fund *> $npmLog
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warn "npm ci a echoue, nouvel essai avec npm install..."
+            & npm install --no-audit --no-fund *>> $npmLog
+            if ($LASTEXITCODE -ne 0) { Get-Content $npmLog -Tail 30; Fail "Installation npm impossible (detail : npm-install.log)." }
+        }
     } finally { Pop-Location }
     Write-Ok "Dependances npm installees"
 
@@ -254,8 +310,10 @@ if (-not $SkipDependencies) {
     $env:JAVA_HOME = $JavaHome
     Push-Location (Join-Path $Root "backend")
     try {
-        & .\mvnw.cmd -q -B -DskipTests package
-        if ($LASTEXITCODE -ne 0) { Fail "La compilation du backend a echoue." }
+        $mvnLog = Join-Path $Root "backend-build.log"
+        Write-Host "    (journal : backend-build.log)" -ForegroundColor Gray
+        & .\mvnw.cmd -B -DskipTests package *> $mvnLog
+        if ($LASTEXITCODE -ne 0) { Get-Content $mvnLog -Tail 40; Fail "La compilation du backend a echoue (detail : backend-build.log)." }
     } finally { Pop-Location }
     Write-Ok "Backend compile"
 }

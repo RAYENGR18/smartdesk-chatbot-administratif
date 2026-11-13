@@ -60,6 +60,7 @@ public class MatiereController {
             if (request.get("type") != null) {
                 matiere.setType(Matiere.TypeMatiere.valueOf((String) request.get("type")));
             }
+            matiere.setNiveau(niveau(request.get("niveau")));
 
             // Handle multiple filieres (many-to-many)
             if (request.get("filiereIds") != null) {
@@ -110,6 +111,8 @@ public class MatiereController {
                 existing.setVolumeHoraire(Integer.valueOf(request.get("volumeHoraire").toString()));
             if (request.containsKey("type"))
                 existing.setType(Matiere.TypeMatiere.valueOf((String) request.get("type")));
+            if (request.containsKey("niveau"))
+                existing.setNiveau(niveau(request.get("niveau")));
 
             // Handle multiple filieres
             if (request.containsKey("filiereIds")) {
@@ -152,5 +155,12 @@ public class MatiereController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Matiere supprimee avec succes");
         return ResponseEntity.ok(response);
+    }
+
+    /** Niveau optionnel : vide = matière commune à tous les niveaux. */
+    private static String niveau(Object valeur) {
+        if (valeur == null || valeur.toString().isBlank()) return null;
+        return com.chatbot.backend.util.Niveaux.normaliser(valeur.toString())
+                .orElseThrow(() -> new RuntimeException("Niveau invalide (L1, L2, L3, M1, M2, ING1...)"));
     }
 }

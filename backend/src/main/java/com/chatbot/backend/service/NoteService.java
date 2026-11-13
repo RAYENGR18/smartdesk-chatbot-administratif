@@ -1,19 +1,20 @@
 package com.chatbot.backend.service;
 
+import com.chatbot.backend.exception.ApiException;
+import com.chatbot.backend.model.Matiere;
 import com.chatbot.backend.model.Note;
 import com.chatbot.backend.model.User;
 import com.chatbot.backend.repository.MatiereRepository;
 import com.chatbot.backend.repository.NoteRepository;
 import com.chatbot.backend.repository.UserRepository;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.chatbot.backend.util.TabularFileReader;
+import com.chatbot.backend.util.TabularFileReader.Ligne;
+import com.chatbot.backend.util.TextUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -31,12 +32,23 @@ public class NoteService {
         this.matiereRepository = matiereRepository;
     }
 
+    /** Note telle qu'affichée à l'étudiant : aucune donnée sur d'autres personnes. */
+    public record NoteView(Long id, String nomMatiere, String codeMatiere, String typeEvaluation,
+                           Double valeur, Double moyenne, String commentaire, LocalDateTime dateSaisie) {
+    }
+
     // ================================================================
-    // CONSULTATION DES NOTES
+    // CONSULTATION
     // ================================================================
 
-    public List<Note> getNotesByEtudiant(Long etudiantId) {
-        return noteRepository.findByEtudiantId(etudiantId);
+    public List<NoteView> getNotesView(Long etudiantId) {
+        return noteRepository.findByEtudiantId(etudiantId).stream()
+                .sorted(Comparator.comparing((Note n) -> nomMatiere(n), String.CASE_INSENSITIVE_ORDER)
+                        .thenComparing(n -> Objects.toString(n.getTypeEvaluation(), "")))
+                .map(n -> new NoteView(n.getId(), nomMatiere(n),
+                        n.getMatiere() != null ? n.getMatiere().getCode() : null,
+                        n.getTypeEvaluation(), n.getValeur(), n.getMoyenne(), n.getCommentaire(), n.getDateSaisie()))
+                .toList();
     }
 
     public List<Note> getAllNotes() {
@@ -44,225 +56,166 @@ public class NoteService {
     }
 
     public void supprimerNote(Long id) {
+        if (!noteRepository.existsById(id)) {
+            throw ApiException.notFound("Note introuvable.");
+        }
         noteRepository.deleteById(id);
     }
 
+    private static String nomMatiere(Note n) {
+        if (n.getNomMatiere() != null && !n.getNomMatiere().isBlank()) return n.getNomMatiere();
+        return n.getMatiere() != null ? n.getMatiere().getNom() : "—";
+    }
+
     // ================================================================
-    // IMPORT DEPUIS FICHIER (EXCEL .xlsx ou CSV .csv)
+    // IMPORT EXCEL (.xlsx) / CSV
     // ================================================================
 
     /**
-     * Importe les notes depuis un fichier Excel ou CSV.
-     * Identification de l'étudiant par le champ CIN.
+     * Importe les notes : chaque ligne est rattachée à l'étudiant par son CIN.
      *
-     * Colonnes attendues (en-tête sur la 1ère ligne) :
-     *   cin | nomMatiere | typeEvaluation | note | moyenne | commentaire
+     * Colonnes (en-têtes libres, accents/casse ignorés) :
+     *   cin* | matiere* | note* | type (Examen par défaut : DS, TP, Projet...) | moyenne | commentaire
      *
-     * "moyenne" et "commentaire" sont optionnels.
-     *
-     * Mode : AJOUT (les notes existantes de l'étudiant ne sont PAS supprimées,
-     *         on met à jour si déjà présent pour la même matière + typeEvaluation,
-     *         sinon on insère).
+     * Une note existante (même étudiant + même matière + même type) est mise à jour,
+     * sinon elle est ajoutée. Les lignes en erreur sont ignorées et listées dans le rapport.
      */
     @Transactional
-    public Map<String, Object> importerNotes(MultipartFile file) throws Exception {
-        String filename = file.getOriginalFilename();
-        if (filename == null) throw new IllegalArgumentException("Fichier invalide.");
-
-        List<Map<String, String>> rows;
-
-        if (filename.toLowerCase().endsWith(".xlsx")) {
-            rows = parseExcel(file);
-        } else if (filename.toLowerCase().endsWith(".csv")) {
-            rows = parseCsv(file);
-        } else {
-            throw new IllegalArgumentException("Format non supporté. Utilisez .xlsx ou .csv");
+    public Map<String, Object> importerNotes(MultipartFile file) {
+        List<Ligne> lignes = TabularFileReader.lire(file);
+        if (lignes.isEmpty()) {
+            throw ApiException.badRequest("Le fichier ne contient aucune ligne de notes.");
         }
+        verifierColonnes(lignes.get(0));
 
-        int inserted = 0;
-        int updated  = 0;
-        int skipped  = 0;
+        int inserted = 0, updated = 0, skipped = 0;
         List<String> errors = new ArrayList<>();
+        Map<String, Optional<User>> etudiants = new HashMap<>();
+        Map<String, Optional<Matiere>> matieres = new HashMap<>();
 
-        for (int i = 0; i < rows.size(); i++) {
-            Map<String, String> row = rows.get(i);
-            int lineNum = i + 2; // +2 : ligne 1 = en-tête
-
-            String cin = clean(row.get("cin"));
+        for (Ligne l : lignes) {
+            String prefixe = "Ligne " + l.numero() + " : ";
+            String cinBrut = l.get("cin", "numerocin", "carteidentite", "cinetudiant", "identifiant");
+            if (cinBrut.isEmpty()) cinBrut = l.chercher("cin");
+            String cin = TextUtils.normaliserCin(cinBrut);
             if (cin.isEmpty()) {
-                errors.add("Ligne " + lineNum + " : CIN manquant.");
+                errors.add(prefixe + "CIN manquant.");
                 skipped++;
                 continue;
             }
 
-            Optional<User> etudiantOpt = userRepository.findByCinIgnoreCase(cin);
+            Optional<User> etudiantOpt = etudiants.computeIfAbsent(cin, c ->
+                    userRepository.findByCinIgnoreCase(c).filter(u -> u.getRole() == User.Role.USER));
             if (etudiantOpt.isEmpty()) {
-                errors.add("Ligne " + lineNum + " : Étudiant introuvable pour CIN = " + cin);
+                errors.add(prefixe + "aucun compte étudiant avec le CIN " + cin
+                        + " (l'étudiant doit d'abord créer son compte).");
                 skipped++;
                 continue;
             }
             User etudiant = etudiantOpt.get();
 
-            String nomMatiere     = clean(row.get("nomMatiere"));
-            String typeEvaluationRaw = clean(row.get("typeEvaluation"));
-            final String typeEvaluation = typeEvaluationRaw.isEmpty() ? "Examen" : typeEvaluationRaw;
-            final String finalNomMatiere = nomMatiere;
-
-            String noteStr    = clean(row.get("note"));
-            String moyenneStr = clean(row.get("moyenne"));
-            String commentaire = clean(row.get("commentaire"));
-
-            if (noteStr.isEmpty()) {
-                errors.add("Ligne " + lineNum + " : Note manquante pour CIN = " + cin);
+            String matiereLue = l.get("matiere", "nommatiere", "module", "unite", "codematiere");
+            if (matiereLue.isEmpty()) matiereLue = l.chercher("matiere", "module");
+            final String nomMatiere = matiereLue;
+            if (nomMatiere.isEmpty()) {
+                errors.add(prefixe + "matière manquante (CIN " + cin + ").");
                 skipped++;
                 continue;
             }
 
-            double valeur;
-            try {
-                valeur = Double.parseDouble(noteStr.replace(",", "."));
-                if (valeur < 0 || valeur > 20)
-                    throw new NumberFormatException();
-            } catch (NumberFormatException e) {
-                errors.add("Ligne " + lineNum + " : Note invalide (" + noteStr + ") pour CIN = " + cin);
+            String noteStr = l.get("note", "valeur", "notefinale", "noteobtenue", "resultat");
+            if (noteStr.isEmpty()) noteStr = l.chercher("note");
+            Double valeur = lireNote(noteStr);
+            if (valeur == null) {
+                errors.add(prefixe + "note invalide « " + noteStr + " » (attendu : nombre entre 0 et 20).");
                 skipped++;
                 continue;
             }
-
-            Double moyenneVal = null;
-            if (!moyenneStr.isEmpty()) {
-                try {
-                    moyenneVal = Double.parseDouble(moyenneStr.replace(",", "."));
-                } catch (NumberFormatException ignored) {}
+            String moyenneStr = l.get("moyenne", "moyennematiere");
+            Double moyenne = moyenneStr.isEmpty() ? null : lireNote(moyenneStr);
+            if (!moyenneStr.isEmpty() && moyenne == null) {
+                errors.add(prefixe + "moyenne invalide « " + moyenneStr + " » (ligne importée sans moyenne).");
             }
 
-            // Résoudre la matière (optionnel — on stocke le nom brut si non trouvée)
-            Optional<com.chatbot.backend.model.Matiere> matiereOpt = finalNomMatiere.isEmpty()
-                    ? Optional.empty()
-                    : matiereRepository.findByNom(finalNomMatiere);
+            String type = normaliserType(l.get("type", "typeevaluation", "evaluation", "epreuve"));
+            String commentaire = l.get("commentaire", "remarque", "observation");
 
-            // Chercher note existante (même étudiant + même matière + même type)
-            List<Note> existing = noteRepository.findByEtudiantId(etudiant.getId())
-                    .stream()
-                    .filter(n -> typeEvaluation.equalsIgnoreCase(n.getTypeEvaluation())
-                            && finalNomMatiere.equalsIgnoreCase(n.getNomMatiere() != null ? n.getNomMatiere()
-                               : (n.getMatiere() != null ? n.getMatiere().getNom() : "")))
-                    .toList();
+            Optional<Matiere> matiere = matieres.computeIfAbsent(TextUtils.normaliserNom(nomMatiere),
+                    k -> trouverMatiere(nomMatiere));
+            String nomAffiche = matiere.map(Matiere::getNom).orElse(nomMatiere.trim());
 
-            Note note;
-            if (!existing.isEmpty()) {
-                note = existing.get(0);
-                updated++;
-            } else {
+            Note note = noteRepository.findByEtudiantId(etudiant.getId()).stream()
+                    .filter(n -> type.equalsIgnoreCase(n.getTypeEvaluation())
+                            && TextUtils.normaliserNom(nomMatiere(n)).equals(TextUtils.normaliserNom(nomAffiche)))
+                    .findFirst()
+                    .orElse(null);
+            if (note == null) {
                 note = new Note();
                 note.setEtudiant(etudiant);
                 note.setSource("IMPORT");
                 inserted++;
+            } else {
+                updated++;
             }
-
+            note.setNomMatiere(limiter(nomAffiche, 255));
+            note.setMatiere(matiere.orElse(null));
+            note.setTypeEvaluation(type);
             note.setValeur(valeur);
-            note.setMoyenne(moyenneVal);
-            note.setTypeEvaluation(typeEvaluation);
-            note.setNomMatiere(finalNomMatiere.isEmpty() ? null : finalNomMatiere);
-            note.setCommentaire(commentaire.isEmpty() ? null : commentaire);
-            matiereOpt.ifPresent(m -> note.setMatiere((com.chatbot.backend.model.Matiere) m));
-
+            note.setMoyenne(moyenne);
+            note.setCommentaire(commentaire.isEmpty() ? null : limiter(commentaire, 255));
             noteRepository.save(note);
         }
 
         Map<String, Object> result = new LinkedHashMap<>();
-        result.put("totalLignes",  rows.size());
-        result.put("inserted",     inserted);
-        result.put("updated",      updated);
-        result.put("skipped",      skipped);
-        result.put("errors",       errors);
+        result.put("totalLignes", lignes.size());
+        result.put("inserted", inserted);
+        result.put("updated", updated);
+        result.put("skipped", skipped);
+        result.put("errors", errors.size() > 200 ? errors.subList(0, 200) : errors);
         return result;
     }
 
-    // ================================================================
-    // PARSEURS
-    // ================================================================
-
-    private List<Map<String, String>> parseExcel(MultipartFile file) throws Exception {
-        List<Map<String, String>> rows = new ArrayList<>();
-        try (Workbook wb = new XSSFWorkbook(file.getInputStream())) {
-            Sheet sheet = wb.getSheetAt(0);
-            Iterator<Row> rowIt = sheet.iterator();
-            if (!rowIt.hasNext()) return rows;
-
-            // Lire l'en-tête
-            Row headerRow = rowIt.next();
-            List<String> headers = new ArrayList<>();
-            for (Cell cell : headerRow) {
-                headers.add(cellToString(cell).trim().toLowerCase());
-            }
-
-            while (rowIt.hasNext()) {
-                Row row = rowIt.next();
-                // Ignorer les lignes totalement vides
-                boolean empty = true;
-                for (Cell c : row) {
-                    if (c != null && c.getCellType() != CellType.BLANK) { empty = false; break; }
-                }
-                if (empty) continue;
-
-                Map<String, String> map = new LinkedHashMap<>();
-                for (int i = 0; i < headers.size(); i++) {
-                    Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                    map.put(headers.get(i), cellToString(cell).trim());
-                }
-                rows.add(map);
-            }
+    private static void verifierColonnes(Ligne premiere) {
+        Set<String> cols = premiere.valeurs().keySet();
+        boolean cin = cols.stream().anyMatch(c -> c.contains("cin") || c.equals("identifiant") || c.contains("carteidentite"));
+        boolean matiere = cols.stream().anyMatch(c -> c.contains("matiere") || c.equals("module") || c.equals("unite"));
+        boolean note = cols.stream().anyMatch(c -> c.startsWith("note") || c.equals("valeur") || c.equals("resultat"));
+        if (!cin || !matiere || !note) {
+            throw ApiException.badRequest("Colonnes obligatoires manquantes. La première ligne doit contenir "
+                    + "au moins : CIN, Matière, Note (colonnes trouvées : " + String.join(", ", cols) + ").");
         }
-        return rows;
     }
 
-    private List<Map<String, String>> parseCsv(MultipartFile file) throws Exception {
-        List<Map<String, String>> rows = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+    private Optional<Matiere> trouverMatiere(String saisie) {
+        String cle = TextUtils.normaliserNom(saisie);
+        return matiereRepository.findAll().stream()
+                .filter(m -> TextUtils.normaliserNom(m.getNom()).equals(cle)
+                        || TextUtils.normaliserNom(m.getCode()).equals(cle))
+                .findFirst();
+    }
 
-            String headerLine = reader.readLine();
-            if (headerLine == null) return rows;
-
-            // Détecter le séparateur (virgule ou point-virgule)
-            String sep = headerLine.contains(";") ? ";" : ",";
-            String[] headers = headerLine.split(sep, -1);
-            for (int i = 0; i < headers.length; i++) {
-                headers[i] = headers[i].trim().toLowerCase().replace("\"", "");
-            }
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.isBlank()) continue;
-                String[] values = line.split(sep, -1);
-                Map<String, String> map = new LinkedHashMap<>();
-                for (int i = 0; i < headers.length; i++) {
-                    String val = i < values.length ? values[i].trim().replace("\"", "") : "";
-                    map.put(headers[i], val);
-                }
-                rows.add(map);
-            }
+    private static Double lireNote(String s) {
+        if (s == null || s.isBlank()) return null;
+        try {
+            double v = Double.parseDouble(s.trim().replace(",", ".").replace("/20", "").trim());
+            return v >= 0 && v <= 20 ? Math.round(v * 100) / 100.0 : null;
+        } catch (NumberFormatException e) {
+            return null;
         }
-        return rows;
     }
 
-    private String cellToString(Cell cell) {
-        if (cell == null) return "";
-        return switch (cell.getCellType()) {
-            case STRING  -> cell.getStringCellValue();
-            case NUMERIC -> {
-                double d = cell.getNumericCellValue();
-                // Éviter d'afficher "15.0" pour un entier
-                yield d == Math.floor(d) ? String.valueOf((long) d) : String.valueOf(d);
-            }
-            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
-            case FORMULA -> cell.getCellFormula();
-            default      -> "";
-        };
+    /** Uniformise les types usuels pour l'affichage (badges DS / Examen / TP / Projet). */
+    private static String normaliserType(String s) {
+        String v = TextUtils.normaliserEntete(s);
+        if (v.isEmpty() || v.startsWith("exam") || v.equals("ex") || v.equals("final")) return "Examen";
+        if (v.startsWith("ds") || v.startsWith("cc") || v.startsWith("controle") || v.startsWith("devoir")) return "DS";
+        if (v.startsWith("tp") || v.startsWith("td")) return "TP";
+        if (v.startsWith("projet") || v.startsWith("mini")) return "Projet";
+        if (v.startsWith("ratt")) return "Rattrapage";
+        return limiter(s.trim(), 50);
     }
 
-    private String clean(String s) {
-        return s == null ? "" : s.trim();
+    private static String limiter(String s, int max) {
+        return s.length() > max ? s.substring(0, max) : s;
     }
 }

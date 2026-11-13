@@ -35,6 +35,7 @@ public class User {
     // ===== PROFIL ÉTENDU =====
     private String firstName;
     private String lastName;
+    @Column(unique = true, length = 30)
     private String cin;
     private String phone;
     private String address;
@@ -52,6 +53,20 @@ public class User {
     private String institution;
     private String faculty;
     private String department;
+
+    // ===== FILIÈRE ET NIVEAU (étudiants) : déterminent l'emploi du temps =====
+    @ManyToOne
+    @JoinColumn(name = "filiere_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Filiere filiere;
+
+    @Column(length = 10)
+    private String niveau;
+
+    // ===== BADGE RFID (professeurs) : pointage des présences =====
+    @JsonIgnore
+    @Column(unique = true, length = 40)
+    private String rfidUid;
 
     // ===== SPÉCIALITÉ ET FILIÈRES (pour les professeurs) =====
     private String specialite;

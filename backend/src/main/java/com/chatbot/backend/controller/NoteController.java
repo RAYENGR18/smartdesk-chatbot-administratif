@@ -26,11 +26,17 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    // ── Consultation : un étudiant ne voit que ses propres notes ──────
+    // ── Mes notes : l'étudiant est identifié par son token, jamais par un paramètre ──
+    @GetMapping("/me")
+    public ResponseEntity<List<NoteService.NoteView>> getMesNotes() {
+        return ResponseEntity.ok(noteService.getNotesView(CurrentUser.get().id()));
+    }
+
+    // ── Consultation par id : soi-même ou admin ──────────────────────
     @GetMapping("/etudiant/{id}")
-    public ResponseEntity<List<Note>> getNotesEtudiant(@PathVariable Long id) {
+    public ResponseEntity<List<NoteService.NoteView>> getNotesEtudiant(@PathVariable Long id) {
         CurrentUser.requireSelfOrAdmin(id);
-        return ResponseEntity.ok(noteService.getNotesByEtudiant(id));
+        return ResponseEntity.ok(noteService.getNotesView(id));
     }
 
     // ── Consultation admin (toutes les notes) ─────────────────────────
@@ -57,13 +63,12 @@ public class NoteController {
         }
         try {
             return ResponseEntity.ok(noteService.importerNotes(file));
-        } catch (IllegalArgumentException e) {
-            throw ApiException.badRequest(e.getMessage());
         } catch (ApiException e) {
             throw e;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error("Échec de l'import des notes", e);
-            throw ApiException.badRequest("Impossible de lire le fichier. Vérifiez qu'il s'agit d'un .xlsx ou .csv valide.");
+            throw ApiException.badRequest("Import impossible : " + e.getClass().getSimpleName()
+                    + ". Vérifiez le fichier (colonnes CIN, Matière, Note).");
         }
     }
 }

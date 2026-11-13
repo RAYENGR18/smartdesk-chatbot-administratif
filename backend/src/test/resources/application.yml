@@ -27,3 +27,9 @@ app:
   security:
     max-login-attempts: 5
     login-lock-minutes: 15
+  timezone: Africa/Tunis
+  registre:
+    mode: local
+  rfid:
+    device-key: cle-appareil-de-test-0123456789
+    anti-rebond-secondes: 0

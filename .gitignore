@@ -94,3 +94,7 @@ scripts/local-config.ps1
 # Journaux des scripts
 setup.log
 start.log
+
+pip-install.log
+npm-install.log
+backend-build.log

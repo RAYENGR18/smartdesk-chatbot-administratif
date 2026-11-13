@@ -26,11 +26,19 @@ public class RegisterRequest {
     @Size(min = 8, max = 100, message = "Le mot de passe doit contenir au moins 8 caractères.")
     private String password;
 
-    // Profil personnel
+    // Identité : vérifiée auprès du registre de l'établissement
+    @NotBlank(message = "Le prénom est obligatoire.")
     @Size(max = 100) private String firstName;
+    @NotBlank(message = "Le nom est obligatoire.")
     @Size(max = 100) private String lastName;
-    @NotBlank(message = "Le CIN est obligatoire.")
+    @NotBlank(message = "Le numéro de CIN est obligatoire.")
     @Size(max = 30) private String cin;
+
+    // Étudiant : filière (id) et niveau (L1, L2, L3, M1, M2...)
+    private Long filiereId;
+    @Size(max = 20) private String niveau;
+
+    // Profil personnel
     @Size(max = 30) private String birthDate;
     @Size(max = 100) private String birthPlace;
     @Size(max = 20) private String gender;
@@ -39,7 +47,7 @@ public class RegisterRequest {
     @Size(max = 255) private String address;
 
     // Profil académique
-    @NotBlank(message = "L'identifiant administratif est obligatoire.")
+    // Ancien identifiant administratif : n'est plus utilisé (conservé pour compatibilité)
     @Size(max = 30) private String studentId;
     @Size(max = 255) private String fieldOfStudy;
     @Size(max = 60) private String academicLevel;
