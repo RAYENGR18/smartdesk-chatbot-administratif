@@ -1,362 +1,362 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Optional, Literal
-from dotenv import load_dotenv
-from contextlib import asynccontextmanager
-from nlp_service import analyze_message
-from rag_service import (answer_with_rag, index_document, create_vector_store,
-                         chat_with_groq, load_vector_store, rewrite_question,
-                         DOCUMENTS_DIR, DOCUMENTS_DIR_STUDENT, DOCUMENTS_DIR_PROF,
-                         CHROMA_DIR, CHROMA_DIR_PROF)
-import shutil
+"""
+FPST SmartDesk - service NLP + RAG + Groq (FastAPI).
+
+Sécurité :
+  - le service n'est appelé QUE par le backend Spring Boot (jamais par le navigateur) :
+    pas de CORS, et chaque requête doit porter l'en-tête X-API-Key = NLP_API_KEY ;
+  - il écoute par défaut sur 127.0.0.1 (pas accessible depuis le réseau) ;
+  - les noms de fichiers de la base de connaissances sont validés
+    (aucun accès possible en dehors du dossier knowledge_base).
+"""
+
+import hmac
 import os
+import re
+from contextlib import asynccontextmanager
 from datetime import datetime
+from typing import Optional
 
-def _get_kb_dir(audience: str) -> str:
-    """Retourne le dossier knowledge_base selon l'audience."""
-    if audience == "professor":
-        return DOCUMENTS_DIR_PROF
-    elif audience == "student_only":
-        return DOCUMENTS_DIR_STUDENT
-    else:  # student (défaut) = dossier racine
-        return DOCUMENTS_DIR
+from dotenv import load_dotenv
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, UploadFile
+from pydantic import BaseModel, Field
 
-# Charger les variables d'environnement
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, "..", ".env"))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-# ============================================
-# AUTO-INDEX AU DÉMARRAGE
-# ============================================
+from nlp_service import analyze_message  # noqa: E402
+from rag_service import (  # noqa: E402
+    CHROMA_DIR, CHROMA_DIR_PROF, DOCUMENTS_DIR, DOCUMENTS_DIR_PROF, DOCUMENTS_DIR_STUDENT,
+    GROQ_API_KEY, answer_with_rag, chat_with_groq, create_vector_store, load_vector_store,
+    rebuild_vector_store, rewrite_question,
+)
+
+NLP_API_KEY = os.getenv("NLP_API_KEY", "")
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+ALLOWED_EXTENSIONS = (".txt", ".pdf", ".docx")
+AUDIENCES = {"student", "student_only", "professor", "all"}
+SAFE_FILENAME = re.compile(r"^[\w ()\-.]{1,150}$", re.UNICODE)
+
+
 def _safe_print(msg):
-    """Print robuste pour Windows (encodage cp1252 compatible)."""
+    """Print robuste pour Windows (console cp1252)."""
     try:
         print(msg)
     except UnicodeEncodeError:
         try:
-            print(msg.encode('ascii', errors='replace').decode('ascii'))
+            print(msg.encode("ascii", errors="replace").decode("ascii"))
         except Exception:
             pass
 
+
+# ============================================
+# CONTRÔLE D'ACCÈS : clé partagée avec le backend
+# ============================================
+async def require_api_key(request: Request):
+    if not NLP_API_KEY:
+        raise HTTPException(status_code=503, detail="NLP_API_KEY non configuree sur le service NLP")
+    provided = request.headers.get("X-API-Key", "")
+    if not hmac.compare_digest(provided.encode(), NLP_API_KEY.encode()):
+        raise HTTPException(status_code=401, detail="Cle API invalide")
+
+
+# ============================================
+# VALIDATION DES CHEMINS
+# ============================================
+def _audience(audience: str) -> str:
+    a = (audience or "student").strip().lower()
+    if a not in AUDIENCES:
+        raise HTTPException(status_code=400, detail="Audience invalide")
+    return a
+
+
+def _get_kb_dir(audience: str) -> str:
+    """Dossier knowledge_base selon l'audience."""
+    if audience == "professor":
+        return DOCUMENTS_DIR_PROF
+    if audience == "student_only":
+        return DOCUMENTS_DIR_STUDENT
+    return DOCUMENTS_DIR  # student (défaut) = dossier racine
+
+
+def _vector_audience(audience: str) -> str:
+    return "professor" if audience == "professor" else "student"
+
+
+def _safe_path(audience: str, filename: str, extensions=ALLOWED_EXTENSIONS) -> str:
+    """Chemin absolu du fichier, garanti à l'intérieur du dossier de l'audience."""
+    name = os.path.basename((filename or "").replace("\\", "/"))
+    if (not name or name != filename or ".." in name
+            or not SAFE_FILENAME.match(name) or not name.lower().endswith(extensions)):
+        raise HTTPException(status_code=400, detail="Nom de fichier invalide")
+    base = os.path.realpath(_get_kb_dir(audience))
+    path = os.path.realpath(os.path.join(base, name))
+    if os.path.dirname(path) != base:
+        raise HTTPException(status_code=400, detail="Nom de fichier invalide")
+    return path
+
+
+# ============================================
+# AUTO-INDEX AU DÉMARRAGE
+# ============================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Indexe automatiquement la base de connaissances au démarrage"""
     _safe_print("[START] FPST SmartDesk NLP Service demarrage...")
-    _safe_print("[INFO] Verification de la base de connaissances...")
+    if not NLP_API_KEY:
+        _safe_print("[WARN] NLP_API_KEY absente : toutes les requetes seront refusees (voir .env)")
 
-    vector_store = load_vector_store()
-    if vector_store is None:
-        _safe_print("[INFO] Premiere execution - Indexation de la base de connaissances...")
-        try:
-            result = create_vector_store()
-            if result:
-                _safe_print("[OK] Base de connaissances indexee avec succes !")
+    try:
+        if load_vector_store() is None:
+            _safe_print("[INFO] Premiere execution - indexation de la base de connaissances...")
+            if create_vector_store():
+                _safe_print("[OK] Base de connaissances indexee")
             else:
                 _safe_print("[WARN] Aucun document trouve dans knowledge_base/")
-        except Exception as e:
-            _safe_print(f"[ERR] Erreur indexation au demarrage: {e}")
-    else:
-        _safe_print("[OK] Base vectorielle deja existante, chargee.")
+        else:
+            _safe_print("[OK] Base vectorielle existante chargee")
+    except Exception as e:
+        _safe_print(f"[ERR] Erreur indexation au demarrage: {e}")
 
-    # Compter les fichiers knowledge_base
-    kb_path = "knowledge_base/"
-    if os.path.exists(kb_path):
-        files = [f for f in os.listdir(kb_path) if f.endswith(('.txt', '.pdf', '.docx'))]
-        _safe_print(f"[INFO] {len(files)} fichiers dans la base de connaissances")
-
-    groq_key = os.getenv("GROQ_API_KEY")
-    if groq_key:
-        _safe_print(f"[OK] Cle Groq API configuree ({groq_key[:10]}...)")
+    if GROQ_API_KEY:
+        _safe_print("[OK] Cle Groq API configuree")
     else:
-        _safe_print("[WARN] GROQ_API_KEY non configuree !")
+        _safe_print("[WARN] GROQ_API_KEY non configuree : le chatbot repondra en mode degrade")
 
     _safe_print("[READY] FPST SmartDesk est pret !")
     yield
     _safe_print("[STOP] FPST SmartDesk arrete.")
 
+
 app = FastAPI(
-    title="FPST SmartDesk — Faculty Assistant & Smart Technology Oracle",
-    description="Service NLP + RAG + Groq pour la gestion de faculté privée",
-    version="2.0",
-    lifespan=lifespan
+    title="FPST SmartDesk - service NLP",
+    description="Service NLP + RAG + Groq, appele uniquement par le backend",
+    version="2.2",
+    lifespan=lifespan,
+    # Pas de documentation interactive exposée par défaut
+    docs_url="/docs" if os.getenv("NLP_ENABLE_DOCS") == "true" else None,
+    redoc_url=None,
+    openapi_url="/openapi.json" if os.getenv("NLP_ENABLE_DOCS") == "true" else None,
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:4200", "http://localhost:8080", "http://localhost:61748", "*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+secured = [Depends(require_api_key)]
 
+
+# ============================================
+# MODÈLES DE REQUÊTE (tailles bornées)
+# ============================================
 class MessageRequest(BaseModel):
-    message: str
-    language: str = "fr"
-    conversation_history: Optional[list] = None
+    message: str = Field(..., max_length=2000)
+    language: str = Field("fr", max_length=5)
+    conversation_history: Optional[list] = Field(None, max_length=40)
+
 
 class RagRequest(BaseModel):
-    question: str
-    language: str = "fr"
-    user_role: str = "ETUDIANT"
-    conversation_history: Optional[list] = None
+    question: str = Field(..., max_length=2000)
+    language: str = Field("fr", max_length=5)
+    user_role: str = Field("ETUDIANT", max_length=20)
+    conversation_history: Optional[list] = Field(None, max_length=40)
+
 
 class GroqChatRequest(BaseModel):
-    message: str
-    language: str = "fr"
+    message: str = Field(..., max_length=2000)
+    language: str = Field("fr", max_length=5)
     student_context: Optional[dict] = None
-    user_role: str = "ETUDIANT"
-    conversation_history: Optional[list] = None
+    user_role: str = Field("ETUDIANT", max_length=20)
+    conversation_history: Optional[list] = Field(None, max_length=40)
+
 
 class UpdateContentRequest(BaseModel):
-    content: str
+    content: str = Field(..., max_length=2_000_000)
+
 
 class RewriteRequest(BaseModel):
-    message: str
-    language: str = "fr"
-    conversation_history: Optional[list] = None
+    message: str = Field(..., max_length=2000)
+    language: str = Field("fr", max_length=5)
+    conversation_history: Optional[list] = Field(None, max_length=40)
+
 
 # ============================================
-# ROUTE PRINCIPALE NLP
+# NLP / RAG / GROQ
 # ============================================
-@app.post("/analyze")
+@app.post("/analyze", dependencies=secured)
 async def analyze(request: MessageRequest):
-    result = analyze_message(
-        request.message,
-        request.language,
-        request.conversation_history
-    )
-    return result
+    return analyze_message(request.message, request.language, request.conversation_history)
 
-# ============================================
-# ROUTE REWRITE — REFORMULATION DE REQUÊTE
-# ============================================
-@app.post("/rewrite")
+
+@app.post("/rewrite", dependencies=secured)
 async def rewrite(request: RewriteRequest):
-    """Rewrites an ambiguous follow-up into a standalone question using conversation history."""
-    rewritten = rewrite_question(
-        request.message,
-        request.conversation_history or [],
-        request.language
-    )
+    """Reformule une question de suivi ambiguë en question autonome."""
+    rewritten = rewrite_question(request.message, request.conversation_history or [], request.language)
     return {"original": request.message, "rewritten": rewritten}
 
-# ============================================
-# ROUTE RAG — QUESTION SUR LES DOCUMENTS
-# ============================================
-@app.post("/rag/ask")
+
+@app.post("/rag/ask", dependencies=secured)
 async def ask_rag(request: RagRequest):
-    result = answer_with_rag(
-        request.question,
-        request.language,
-        request.user_role,
-        request.conversation_history
-    )
-    return result
+    return answer_with_rag(request.question, request.language, request.user_role,
+                           request.conversation_history)
 
-# ============================================
-# ROUTE GROQ — CHAT DIRECT AVEC IA
-# ============================================
-@app.post("/groq/chat")
+
+@app.post("/groq/chat", dependencies=secured)
 async def groq_chat(request: GroqChatRequest):
-    """Chat direct avec FPST SmartDesk via Groq pour les questions générales"""
-    # Pass student_context to the system prompt (NOT injected into the user message)
-    # Injecting into user message caused Groq to respond about the profile instead of the question
-    result = chat_with_groq(
-        request.message,
-        request.language,
-        request.user_role,
-        request.student_context,
-        request.conversation_history
-    )
-    return result
+    return chat_with_groq(request.message, request.language, request.user_role,
+                          request.student_context, request.conversation_history)
+
 
 # ============================================
-# ROUTE UPLOAD DOCUMENT (avec audience)
+# BASE DE CONNAISSANCES
 # ============================================
-@app.post("/rag/upload")
-async def upload_document(
-    file: UploadFile = File(...),
-    audience: str = Query(default="student", description="student | professor")
-):
-    upload_dir = _get_kb_dir(audience)
-    os.makedirs(upload_dir, exist_ok=True)
-    filepath = os.path.join(upload_dir, file.filename)
+@app.post("/rag/upload", dependencies=secured)
+async def upload_document(file: UploadFile = File(...),
+                          audience: str = Query(default="student")):
+    aud = _audience(audience)
+    filepath = _safe_path(aud, file.filename)
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
+    data = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="Fichier trop volumineux (10 Mo maximum)")
     with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        buffer.write(data)
 
-    # Indexer uniquement dans le vector store de l'audience
     try:
-        aud_vs = "professor" if audience == "professor" else "student"
-        import shutil as sh
-        chroma_dir = CHROMA_DIR_PROF if aud_vs == "professor" else CHROMA_DIR
-        if os.path.exists(chroma_dir):
-            sh.rmtree(chroma_dir)
-        create_vector_store(aud_vs)
-        return {"message": f"Document '{file.filename}' indexe avec succes ({audience})", "status": "success"}
+        rebuild_vector_store(_vector_audience(aud))
+        return {"message": f"Document '{os.path.basename(filepath)}' indexe avec succes ({aud})",
+                "status": "success"}
     except Exception as e:
-        return {"message": f"Fichier sauvegarde mais indexation echouee: {e}", "status": "partial"}
+        _safe_print(f"[ERR] Indexation apres upload: {e}")
+        return {"message": "Fichier sauvegarde mais indexation echouee", "status": "partial"}
 
-# ============================================
-# ROUTE RÉINDEXER TOUS LES DOCUMENTS
-# ============================================
-@app.post("/rag/index")
-async def index_all(audience: str = Query(default="all", description="student | professor | all")):
-    """Force la réindexation complète de la base de connaissances"""
-    import shutil as sh
+
+@app.post("/rag/index", dependencies=secured)
+async def index_all(audience: str = Query(default="all")):
+    """Force la réindexation complète."""
+    aud = _audience(audience)
+    targets = []
+    if aud in ("student", "student_only", "all"):
+        targets.append("student")
+    if aud in ("professor", "all"):
+        targets.append("professor")
+
     results = []
-
-    audiences_to_rebuild = []
-    if audience in ("student", "all"):
-        audiences_to_rebuild.append("student")
-    if audience in ("professor", "all"):
-        audiences_to_rebuild.append("professor")
-
-    for aud in audiences_to_rebuild:
-        chroma_dir = CHROMA_DIR_PROF if aud == "professor" else CHROMA_DIR
-        if os.path.exists(chroma_dir):
-            sh.rmtree(chroma_dir)
-            _safe_print(f"[INFO] Chroma {aud} supprime")
+    for target in targets:
         try:
-            vs = create_vector_store(aud)
-            results.append(f"{aud}: {'OK' if vs else 'vide'}")
+            vs = rebuild_vector_store(target)
+            results.append(f"{target}: {'OK' if vs else 'vide'}")
         except Exception as e:
-            results.append(f"{aud}: ERREUR {e}")
+            _safe_print(f"[ERR] Reindexation {target}: {e}")
+            results.append(f"{target}: ERREUR")
+    return {"message": "Reindexation terminee - " + " | ".join(results), "status": "success"}
 
-    return {"message": "Reindexation terminee — " + " | ".join(results), "status": "success"}
 
-# ============================================
-# ROUTE STATUS RAG
-# ============================================
-@app.get("/rag/status")
+@app.get("/rag/status", dependencies=secured)
 async def rag_status():
-    """Vérifie l'état complet du service FPST SmartDesk"""
-    from rag_service import GROQ_API_KEY
-
-    has_vs_student = load_vector_store("student") is not None
-    has_vs_prof    = load_vector_store("professor") is not None
-    has_groq_key   = GROQ_API_KEY is not None and len(GROQ_API_KEY) > 0
-
+    """État du service (sans aucune information secrète)."""
     def count_files(path):
         if os.path.exists(path):
             return len([f for f in os.listdir(path)
-                        if os.path.isfile(os.path.join(path, f))
-                        and f.endswith(('.txt', '.pdf', '.docx'))])
+                        if os.path.isfile(os.path.join(path, f)) and f.lower().endswith(ALLOWED_EXTENSIONS)])
         return 0
 
-    student_files = count_files(DOCUMENTS_DIR) + count_files(DOCUMENTS_DIR_STUDENT)
-    prof_files    = count_files(DOCUMENTS_DIR_PROF)
+    has_vs_student = os.path.exists(CHROMA_DIR) and bool(os.listdir(CHROMA_DIR))
+    has_vs_prof = os.path.exists(CHROMA_DIR_PROF) and bool(os.listdir(CHROMA_DIR_PROF))
+    has_groq_key = bool(GROQ_API_KEY)
 
     return {
         "assistant_name": "FPST SmartDesk",
-        "version": "2.1",
+        "version": "2.2",
         "vector_store_ready": has_vs_student,
         "vector_store_prof_ready": has_vs_prof,
         "groq_configured": has_groq_key,
-        "knowledge_base_files": student_files,
-        "professor_files": prof_files,
+        "knowledge_base_files": count_files(DOCUMENTS_DIR) + count_files(DOCUMENTS_DIR_STUDENT),
+        "professor_files": count_files(DOCUMENTS_DIR_PROF),
         "status": "ready" if (has_groq_key and has_vs_student) else
-                  "partial" if has_groq_key else "missing_api_key"
+                  "partial" if has_groq_key else "missing_api_key",
     }
 
-# ============================================
-# ROUTE LISTE DES DOCUMENTS (avec audience)
-# ============================================
-@app.get("/rag/documents")
+
+@app.get("/rag/documents", dependencies=secured)
 async def list_documents(audience: str = Query(default="student")):
-    kb_path = _get_kb_dir(audience)
+    aud = _audience(audience)
+    kb_path = _get_kb_dir(aud)
     os.makedirs(kb_path, exist_ok=True)
     docs = []
     for f in sorted(os.listdir(kb_path)):
         filepath = os.path.join(kb_path, f)
-        if not os.path.isfile(filepath):
+        if not os.path.isfile(filepath) or not f.lower().endswith(ALLOWED_EXTENSIONS):
             continue
-        if f.endswith(('.txt', '.pdf', '.docx')):
-            stat = os.stat(filepath)
-            docs.append({
-                "name": f,
-                "size": stat.st_size,
-                "modified": datetime.fromtimestamp(stat.st_mtime).strftime("%d/%m/%Y %H:%M"),
-                "type": f.rsplit('.', 1)[-1].upper(),
-                "editable": f.endswith('.txt'),
-                "audience": audience
-            })
+        stat = os.stat(filepath)
+        docs.append({
+            "name": f,
+            "size": stat.st_size,
+            "modified": datetime.fromtimestamp(stat.st_mtime).strftime("%d/%m/%Y %H:%M"),
+            "type": f.rsplit(".", 1)[-1].upper(),
+            "editable": f.lower().endswith(".txt"),
+            "audience": aud,
+        })
     return {"documents": docs, "count": len(docs)}
 
-# ============================================
-# ROUTE SUPPRIMER UN DOCUMENT (avec audience)
-# ============================================
-@app.delete("/rag/documents/{filename}")
+
+@app.delete("/rag/documents/{filename}", dependencies=secured)
 async def delete_document(filename: str, audience: str = Query(default="student")):
-    kb_path = _get_kb_dir(audience)
-    filepath = os.path.join(kb_path, filename)
-    if not os.path.exists(filepath):
+    aud = _audience(audience)
+    filepath = _safe_path(aud, filename)
+    if not os.path.isfile(filepath):
         raise HTTPException(status_code=404, detail="Fichier non trouve")
     os.remove(filepath)
     try:
-        import shutil as sh
-        aud_vs = "professor" if audience == "professor" else "student"
-        chroma_dir = CHROMA_DIR_PROF if aud_vs == "professor" else CHROMA_DIR
-        if os.path.exists(chroma_dir):
-            sh.rmtree(chroma_dir)
-        create_vector_store(aud_vs)
-    except Exception:
-        pass
+        rebuild_vector_store(_vector_audience(aud))
+    except Exception as e:
+        _safe_print(f"[ERR] Reindexation apres suppression: {e}")
     return {"message": f"Document '{filename}' supprime et base reindexee", "status": "success"}
 
-# ============================================
-# ROUTE LIRE CONTENU D'UN DOCUMENT TXT (avec audience)
-# ============================================
-@app.get("/rag/documents/{filename}/content")
-async def get_document_content(filename: str, audience: str = Query(default="student")):
-    if not filename.endswith('.txt'):
-        raise HTTPException(status_code=400, detail="Seuls les fichiers .txt peuvent etre lus")
-    kb_path = _get_kb_dir(audience)
-    filepath = os.path.join(kb_path, filename)
-    if not os.path.exists(filepath):
-        raise HTTPException(status_code=404, detail="Fichier non trouve")
-    with open(filepath, 'r', encoding='utf-8') as f:
-        content = f.read()
-    return {"filename": filename, "content": content, "audience": audience}
 
-# ============================================
-# ROUTE MODIFIER CONTENU D'UN DOCUMENT TXT
-# ============================================
-@app.put("/rag/documents/{filename}/content")
+@app.get("/rag/documents/{filename}/content", dependencies=secured)
+async def get_document_content(filename: str, audience: str = Query(default="student")):
+    aud = _audience(audience)
+    filepath = _safe_path(aud, filename, (".txt",))
+    if not os.path.isfile(filepath):
+        raise HTTPException(status_code=404, detail="Fichier non trouve")
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read()
+    return {"filename": filename, "content": content, "audience": aud}
+
+
+@app.put("/rag/documents/{filename}/content", dependencies=secured)
 async def update_document_content(filename: str, body: UpdateContentRequest,
                                   audience: str = Query(default="student")):
-    if not filename.endswith('.txt'):
-        raise HTTPException(status_code=400, detail="Seuls les fichiers .txt peuvent etre modifies")
-    kb_path = _get_kb_dir(audience)
-    filepath = os.path.join(kb_path, filename)
+    aud = _audience(audience)
+    filepath = _safe_path(aud, filename, (".txt",))
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
-    # 1. Sauvegarder le fichier (priorité absolue)
     try:
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(body.content)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur ecriture fichier: {str(e)}")
+    except OSError as e:
+        _safe_print(f"[ERR] Ecriture {filepath}: {e}")
+        raise HTTPException(status_code=500, detail="Erreur d'ecriture du fichier")
 
-    # 2. Reindexer (non bloquant si echec)
     try:
-        import shutil as sh
-        aud_vs = "professor" if audience == "professor" else "student"
-        chroma_dir = CHROMA_DIR_PROF if aud_vs == "professor" else CHROMA_DIR
-        if os.path.exists(chroma_dir):
-            sh.rmtree(chroma_dir)
-        create_vector_store(aud_vs)
+        rebuild_vector_store(_vector_audience(aud))
         return {"message": f"Contenu de '{filename}' mis a jour et base reindexee", "status": "success"}
     except Exception as e:
-        # Le fichier est sauvegardé même si l'indexation échoue
-        return {"message": f"Fichier '{filename}' sauvegarde. Reindexation en attente (relancez le service).", "status": "partial", "error": str(e)}
+        _safe_print(f"[ERR] Reindexation: {e}")
+        return {"message": f"Fichier '{filename}' sauvegarde. Reindexation en attente.",
+                "status": "partial"}
+
 
 # ============================================
-# ROUTE DE SANTÉ
+# SANTÉ (public, sans information sensible)
 # ============================================
 @app.get("/health")
 async def health():
-    return {
-        "status": "✅ FPST SmartDesk (Faculty Assistant & Smart Technology Oracle) is running!",
-        "version": "2.0",
-        "services": ["NLP", "RAG", "Groq AI"],
-        "languages": ["Français", "العربية", "الدارجة التونسية"]
-    }
+    return {"status": "UP", "service": "FPST SmartDesk NLP", "version": "2.2"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "main:app",
+        host=os.getenv("NLP_HOST", "127.0.0.1"),
+        port=int(os.getenv("NLP_PORT", "8000")),
+    )

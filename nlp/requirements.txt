@@ -1,20 +1,30 @@
-fastapi==0.104.1
-uvicorn==0.24.0
-spacy==3.7.2
+# Service NLP SmartDesk - Python 3.10 à 3.13
+# Installation : pip install -r requirements.txt
+#                python -m spacy download fr_core_news_sm
+
+# --- API ---
+fastapi>=0.115,<1.0
+uvicorn>=0.32,<1.0
+python-multipart>=0.0.18
+pydantic>=2.7,<3
+python-dotenv>=1.0,<2
+requests>=2.32,<3
+
+# --- RAG (recherche dans la base de connaissances) ---
+langchain-core>=1.0,<2
+langchain-community>=0.4,<0.5
+langchain-text-splitters>=1.0,<2
+langchain-chroma>=1.0,<2
+langchain-huggingface>=1.0,<2
+chromadb>=1.0,<2
+sentence-transformers>=5.2,<6
+pypdf>=6.0,<8
+docx2txt>=0.9
+python-docx>=1.1,<2
+
+# --- LLM ---
+groq>=0.30,<2
+
+# --- NLP classique ---
+spacy>=3.8,<3.9
 langdetect==1.0.9
-pydantic==2.5.0
-requests==2.31.0
-langchain==0.1.20
-langchain-community==0.0.38
-langchain-text-splitters==0.0.1
-langchain-core==0.1.52
-langchain-groq==0.1.3
-chromadb==0.4.22
-sentence-transformers==2.7.0
-pypdf==3.17.4
-python-docx==1.1.0
-python-multipart==0.0.6
-numpy==1.24.3
-huggingface-hub==0.23.0
-groq==0.5.0
-python-dotenv==1.0.1

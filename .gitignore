@@ -85,3 +85,8 @@ nlp/chroma_db_prof/
 # Tests / caches
 .pytest_cache/
 nlp/tests/__pycache__/
+
+# Environnements et config locale
+.venv/
+nlp/.venv/
+scripts/local-config.ps1

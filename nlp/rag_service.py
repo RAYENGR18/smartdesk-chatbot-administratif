@@ -25,8 +25,15 @@ from langchain_community.document_loaders import (
     TextLoader
 )
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma
+# Paquets dédiés (recommandés) avec repli sur langchain_community
+try:
+    from langchain_huggingface import HuggingFaceEmbeddings
+except ImportError:  # pragma: no cover
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+try:
+    from langchain_chroma import Chroma
+except ImportError:  # pragma: no cover
+    from langchain_community.vectorstores import Chroma
 from groq import Groq
 from langchain_core.prompts import PromptTemplate
 
@@ -72,16 +79,20 @@ class GroqLLM:
         
         return Response(completion.choices[0].message.content)
 
-load_dotenv()
+# .env : racine du projet puis dossier nlp/ (le premier trouvé gagne pour chaque variable)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, "..", ".env"))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # ============================================
-# CONFIGURATION
+# CONFIGURATION (chemins absolus : le service peut être lancé depuis n'importe où)
 # ============================================
-DOCUMENTS_DIR         = "knowledge_base/"
-DOCUMENTS_DIR_STUDENT = "knowledge_base/student/"
-DOCUMENTS_DIR_PROF    = "knowledge_base/professor/"
-CHROMA_DIR            = "chroma_db/"
-CHROMA_DIR_PROF       = "chroma_db_prof/"
+DOCUMENTS_DIR         = os.path.join(BASE_DIR, "knowledge_base")
+DOCUMENTS_DIR_STUDENT = os.path.join(DOCUMENTS_DIR, "student")
+DOCUMENTS_DIR_PROF    = os.path.join(DOCUMENTS_DIR, "professor")
+CHROMA_DIR            = os.getenv("CHROMA_DB_PATH") or os.path.join(BASE_DIR, "chroma_db")
+CHROMA_DIR_PROF       = os.getenv("CHROMA_DB_PROF_PATH") or os.path.join(BASE_DIR, "chroma_db_prof")
+EMBEDDING_MODEL       = os.getenv("EMBEDDING_MODEL", "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
@@ -592,9 +603,17 @@ def rewrite_question(message: str, conversation_history: list,
 # ============================================
 # INITIALISER LES EMBEDDINGS
 # ============================================
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-)
+_embeddings = None
+
+def get_embeddings():
+    """Charge le modèle d'embeddings une seule fois, au premier besoin."""
+    global _embeddings
+    if _embeddings is None:
+        _embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
+    return _embeddings
+
+def _chroma_dir(audience: str) -> str:
+    return CHROMA_DIR_PROF if audience == "professor" else CHROMA_DIR
 
 # ============================================
 # CHARGER LES DOCUMENTS (d'un ou plusieurs dossiers)
@@ -646,7 +665,7 @@ def load_documents(audience="student"):
 # CRÉER LA BASE VECTORIELLE
 # ============================================
 def create_vector_store(audience="student"):
-    chroma_dir = CHROMA_DIR_PROF if audience == "professor" else CHROMA_DIR
+    chroma_dir = _chroma_dir(audience)
     documents = load_documents(audience)
 
     if not documents:
@@ -663,7 +682,7 @@ def create_vector_store(audience="student"):
 
     vector_store = Chroma.from_documents(
         documents=chunks,
-        embedding=embeddings,
+        embedding=get_embeddings(),
         persist_directory=chroma_dir
     )
 
@@ -674,13 +693,30 @@ def create_vector_store(audience="student"):
 # CHARGER LA BASE VECTORIELLE EXISTANTE
 # ============================================
 def load_vector_store(audience="student"):
-    chroma_dir = CHROMA_DIR_PROF if audience == "professor" else CHROMA_DIR
+    chroma_dir = _chroma_dir(audience)
     if os.path.exists(chroma_dir) and os.listdir(chroma_dir):
         return Chroma(
             persist_directory=chroma_dir,
-            embedding_function=embeddings
+            embedding_function=get_embeddings()
         )
     return None
+
+# ============================================
+# RECONSTRUIRE LA BASE VECTORIELLE
+# ============================================
+def rebuild_vector_store(audience="student"):
+    """
+    Vide la collection existante puis la recrée.
+    On ne supprime plus le dossier chroma_db avec shutil.rmtree : sous Windows
+    le fichier SQLite est verrouillé tant que le service tourne (WinError 32).
+    """
+    existing = load_vector_store(audience)
+    if existing is not None:
+        try:
+            existing.delete_collection()
+        except Exception as e:
+            _safe_print(f"[WARN] Collection {audience} non supprimee: {e}")
+    return create_vector_store(audience)
 
 # ============================================
 # INITIALISER LE LLM GROQ
@@ -827,8 +863,9 @@ def answer_with_rag(question: str, language: str = 'fr', user_role: str = 'ETUDI
         sources = []
         for doc in source_documents:
             source = doc.metadata.get("source", "Document inconnu")
-            source_clean = source.replace("knowledge_base/", "").replace("knowledge_base\\", "")
-            source_clean = source_clean.replace(".txt", "").replace("_", " ").title()
+            # Nom du fichier seulement : on n'expose jamais le chemin du serveur
+            source_clean = os.path.basename(str(source).replace("\\", "/"))
+            source_clean = os.path.splitext(source_clean)[0].replace("_", " ").title()
             if source_clean not in sources:
                 sources.append(source_clean)
 
@@ -978,7 +1015,7 @@ def index_document(filepath: str) -> bool:
         else:
             Chroma.from_documents(
                 documents=chunks,
-                embedding=embeddings,
+                embedding=get_embeddings(),
                 persist_directory=CHROMA_DIR
             )
 

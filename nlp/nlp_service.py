@@ -11,7 +11,9 @@ import unicodedata
 from langdetect import detect
 from dotenv import load_dotenv
 
-load_dotenv()
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(_BASE_DIR, "..", ".env"))
+load_dotenv(os.path.join(_BASE_DIR, ".env"))
 _GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # Lightweight, fast model used ONLY for classification (not generation)
 _CLASSIFIER_MODEL = "llama-3.1-8b-instant"
@@ -148,7 +150,13 @@ def _keyword_matches(keyword: str, text: str) -> bool:
     # (?<!\w) = no word char immediately before → keyword starts a word
     return bool(re.search(r'(?<!\w)' + re.escape(keyword), text))
 
-nlp_fr = spacy.load("fr_core_news_sm")
+try:
+    nlp_fr = spacy.load("fr_core_news_sm")
+except OSError:
+    # Modèle non installé : le service fonctionne quand même (sans extraction d'entités)
+    # Installation : python -m spacy download fr_core_news_sm
+    nlp_fr = None
+    print("[WARN] Modele spaCy fr_core_news_sm absent : extraction d'entites desactivee.")
 
 # ============================================
 # TOUTES LES INTENTIONS
@@ -730,7 +738,7 @@ def analyze_message(message: str, language: str = None,
         classifier_used = "keyword_full"
 
     entities = []
-    if detected_language == 'fr':
+    if detected_language == 'fr' and nlp_fr is not None:
         doc = nlp_fr(message)
         entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
 
