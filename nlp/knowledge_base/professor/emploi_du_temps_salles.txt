@@ -1,0 +1,70 @@
+GESTION DE L'EMPLOI DU TEMPS ET DES SALLES - FPST
+===================================================
+
+CONSULTATION DE L'EMPLOI DU TEMPS
+------------------------------------
+L'emploi du temps de chaque professeur est disponible dans l'espace FASTO sous l'onglet "Mon emploi du temps".
+Il est mis a jour chaque debut de semestre par le service planification.
+
+STRUCTURE DES CRENEAUX
+-----------------------
+Matin :
+- 08h00 - 09h30 : Creneau 1
+- 09h30 - 11h00 : Creneau 2
+- 11h00 - 12h30 : Creneau 3
+
+Apres-midi :
+- 13h30 - 15h00 : Creneau 4
+- 15h00 - 16h30 : Creneau 5
+- 16h30 - 18h00 : Creneau 6
+
+SALLES DISPONIBLES
+-------------------
+Salles de cours :
+- Salle A101, A102, A103, A104 (capacite 40 places)
+- Salle B201, B202, B203 (capacite 60 places)
+- Amphitheatre (capacite 150 places)
+
+Salles informatiques :
+- Labo Info 1 : 30 postes (logiciels : Office, Python, Java, etc.)
+- Labo Info 2 : 25 postes (logiciels : Matlab, R, SPSS)
+- Labo Reseau : 20 postes (equipements Cisco)
+
+Salles specialisees :
+- Salle de conference (40 places)
+- Salle multimedia
+
+RESERVATION DE SALLE
+---------------------
+Pour une reservation exceptionnelle (hors emploi du temps habituel) :
+1. Verifier la disponibilite aupres du secretariat
+2. Remplir le formulaire de reservation en ligne ou papier
+3. Validation par le chef de departement
+4. Confirmation sous 24h
+
+PROBLEMES TECHNIQUES EN SALLE
+-------------------------------
+En cas de panne du videoprojecteur, ordinateur ou autre equipement :
+- Appeler le service technique : poste interne 150
+- Signalement par email : technique@fpst.tn
+- Intervention dans un delai de 30 minutes
+
+CHANGEMENT D'EMPLOI DU TEMPS
+------------------------------
+Toute modification doit etre validee par le chef de departement.
+Les demandes de changement permanent sont a soumettre avant la 3eme semaine du semestre.
+Les changements exceptionnels sont a communiquer au secretariat et aux etudiants.
+
+CALENDRIER ACADEMIQUE
+----------------------
+Semestre 1 :
+- Debut des cours : debut septembre
+- Conges mi-semestre : fin octobre / debut novembre
+- Examens de session principale : debut janvier
+- Session de rattrapage : fin janvier
+
+Semestre 2 :
+- Debut des cours : debut fevrier
+- Conges mi-semestre : fin mars / debut avril
+- Examens de session principale : fin mai / debut juin
+- Session de rattrapage : fin juin

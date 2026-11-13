@@ -1,0 +1,264 @@
+<div class="notes-container" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
+  <!-- ── HEADER ─────────────────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h2 class="page-title">{{ text('title') }}</h2>
+      <p class="page-subtitle">{{ text('subtitle') }}</p>
+    </div>
+    <div class="header-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+        <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+      </svg>
+      FPST
+    </div>
+  </div>
+
+  <!-- ── STATISTICS CARDS ───────────────────────────────── -->
+  <div class="stats-grid">
+    <div class="stat-card stat-blue">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M9 17H7A5 5 0 017 7h2M15 7h2a5 5 0 010 10h-2M8 12h8"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-value">{{ totalNotes }}</div>
+        <div class="stat-label">{{ text('total_notes') }}</div>
+      </div>
+    </div>
+    <div class="stat-card stat-green">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-value">{{ nbPass }}</div>
+        <div class="stat-label">{{ text('nb_pass') }}</div>
+      </div>
+    </div>
+    <div class="stat-card stat-red">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-value">{{ nbFail }}</div>
+        <div class="stat-label">{{ text('nb_fail') }}</div>
+      </div>
+    </div>
+    <div class="stat-card stat-purple">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-value">{{ moyenne | number:'1.2-2' }}<span class="stat-unit">/20</span></div>
+        <div class="stat-label">{{ text('moyenne') }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ALERTS ─────────────────────────────────────────── -->
+  <div class="alert alert-success" *ngIf="successMsg" role="alert">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+    {{ successMsg }}
+  </div>
+  <div class="alert alert-error" *ngIf="errorMsg" role="alert">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    {{ errorMsg }}
+  </div>
+
+  <!-- ── FORM CARD ──────────────────────────────────────── -->
+  <div class="form-card note-form-card">
+    <div class="form-card-header">
+      <div class="form-card-title">
+        <span class="form-card-dot" [class.dot-edit]="editingNoteId !== null"></span>
+        {{ editingNoteId !== null ? text('edit_evaluation') : text('new_evaluation') }}
+      </div>
+      <button class="btn-cancel-top" *ngIf="editingNoteId !== null" (click)="cancelEdit()">
+        {{ text('cancel') }}
+      </button>
+    </div>
+
+    <div class="form-grid-4">
+      <div class="form-group">
+        <label class="field-label">{{ text('student') }}</label>
+        <select [(ngModel)]="newNote.etudiantId" class="field-select">
+          <option value="">{{ text('select_student') }}</option>
+          <option *ngFor="let s of etudiants" [value]="s.id">
+            {{ s.firstName }} {{ s.lastName }}
+            <ng-container *ngIf="s.studentId || s.username"> ({{ s.studentId || s.username }})</ng-container>
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">{{ text('subject') }}</label>
+        <select [(ngModel)]="newNote.matiereId" class="field-select">
+          <option value="">{{ text('select_subject') }}</option>
+          <option *ngFor="let m of matieres" [value]="m.id">
+            {{ m.nom }}<ng-container *ngIf="m.filiere?.nom"> — {{ m.filiere.nom }}</ng-container>
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">{{ text('evaluation_type') }}</label>
+        <select [(ngModel)]="newNote.typeEvaluation" class="field-select">
+          <option value="DS">{{ typeLabel('DS') }}</option>
+          <option value="Examen">{{ typeLabel('Examen') }}</option>
+          <option value="TP">{{ typeLabel('TP') }}</option>
+          <option value="Projet">{{ typeLabel('Projet') }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="field-label">{{ text('grade20') }}</label>
+        <input type="number" [(ngModel)]="newNote.valeur"
+               min="0" max="20" step="0.25"
+               class="field-input"
+               [placeholder]="text('grade_placeholder')"/>
+      </div>
+    </div>
+
+    <div class="form-group mt-16">
+      <label class="field-label">{{ text('comment_optional') }}</label>
+      <input type="text" [(ngModel)]="newNote.commentaire"
+             [placeholder]="text('comment_placeholder')"
+             class="field-input"/>
+    </div>
+
+    <div class="form-actions mt-20">
+      <button class="btn-primary" (click)="ajouterNote()" [disabled]="isSubmitting">
+        <svg *ngIf="!isSubmitting" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v14a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+        </svg>
+        <span class="spinner-sm" *ngIf="isSubmitting"></span>
+        {{ editingNoteId !== null ? text('update_grade') : text('save_grade') }}
+      </button>
+      <button class="btn-ghost" *ngIf="editingNoteId !== null" (click)="cancelEdit()">
+        {{ text('cancel') }}
+      </button>
+    </div>
+  </div>
+
+  <!-- ── TABLE CARD ─────────────────────────────────────── -->
+  <div class="table-card">
+    <div class="table-card-header">
+      <h3 class="table-card-title">{{ text('saved_grades') }}</h3>
+
+      <!-- Search & Filters -->
+      <div class="table-controls">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" [(ngModel)]="searchQuery" [placeholder]="text('searching')" class="search-input"/>
+        </div>
+        <select [(ngModel)]="filterType" class="filter-select">
+          <option value="">{{ text('all_types') }}</option>
+          <option value="DS">{{ typeLabel('DS') }}</option>
+          <option value="Examen">{{ typeLabel('Examen') }}</option>
+          <option value="TP">{{ typeLabel('TP') }}</option>
+          <option value="Projet">{{ typeLabel('Projet') }}</option>
+        </select>
+        <select [(ngModel)]="filterMatiere" class="filter-select">
+          <option value="">{{ text('all_subjects') }}</option>
+          <option *ngFor="let m of matieres" [value]="m.id">{{ m.nom }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-state">
+      <span class="spinner"></span>
+      <span>{{ text('loading') }}</span>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap" *ngIf="!isLoading">
+      <table class="notes-table">
+        <thead>
+          <tr>
+            <th>{{ text('student') }}</th>
+            <th>{{ text('subject') }}</th>
+            <th>{{ text('type') }}</th>
+            <th class="th-center">{{ text('grade20') }}</th>
+            <th>{{ text('comment') }}</th>
+            <th>{{ text('date') }}</th>
+            <th class="th-center">{{ text('action') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="filteredNotes.length === 0">
+            <td colspan="7" class="empty-row">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="36" height="36">
+                  <path d="M9 17H7A5 5 0 017 7h2M15 7h2a5 5 0 010 10h-2M8 12h8"/>
+                </svg>
+                <span>{{ text('empty') }}</span>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let n of filteredNotes" class="table-row">
+            <td>
+              <div class="student-cell">
+                <div class="student-avatar">{{ (n.etudiant?.firstName || '?')[0].toUpperCase() }}</div>
+                <div>
+                  <div class="student-name">{{ n.etudiant?.firstName }} {{ n.etudiant?.lastName }}</div>
+                  <div class="student-id" *ngIf="n.etudiant?.studentId">{{ n.etudiant.studentId }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="td-matiere">{{ n.matiere?.nom }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'badge-ds':     n.typeEvaluation === 'DS',
+                'badge-exam':   n.typeEvaluation === 'Examen',
+                'badge-tp':     n.typeEvaluation === 'TP',
+                'badge-projet': n.typeEvaluation === 'Projet'
+              }">{{ typeLabel(n.typeEvaluation) }}</span>
+            </td>
+            <td class="td-center">
+              <span class="grade-pill" [class.grade-pass]="n.valeur >= 10" [class.grade-fail]="n.valeur < 10">
+                {{ n.valeur | number:'1.2-2' }}<span class="grade-denom">/20</span>
+              </span>
+            </td>
+            <td class="td-comment">{{ n.commentaire || text('empty_dash') }}</td>
+            <td class="td-date">{{ formatDate(n.dateSaisie) }}</td>
+            <td class="td-center">
+              <div class="action-btns">
+                <button class="btn-edit-row" (click)="editNote(n)" title="{{ text('edit_evaluation') }}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button class="btn-delete-row" (click)="supprimerNote(n.id)" title="{{ text('confirm_delete') }}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pass rate bar -->
+      <div class="pass-rate-bar" *ngIf="totalNotes > 0">
+        <div class="pass-rate-label">
+          <span>{{ text('nb_pass') }} {{ passRate }}%</span>
+          <span>{{ nbPass }}/{{ totalNotes }}</span>
+        </div>
+        <div class="pass-rate-track">
+          <div class="pass-rate-fill" [style.width.%]="passRate"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

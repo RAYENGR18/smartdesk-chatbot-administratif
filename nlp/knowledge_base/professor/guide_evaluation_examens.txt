@@ -1,0 +1,104 @@
+GUIDE DE L'EVALUATION ET DES EXAMENS - FPST
+============================================
+
+TYPES D'EVALUATIONS
+---------------------
+
+1. Controle Continu (DS)
+   - Duree : 1h30 en general
+   - Organisation : en salle pendant les heures de cours
+   - Coefficient : variable selon le module (generalement 30-40% de la note finale)
+   - Feuilles d'examen fournies par le service scolarite
+
+2. Examen de Session Principale
+   - Duree : 2h00 a 3h00 selon le module
+   - Organisation : selon le planning officiel
+   - Coefficient : generalement 60-70% de la note finale
+   - Acces a la session de rattrapage si note < 10/20
+
+3. Session de Rattrapage
+   - Concerne les etudiants ayant obtenu une note < 10/20
+   - La meilleure note (principale ou rattrapage) est retenue
+   - Meme format que la session principale
+
+4. Travaux Pratiques (TP/TD)
+   - Evaluation continue des seances pratiques
+   - Rapport de TP a remettre dans les 7 jours suivant la seance
+   - Notes de participation et de comportement en laboratoire
+
+5. Projets
+   - Evaluation par soutenance orale + rapport ecrit
+   - Grille d'evaluation : fond (60%), forme (20%), presentation orale (20%)
+   - Plagiat : note 0 et renvoi devant le conseil de discipline
+
+PREPARATION DES SUJETS D'EXAMEN
+---------------------------------
+Consignes :
+- Le sujet doit couvrir l'ensemble du programme du module
+- Prevoir des questions de difficultes progressives
+- Inclure le bareme detaille sur le sujet
+- Verifier l'absence de fautes et la coherence du sujet
+- Soumettre le sujet et le corrige au chef de departement pour validation
+- Delai de remise : 48h avant l'examen
+
+Format du sujet :
+- En-tete : nom du module, filiere, niveau, duree, session
+- Instructions claires pour les etudiants
+- Documents autorises ou non (preciser)
+- Baremes clairement indiques
+
+SURVEILLANCE DES EXAMENS
+--------------------------
+Regles de surveillance :
+- Arriver 15 minutes avant le debut pour preparer la salle
+- Verifier les identites des etudiants (carte etudiant)
+- Interdire tout materiel non autorise (telephonnes, notes, etc.)
+- Signaler tout cas de fraude sur le PV de surveillance
+- Ne pas quitter la salle pendant l'examen
+- Faire signer la feuille de presence
+
+En cas de fraude :
+- Confisquer le materiel interdit
+- Laisser l'etudiant continuer l'examen
+- Mentionner l'incident dans le PV
+- Remettre le dossier au chef de departement
+- Conseil de discipline dans les 5 jours
+
+CORRECTION ET RENDU DES COPIES
+--------------------------------
+- Corriger anonymement (les copies sont anonymisees)
+- Respecter strictement le bareme fourni
+- Annoter les corrections pour que l'etudiant comprenne ses erreurs
+- Delai de correction : 48h pour les examens de session
+- Remise des notes au service scolarite sous forme numerique et papier
+
+CALCUL DE LA MOYENNE FINALE
+-----------------------------
+Formule generale :
+Moyenne finale = (Note DS x coeff DS) + (Note Examen x coeff Examen) + (Note TP x coeff TP)
+                 -------------------------------------------------------------------------
+                                    Somme des coefficients
+
+Validation :
+- Moyenne >= 10/20 : module valide
+- Moyenne < 10/20 : session de rattrapage
+- Absence injustifiee a un examen = note 0
+
+JURY DE DELIBERATION
+---------------------
+Composition :
+- Le doyen ou son representant (president)
+- Les chefs de departement
+- Les professeurs responsables des modules
+
+Decisions du jury :
+- Validation du semestre si moyenne >= 10/20
+- Passage en annee superieure selon les conditions de progression
+- Redoublement si conditions non satisfaites
+- Exclusion en cas d'echecs repetitifs (selon reglement)
+
+CONSERVATION DES COPIES
+------------------------
+- Les copies d'examens doivent etre conservees 2 ans
+- Stockage au service scolarite apres remise des notes
+- Acces possible pour reclamation des etudiants

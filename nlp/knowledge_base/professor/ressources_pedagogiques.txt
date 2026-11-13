@@ -1,0 +1,83 @@
+RESSOURCES PEDAGOGIQUES DISPONIBLES - FPST
+==========================================
+
+BIBLIOTHEQUE
+-------------
+Horaires d'ouverture :
+- Lundi - Vendredi : 08h00 - 18h00
+- Samedi : 08h00 - 13h00
+
+Ressources disponibles :
+- Ouvrages scientifiques (plus de 15 000 titres)
+- Acces a des revues et journaux scientifiques en ligne
+- Abonnement IEEE Xplore, ACM Digital Library, Science Direct
+- Periodiques specialises
+
+Service de pret :
+- Duree de pret : 15 jours (renouvelable une fois)
+- Maximum : 5 ouvrages simultanement
+- Reservation en ligne via le catalogue numerique
+
+PLATEFORME NUMERIQUE D'ENSEIGNEMENT
+-------------------------------------
+La FPST dispose d'une plateforme e-learning :
+- Depot de supports de cours (PDF, presentations, videos)
+- Creation de QCM et exercices en ligne
+- Suivi de l'avancement des etudiants
+- Forums de discussion par module
+- Remise de travaux et devoirs en ligne
+
+MATERIELS ET RESSOURCES NUMERIQUES
+------------------------------------
+Logiciels disponibles pour l'enseignement :
+- Mathematiques : MATLAB, Scilab, Mathematica
+- Programmation : Eclipse, IntelliJ IDEA, Visual Studio Code, PyCharm
+- Statistiques : SPSS, R Studio
+- Conception : AutoCAD, SolidWorks (pour genie)
+- Bases de donnees : MySQL Workbench, Oracle SQL Developer
+- Reseau : Packet Tracer, GNS3
+
+PREPARATION DES COURS
+-----------------------
+Support de cours recommandes :
+- Presentations PowerPoint/PDF a deposer sur la plateforme avant le cours
+- Polycopies disponibles via le service reprographie (demande 48h a l'avance)
+- References bibliographiques a communiquer aux etudiants en debut de semestre
+
+Service reprographie :
+- Impression de supports de cours (quota annuel par professeur)
+- Contact : reprographie@fpst.tn
+- Delai de preparation : 48 heures minimum
+
+ENCADREMENT DES STAGES ET PFE
+-------------------------------
+Encadrement des stages :
+- Le professeur encadreur suit l'etudiant tout au long du stage
+- Visites en entreprise recommandees (au moins une)
+- Evaluation conjointe (entreprise + professeur)
+
+Encadrement des PFE (Projets de Fin d'Etudes) :
+- Attribution des sujets en debut de semestre 5
+- Reunions de suivi obligatoires (minimum 1 par mois)
+- Composition du jury : encadreur + rapporteur externe
+- Depot du rapport final : 3 semaines avant la soutenance
+
+FORMATION CONTINUE DES ENSEIGNANTS
+-------------------------------------
+Formations disponibles :
+- Pedagogie universitaire (2 jours par an)
+- Outils numeriques pour l'enseignement
+- Langues etrangeres (anglais professionnel)
+- Recherche scientifique et publication
+
+Financement :
+- Formations prises en charge par l'etablissement
+- Formulaire de candidature aupres du service RH
+
+RESSOURCES EN LIGNE
+---------------------
+Acces aux ressources numeriques :
+- Google Scholar (recherche scientifique)
+- ResearchGate (publications et collaboration)
+- Coursera / edX (formations en ligne pour les enseignants)
+- OpenEdX (cours en ligne ouverts)

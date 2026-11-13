@@ -1,0 +1,218 @@
+═══════════════════════════════════════════════════════════
+              GUIDE STAGES ET PROJET DE FIN D'ÉTUDES (PFE)
+      Faculté Privée des Sciences et Technologies (FPST)
+═══════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────
+📌 TYPES DE STAGES À LA FPST
+────────────────────────────────────────────────────────
+
+1. STAGE D'OBSERVATION (L2 — 1 mois — Juillet)
+   Objectif : Découvrir le monde professionnel
+   Durée    : 4 semaines minimum
+   Lieu     : Toute structure (entreprise, administration, ONG)
+   Livrable : Rapport de stage + attestation employeur
+   Note     : Pass/Fail (validé = 10/20 accordé)
+
+2. STAGE PROFESSIONNEL (L3 — 2 mois — Juillet-Août)
+   Objectif : Mise en pratique des compétences acquises
+   Durée    : 8 semaines minimum
+   Lieu     : Entreprise du secteur (informatique préféré)
+   Livrable : Rapport (30-50 pages) + Soutenance devant jury
+   Évaluation : Rapport (40%) + Soutenance (40%) + Tuteur (20%)
+
+3. STAGE PFE / MÉMOIRE (L3-S2 ou M2-S2 — 4 à 6 mois)
+   Objectif : Réaliser un projet complet en entreprise ou laboratoire
+   Durée    : 16 à 24 semaines
+   Livrable : Rapport PFE (60-100 pages) + Soutenance officielle
+   Évaluation : Rapport (35%) + Soutenance (40%) + Encadrant (15%) + Jury (10%)
+
+────────────────────────────────────────────────────────
+🔍 TROUVER UN STAGE — RESSOURCES ET CONSEILS
+────────────────────────────────────────────────────────
+
+RESSOURCES OFFICIELLES DE LA FPST :
+  • Bureau des Stages : Bureau 203, Bâtiment B
+    Horaires : Lun-Ven 09h00-16h00
+    Email : stages@fpst.tn
+
+  • Plateforme stages en ligne : stages.fpst.tn
+    → Offres de stages partenaires (mis à jour hebdomadairement)
+    → Dépôt de CV en ligne
+    → Suivi de candidatures
+
+  • Forum Entreprises-Étudiants (Chaque mois de Mars sur le campus)
+    → Plus de 40 entreprises présentes
+    → Entretiens sur place possible
+    → Dépôt de candidatures en direct
+
+  • Réseau Alumni FPST
+    → Anciens diplômés dans + de 60 entreprises
+    → Mentorat et recommandations
+
+ENTREPRISES PARTENAIRES (exemples) :
+  • Ooredoo Tunisie (Télécoms)
+  • Orange Tunisie (Télécoms)
+  • Vermeg (Fintech, SI bancaires)
+  • BIAT (Banque)
+  • Tunis Air (Aviation)
+  • Stelia Aerospace (Industrie)
+  • Telnet Holding (IT Services)
+  • Sofrecom (Consulting Télécom)
+  • Onetech Group (Câblage automobile)
+  • IBM Tunisie (Technologies)
+  • Wevioo (Digital, IA)
+  • Ministère des TIC (Administration)
+  • Centres de recherche universitaires
+
+CONSEILS POUR TROUVER UN STAGE :
+  → Rédigez un CV propre (1 page, PDF)
+  → Rédigez une lettre de motivation personnalisée pour chaque candidature
+  → Utilisez LinkedIn : profilez-vous avec vos projets de cours
+  → Contactez directement les DRH par email
+  → Participez aux hackathons et coding events (visibilité)
+  → Commencez à chercher 3 mois avant la date de début souhaitée
+
+────────────────────────────────────────────────────────
+📄 CONVENTION DE STAGE
+────────────────────────────────────────────────────────
+
+OBLIGATOIRE pour tout stage rémunéré ou non.
+Document établi entre : L'étudiant + La FPST + L'Entreprise
+
+COMMENT OBTENIR LA CONVENTION :
+  1. Trouver une entreprise d'accueil (accord verbal/email de l'employeur)
+  2. Télécharger le modèle : elearning.fpst.tn → Rubriques → Documents
+  3. Remplir les informations (étudiant + entreprise + dates + thème)
+  4. Soumettre au Bureau des Stages (Bureau 203) 2 semaines avant le début
+  5. La faculté valide et signe sous 48h
+  6. 3 exemplaires signés : étudiant / faculté / entreprise
+
+CONTENU DE LA CONVENTION :
+  → Identité des 3 parties
+  → Dates précises (début et fin)
+  → Thème ou mission principale
+  → Nom du tuteur en entreprise
+  → Nom de l'encadrant académique (désigné par la faculté)
+  → Conditions d'assurance
+
+────────────────────────────────────────────────────────
+📝 RAPPORT DE STAGE — STRUCTURE ET EXIGENCES
+────────────────────────────────────────────────────────
+
+STRUCTURE RECOMMANDÉE DU RAPPORT :
+
+  Page de garde (titre, nom, année, faculté, entreprise)
+  Dédicaces (optionnel)
+  Remerciements
+  Table des matières
+  Liste des figures et tableaux
+  Liste des abréviations
+  Résumé (FR + EN, max 300 mots chacun)
+
+  PARTIE I — PRÉSENTATION DE L'ORGANISME D'ACCUEIL (5-10 pages)
+    → Historique, activités, structure organisationnelle
+    → Département d'accueil, contexte du stage
+
+  PARTIE II — ÉTUDE THÉORIQUE (15-25 pages)
+    → Analyse du problème ou besoin
+    → État de l'art / Revue bibliographique
+    → Solutions proposées et choix retenu
+
+  PARTIE III — RÉALISATION (20-40 pages)
+    → Conception (UML : cas d'utilisation, diagrammes de classes)
+    → Implémentation (technologies, architecture, interfaces)
+    → Tests et validation
+
+  CONCLUSION ET PERSPECTIVES
+  Références bibliographiques (norme IEEE ou APA)
+  Annexes
+
+EXIGENCES DE MISE EN PAGE :
+  Police : Times New Roman ou Arial, taille 12
+  Interligne : 1.5
+  Marges : 2.5 cm (gauche : 3 cm pour reliure)
+  Reliure : Spirale (stage) ou Rigide (PFE)
+  Nombre d'exemplaires : 3 (jury) + 1 (bibliothèque) pour PFE
+  Format : A4, impression recto-verso recommandée
+
+────────────────────────────────────────────────────────
+🎤 SOUTENANCE DE STAGE / PFE
+────────────────────────────────────────────────────────
+
+DURÉE DE LA SOUTENANCE :
+  Stage professionnel (L3) : 20-25 minutes de présentation + 10 min questions
+  PFE/Mémoire             : 30-40 minutes de présentation + 20 min questions
+
+COMPOSITION DU JURY :
+  • Président du jury : Enseignant senior (Docteur ou Professeur)
+  • Encadrant académique : Enseignant désigné par la faculté
+  • Rapporteur : Deuxième enseignant lecteur du rapport
+  • Invité possible : Représentant de l'entreprise (non votant)
+
+TENUE VESTIMENTAIRE :
+  Tenue professionnelle obligatoire (pas de jean/T-shirt).
+
+SUPPORT DE PRÉSENTATION :
+  → Format PowerPoint ou équivalent (PDF recommandé)
+  → Maximum 20 diapositives pour PFE
+  → Inclure : Intro, problématique, solution, démo/captures, conclusion
+
+DÉLAI DE DÉPÔT DU RAPPORT :
+  Stage L3 : 10 jours avant la soutenance
+  PFE       : 15 jours avant la soutenance
+  Dépôt : Bureau des stages (Bureau 203) + version PDF sur elearning.fpst.tn
+
+────────────────────────────────────────────────────────
+📅 CALENDRIER DES STAGES 2024-2025
+────────────────────────────────────────────────────────
+
+  15 Mars 2025    — Date limite de soumission convention stage L2 et L3
+  01 Avril 2025   — Publication de la liste des encadrants académiques
+  15 Juin 2025    — Fin des cours et début officiel des stages L2/L3
+  15 Juillet 2025 — Début des stages PFE (M2-S2)
+  01 Septembre    — Date limite de dépôt rapport stage L2
+  10 Septembre    — Soutenances stages L2
+  15 Septembre    — Date limite de dépôt rapport stage L3
+  25 Sept - 10 Oct — Soutenances stages L3 et PFE Licences
+  15 Nov 2025     — Date limite dépôt mémoires Masters
+  Nov-Déc 2025    — Soutenances Masters (MIADS, MCS)
+
+────────────────────────────────────────────────────────
+❓ QUESTIONS FRÉQUENTES SUR LES STAGES ET PFE
+────────────────────────────────────────────────────────
+
+Q: Puis-je faire mon stage à l'étranger ?
+R: Oui, sous réserve d'un accord préalable du bureau des stages.
+   La convention est adaptée pour les stages internationaux.
+   Un encadrant académique vous sera assigné à distance.
+
+Q: Peut-on faire un stage non rémunéré ?
+R: Oui, mais la FPST encourage les entreprises à rémunérer (au moins le SMIG).
+   Aucune obligation légale de rémunération pour les stages < 3 mois en Tunisie.
+
+Q: J'ai trouvé un stage mais pas dans mon domaine, est-ce accepté ?
+R: Pour le stage d'observation (L2), tout domaine est accepté.
+   Pour le stage L3 et le PFE, le domaine doit être lié à votre filière.
+   Validation préalable du bureau des stages obligatoire.
+
+Q: Mon entreprise ne veut pas signer de convention, que faire ?
+R: Certaines grandes entreprises ont leurs propres conventions.
+   Dans ce cas, apportez la leur au Bureau des Stages pour validation.
+   Si l'entreprise refuse toute convention, choisissez une autre entreprise.
+
+Q: Je rate ma soutenance de PFE, que se passe-t-il ?
+R: Une resoutenance est possible en octobre (pour les étudiants ajournés).
+   Si la 2ème soutenance est aussi insuffisante (<10/20),
+   un nouveau sujet PFE devra être proposé l'année suivante.
+
+Q: Puis-je choisir moi-même mon sujet de PFE ?
+R: Oui ! Vous pouvez proposer un sujet issu de votre stage ou de votre intérêt.
+   Il doit être validé par votre encadrant académique avant de débuter.
+   La liste des sujets proposés par les enseignants est disponible en Janvier.
+
+═══════════════════════════════════════════════════════════
+Bureau des Stages : Bureau 203, Bâtiment B
+Email : stages@fpst.tn
+Plateforme : stages.fpst.tn | elearning.fpst.tn
+═══════════════════════════════════════════════════════════

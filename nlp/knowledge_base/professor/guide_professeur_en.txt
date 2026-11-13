@@ -1,0 +1,278 @@
+FPST — COMPLETE PROFESSOR GUIDE (ENGLISH)
+==========================================
+
+FACULTY OVERVIEW
+-----------------
+Name: Private Faculty of Sciences and Technologies (FPST)
+Location: Industrial Zone, Science Street, Tunis
+Website: www.fpst.tn | Email: info@fpst.tn
+Hours: Mon–Fri 08:00–18:00 | Sat 08:00–13:00
+Secretary (Pedagogical): secretariat@fpst.tn | Building A, Ground Floor
+HR Department: rh@fpst.tn | Building B, Office 101
+
+PROFESSOR CATEGORIES AND CONTRACTS
+------------------------------------
+Full-time permanent professors:
+- Permanent contract (CDI) after 2-year trial period
+- Annual teaching load: 384 ETD hours (equivalent TD)
+- Gross salary: 2,800 to 4,500 DT/month depending on rank and seniority
+- Benefits: health insurance, research bonus, dedicated office, lab access
+- Obligations: participation in academic councils and thesis juries
+
+Part-time permanent professors:
+- 192 ETD hours/year
+- Pro-rated salary
+- Possible to combine with another position (written authorization required)
+
+Adjunct/Visiting lecturers:
+- Hourly rate: 35 to 55 DT/hour depending on qualification
+  * Master's graduate / PhD student: 35 DT/h
+  * PhD / Experienced engineer: 45 DT/h
+  * Senior expert / Consultant: 55 DT/h
+- Contract signed at start of semester, payment at end of semester or monthly
+- Maximum: 192h/year per adjunct lecturer at FPST
+
+WORKLOAD DISTRIBUTION (ETD)
+-----------------------------
+The 384h ETD load includes:
+- 1h lecture (CM) = 1.5h ETD
+- 1h tutorial (TD) = 1h ETD
+- 1h lab (TP) = 0.67h ETD
+- Thesis supervision: 10h ETD per student supervised (max 5 students)
+- Jury participation: 2h ETD per jury
+
+Overtime hours: triggered above 384h ETD for permanent professors
+Overtime rate: 45 DT/hour (tax-exempt up to 96h/year)
+Director's prior approval required.
+
+SALARY SCALE (CDI)
+-------------------
+Assistant lecturer (< 3 years): 2,800 – 3,200 DT/month
+Confirmed assistant (3–7 years): 3,200 – 3,800 DT/month
+Associate professor (> 7 years, PhD): 3,800 – 4,500 DT/month
+Full professor (> 10 years, publications): 4,500 – 5,500 DT/month
+
+Regular bonuses:
+- Semester performance bonus: 150–400 DT (based on student evaluations)
+- Research bonus: 200 DT per article published in indexed journal
+- Annual bonus: 1 month salary (for CDI > 1 year)
+- Transport allowance: 80 DT/month
+- Health insurance: 70% covered by FPST
+
+LEAVE AND ABSENCE POLICY
+--------------------------
+Annual leave (CDI): 30 working days/year
+Summer leave: July–August (subject to exam retake sessions)
+Christmas/Eid holidays: aligned with official academic calendar
+
+Academic absences (outside teaching load):
+- Conferences/symposia: up to 5 days/year with Director's approval
+- Continuing education: up to 10 days/year
+- International expert missions: HR + Direction file required
+
+Unplanned absence procedure:
+1. Notify pedagogical secretary (Office 202) as soon as possible
+2. Propose a make-up class within 72 hours
+3. Notify students via Moodle or official email
+Note: Unrecovered absence = salary deduction (1/22 per day)
+
+ADMINISTRATIVE PROCEDURES
+---------------------------
+Leave request:
+1. Fill in the leave request form (available from the secretary)
+2. Submit to department head at least 15 days before the requested date
+3. Department head approves and forwards to management
+4. Official response within 5 working days
+
+Types of leave:
+- Annual leave: 30 working days/year
+- Sick leave: medical certificate required within 48h
+- Maternity/paternity leave: per Tunisian Labor Code
+- Unpaid leave: exceptional request to submit to management
+
+Absence and make-up classes:
+- In case of unplanned absence: notify secretary at least 2 hours before the class
+- Propose a make-up session the following week
+- Coordinate with department head for room booking
+- Students must be informed 24h in advance
+
+Missions and travel:
+1. Submit a mission file to management (mission form + program)
+2. Minimum 10 days before departure
+3. Expense reimbursement: with receipts (tickets, accommodation)
+4. Mission report to be submitted within 5 days of return
+
+EXAM ORGANIZATION
+------------------
+The professor is responsible for:
+- Preparing the exam subject (submitted to secretary 48h in advance)
+- Invigilation (schedule set by department head)
+- Grading within set deadlines (48h for exam sessions)
+- Submitting grades to the registrar
+
+Grade publication:
+- Grades are published via the FPST SmartDesk system after department head validation
+- Students consult their grades in their personal space
+- No grade may be communicated verbally before official publication
+
+Student grade appeals:
+- Students may contest a grade within 5 days of publication
+- Student submits review request to department head
+- Professor must provide a copy of the correction within 48h
+
+TEACHING SCHEDULE AND ROOMS
+-----------------------------
+- Timetable managed by the Planning Department (Bureau 201)
+- Schedules available on FPST SmartDesk platform
+- Room requests: at least 48h in advance via Room Booking Form
+- Computer lab: reservation required (Office 301)
+- Changes to timetable: notify Planning Department and students at least 24h in advance
+
+GRADE ENTRY
+------------
+Grade entry in the FPST SmartDesk system:
+- Access via: elearning.fpst.tn with your institutional credentials
+- Entry deadline: 48h after the last exam
+- Grading: /20, with 10/20 as passing grade
+- Continuous assessment counts for 30% of final grade
+
+Steps:
+1. Log into the FPST SmartDesk platform
+2. Go to "My Courses" → select the module
+3. Click "Grades" → enter each student's grade
+4. Submit and click "Validate"
+Note: Once validated, grades can only be modified with department head approval
+
+PEDAGOGICAL RESOURCES
+-----------------------
+Available tools for professors:
+- Moodle LMS: course creation, assignments, online quizzes, direct messaging
+- Digital library: access to 15,000+ books and scientific articles
+- Computer labs: 6 labs with 25–30 stations each (Windows + Linux)
+- Smart classrooms: interactive boards in 4 rooms (B201, B202, B301, B302)
+- Multimedia lab: video/podcast recording equipment
+- Video conferencing: Zoom Pro license provided
+
+Moodle support: support@fpst.tn | Office 304
+Equipment booking: intendance@fpst.tn | Office 105
+
+RESEARCH AND PUBLICATIONS
+---------------------------
+FPST Research Labs:
+- LASI: Lab for AI and Intelligent Systems
+- LCSI: Lab for Computer Security and Networks
+- LTID: Lab for Digital Transformation and Innovation
+
+Funding available:
+- Internal research fund: up to 5,000 DT/project (annual call)
+- National programs (PNRI, ANPR): support for application
+- International (Erasmus+, Tempus): international relations office
+
+Publication bonus:
+- 200 DT per article in an indexed journal (Scopus, WOS)
+- 100 DT per national conference paper
+- 50 DT per international conference paper (without proceedings)
+
+To apply for research funding: recherche@fpst.tn | Office 205
+
+CONTINUING EDUCATION AND TRAINING
+-----------------------------------
+Annual training budget: 500 DT/professor/year (may be pooled)
+Available trainings:
+- Digital pedagogy (Moodle, active learning, flipped classroom)
+- Research methodology (academic writing, publication process)
+- Languages: Arabic, English, French (institutional partnerships)
+- Technical: certifications in your field (Cisco, Oracle, Microsoft...)
+
+To register for a training: rh@fpst.tn or Office B101
+
+THESIS SUPERVISION (PFE)
+--------------------------
+Supervision load:
+- Maximum 5 PFE students per professor per year
+- Each supervision = 10h ETD (counted in annual workload)
+- Additional supervision: 45 DT/h compensation
+
+Defense calendar:
+- June defenses: thesis submitted by May 31st
+- September defenses: thesis submitted by August 31st
+- Jury composition: minimum 3 members (supervisor + 2 others)
+
+Online form submission: elearning.fpst.tn → "PFE Management"
+
+HEALTH AND SAFETY IN LABS
+---------------------------
+Security rules:
+- Mandatory PPE (gloves, goggles) in chemistry and electronics labs
+- 1 fire extinguisher per lab, emergency exit clearly marked
+- First aid kit: accessible at all times
+- MSDS (Material Safety Data Sheet): available for every chemical product
+
+Incident/accident reporting:
+1. Immediately secure the area
+2. Call emergency: 15 or Internal: Ext. 9
+3. Fill in the accident report within 24h (Office 103)
+4. Preventive maintenance: first Tuesday of every month (lab closed)
+
+STUDENT COMMUNICATION
+-----------------------
+Official communication tools:
+- Moodle messaging: for academic matters (24h response time)
+- Institutional email (@fpst.tn): for formal matters
+- FPST SmartDesk: notifications and announcements
+
+Office hours:
+- Minimum 2h/week for student consultations
+- Schedule posted on the professor's Moodle profile and office door
+- Office hours during exam periods: minimum 4h/week
+
+INTERNAL CONTACTS
+------------------
+President / Director: direction@fpst.tn | Building A, Floor 2
+Pedagogical Director: directeur.pedagogique@fpst.tn | Office A201
+HR Department: rh@fpst.tn | Office B101
+Secretary: secretariat@fpst.tn | Building A, Ground Floor
+Planning Department: planning@fpst.tn | Office 201
+IT Support: support@fpst.tn | Office 304
+Research Department: recherche@fpst.tn | Office 205
+Student Services: vie.etudiante@fpst.tn | Building C, Ground Floor
+
+INTERNAL REGULATIONS FOR PROFESSORS
+--------------------------------------
+Obligations:
+- Be present at least 15 minutes before the first class of the day
+- Keep attendance sheets up to date
+- Submit exam subjects 48h before the exam
+- Submit grades within 48h after the last exam
+- Attend compulsory institutional meetings (jury, academic council)
+- Respect confidentiality of student information
+
+Prohibited:
+- Using institutional equipment for personal purposes without authorization
+- Disclosing individual student grades to third parties
+- Accepting any gift or benefit from students
+- Communicating grades before official publication
+
+Academic integrity:
+- Student plagiarism must be reported to the department head
+- Plagiarism detection tool available on Moodle (Turnitin)
+- Plagiarism penalty: zero grade on the work + possible disciplinary action
+
+ANNUAL EVALUATION OF TEACHING STAFF
+--------------------------------------
+Annual evaluation by:
+1. Pedagogical Director (individual interview, June)
+2. Students (anonymous questionnaire on Moodle, end of semester)
+3. Self-evaluation (annual activity report, due before June 30th)
+
+Evaluation criteria:
+- Teaching quality (clarity, availability, materials)
+- Student pass rate
+- Compliance with deadlines (grade publication, exam submission)
+- Participation in institutional life (councils, juries, supervision)
+- Research activities and publications
+
+Consequences:
+- Score ≥ 4/5: automatic annual increase (2–3%)
+- Score 3–4/5: improvement plan proposed
+- Score < 3/5 for two consecutive years: HR disciplinary meeting

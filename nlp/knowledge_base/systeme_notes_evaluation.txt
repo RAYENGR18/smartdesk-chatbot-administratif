@@ -1,0 +1,218 @@
+═══════════════════════════════════════════════════════════
+          SYSTÈME DE NOTATION ET ÉVALUATION
+      Faculté Privée des Sciences et Technologies (FPST)
+═══════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────
+📊 SYSTÈME DE NOTATION
+────────────────────────────────────────────────────────
+
+ÉCHELLE DES NOTES :
+  La note est sur 20 points.
+
+  20  — Parfait / Excellent absolu
+  18-19 — Excellent (Très Bien +)
+  16-17 — Très Bien
+  14-15 — Bien
+  12-13 — Assez Bien
+  10-11 — Passable (moyenne)
+  08-09 — Insuffisant
+  06-07 — Faible
+  0-05  — Très faible / Echec
+
+  Seuil de validation d'une unité : 10/20
+  Seuil de compensation possible : 8/20
+
+────────────────────────────────────────────────────────
+📐 CALCUL DE LA MOYENNE GÉNÉRALE
+────────────────────────────────────────────────────────
+
+FORMULE :
+  Moyenne = Somme(Note_i × Coefficient_i) / Somme(Coefficient_i)
+
+  Chaque matière possède un coefficient (de 1 à 5).
+  Les matières à fort coefficient (3-5) ont plus d'impact sur la moyenne.
+
+EXEMPLE SEMESTRE 1 (LIG) :
+  Algorithmique (Coef 3) → Note 14 → 14×3 = 42
+  Mathématiques (Coef 3) → Note 12 → 12×3 = 36
+  Architecture (Coef 2)  → Note 15 → 15×2 = 30
+  Économie (Coef 2)      → Note 11 → 11×2 = 22
+  Anglais (Coef 1)       → Note 16 → 16×1 = 16
+  Communication (Coef 1) → Note 13 → 13×1 = 13
+  ─────────────────────────────────────────────
+  Total coefficients : 12
+  Total pondéré : 159
+  Moyenne S1 : 159 / 12 = 13.25/20
+
+────────────────────────────────────────────────────────
+📝 COMPOSITION DES NOTES PAR MATIÈRE
+────────────────────────────────────────────────────────
+
+RÉPARTITION STANDARD :
+  • Contrôle continu (CC) : 30%
+    - Interrogations surprises, quiz, participation
+    - Devoirs maison et mini-projets
+  • Examen de mi-semestre (partiel) : 20%
+    - Durée : 1h30 à 2h
+    - Semaines 7-8 du semestre
+  • Examen final (EF) : 50%
+    - Durée : 2h à 3h
+    - Session d'examens officiels
+
+FORMULE NOTE FINALE :
+  Note = (CC × 0.30) + (Partiel × 0.20) + (Final × 0.50)
+
+CAS PARTICULIERS :
+  • Cours magistraux seuls : Partiel (30%) + Final (70%)
+  • TP / Projets : Note de TP (50%) + Rapport (50%)
+  • Stage : Rapport (40%) + Soutenance (40%) + Évaluation tuteur (20%)
+  • PFE : Rapport (35%) + Soutenance (40%) + Encadrant (15%) + Jury (10%)
+
+────────────────────────────────────────────────────────
+🏆 MENTIONS ET CLASSEMENT
+────────────────────────────────────────────────────────
+
+MENTIONS (basées sur la moyenne annuelle) :
+
+  ≥ 16/20   → Mention TRÈS BIEN (Félicitations du jury)
+  14-15.99  → Mention BIEN
+  12-13.99  → Mention ASSEZ BIEN
+  10-11.99  → Passable (sans mention)
+  < 10      → Ajourné (session de rattrapage)
+
+CLASSEMENT :
+  Un classement par promotion est établi à chaque fin de semestre.
+  Le major de promotion est récompensé (bourse d'excellence).
+
+────────────────────────────────────────────────────────
+🔄 COMPENSATION ET RÈGLES DE PASSAGE
+────────────────────────────────────────────────────────
+
+RÈGLE DE COMPENSATION AU SEIN D'UN SEMESTRE :
+  Un étudiant peut compenser une note inférieure à 10 si :
+  → Sa moyenne semestrielle est ≥ 10/20
+  → La note à compenser est ≥ 8/20
+  → Pas plus de 2 matières compensées par semestre
+
+  Exemple : Note 09/20 en Anglais + moyenne générale 12/20
+  → L'Anglais est validé par compensation.
+
+COMPENSATION INTER-SEMESTRES (même année) :
+  Un semestre faible peut être compensé par un semestre fort
+  si la moyenne annuelle (pondérée) est ≥ 10/20.
+
+RÈGLES DE PASSAGE EN ANNÉE SUPÉRIEURE :
+  L1 → L2 : Moyenne annuelle ≥ 10/20 (ou rattrapage réussi)
+  L2 → L3 : Idem + stage L2 validé
+  L3 : Obtention de la licence si PFE validé + moyenne ≥ 10/20
+
+────────────────────────────────────────────────────────
+📋 SESSIONS DE RATTRAPAGE (DEUXIÈME SESSION)
+────────────────────────────────────────────────────────
+
+QUI PEUT PASSER LE RATTRAPAGE ?
+  Tout étudiant ajourné (moyenne < 10/20 sans compensation possible).
+  Étudiant avec note de matière < 08/20 non compensable.
+
+MODALITÉS :
+  • Dates : Juillet (environ 3 semaines après résultats S2)
+  • Matières : Seulement celles avec note < 10/20
+  • Note conservée : MAX(Note session 1, Note session 2)
+  • Impact sur la mention : La mention est basée sur la meilleure note
+
+MATIÈRES NON RATTRAPABLES :
+  • Stages (redoublement d'année obligatoire si stage non validé)
+  • PFE (nouveau sujet proposé, resoutenance en octobre)
+
+────────────────────────────────────────────────────────
+🎓 DÉLIBÉRATIONS ET JURY
+────────────────────────────────────────────────────────
+
+COMPOSITION DU JURY :
+  • Le Doyen (ou son représentant) : Président du jury
+  • Les chefs de département
+  • Un représentant des enseignants permanents
+  • Le directeur pédagogique
+
+POUVOIR DU JURY :
+  Le jury peut accorder des points de jury (jusqu'à 0.5 point)
+  à des étudiants en difficulté à la limite du seuil.
+  Exemple : Moyenne 9.70 → peut devenir 10/20 par décision jury.
+
+DÉLIBÉRATIONS SONT SOUVERAINES :
+  La décision du jury est définitive et sans appel.
+  Seule une erreur matérielle peut faire l'objet d'une réclamation.
+
+PUBLICATION DES RÉSULTATS :
+  • Par voie d'affichage dans le hall du Bâtiment A
+  • Sur la plateforme en ligne : elearning.fpst.tn
+  • Par email sur la messagerie institutionnelle
+  • Dans les 48h suivant la délibération
+
+────────────────────────────────────────────────────────
+📤 RÉCLAMATIONS SUR LES NOTES
+────────────────────────────────────────────────────────
+
+PROCÉDURE :
+  Délai : 5 jours ouvrables après publication des résultats
+  Dépôt : Bureau des examens (Bureau 105, Bâtiment A)
+  Formulaire : Disponible au bureau ou sur elearning.fpst.tn
+
+  Motifs valables :
+  → Erreur de calcul de la moyenne
+  → Feuille de copie non corrigée (oubliée)
+  → Différence entre note affichée et note du relevé
+
+  Motifs NON valables :
+  → Désaccord avec la correction d'une question
+  → Souhait que le correcteur relise la copie
+
+DÉLAI DE TRAITEMENT :
+  7 jours ouvrables pour réponse officielle.
+
+────────────────────────────────────────────────────────
+📑 RELEVÉ DE NOTES ET TRANSCRIPTS
+────────────────────────────────────────────────────────
+
+RELEVÉ DE NOTES SEMESTRIEL :
+  • Disponible sur la plateforme après les délibérations
+  • Version officielle (tamponnée) : Bureau 105
+  • Délai : 5 jours ouvrables après demande
+  • Gratuit pour la 1ère demande, 3 DT pour chaque copie supplémentaire
+
+RELEVÉ DE NOTES COMPLET (TRANSCRIPT) :
+  • Pour candidatures master, échange international, emploi
+  • Disponible en Français et en Anglais
+  • Certifié par le Doyen
+  • Délai : 10 jours ouvrables
+  • Tarif : 10 DT (anglais + français)
+
+────────────────────────────────────────────────────────
+❓ QUESTIONS FRÉQUENTES SUR LES NOTES
+────────────────────────────────────────────────────────
+
+Q: J'ai une note de 9.8/20, est-ce que le jury peut m'accorder la moyenne ?
+R: Oui, le jury dispose d'un pouvoir discrétionnaire pour accorder des points
+   aux étudiants en limite de seuil. Ce n'est pas automatique mais possible.
+
+Q: Puis-je voir ma copie d'examen ?
+R: Oui, dans les 10 jours suivant la publication des résultats.
+   Demandez un rendez-vous auprès du Bureau des examens (Bureau 105).
+
+Q: Ma note de CC n'a pas été enregistrée, que faire ?
+R: Contactez d'abord votre enseignant concerné. Si non résolu,
+   déposez une réclamation écrite au Bureau 105 avec preuves.
+
+Q: Combien de fois peut-on redoubler ?
+R: Maximum 2 redoublements par cycle (Licence ou Master).
+   Au-delà, un avis de conseil de discipline est obligatoire.
+
+Q: Le stage est-il noté ?
+R: Oui, le stage est évalué par un rapport écrit (40%), une soutenance (40%)
+   et l'évaluation du tuteur en entreprise (20%). Note minimale : 10/20.
+
+═══════════════════════════════════════════════════════════
+Contact Bureau des Examens : examens@fpst.tn | Bureau 105, Bâtiment A
+Horaires : Lundi-Vendredi, 09h00 — 16h00
+═══════════════════════════════════════════════════════════

@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: chatbot-backend
+  devtools:
+    livereload:
+      enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/chatbot_db
+    username: postgres
+    password: CHANGE_ME
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+
+jwt:
+  secret: CHANGE_ME
+  expiration: 86400000
+
+# URL du service NLP (localhost pour dev, nlp pour Docker)
+nlp:
+  url: http://localhost:8000

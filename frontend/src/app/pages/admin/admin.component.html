@@ -1,0 +1,777 @@
+<div class="admin-shell" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
+  <!-- ======== SIDEBAR ======== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M12 3L2 8.5V9h20V8.5L12 3z" fill="white" opacity="0.9"/>
+          <path d="M4 11v7h3v-7H4zm6.5 0v7h3v-7h-3zM17 11v7h3v-7h-3z" fill="white" opacity="0.75"/>
+          <path d="M2 20h20v2H2v-2z" fill="white" opacity="0.85"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">FPST SmartDesk</span>
+        <span class="logo-sub">{{ text('title') }}</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item" [class.active]="activeTab === 'stats'" (click)="setTab('stats')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+        </span>
+        <span>{{ text('dashboard') }}</span>
+      </button>
+
+      <button class="nav-item" [class.active]="activeTab === 'identities'" (click)="setTab('identities')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+          </svg>
+        </span>
+        <span>{{ text('identities') }}</span>
+        <span class="nav-badge">{{ text('key_badge') }}</span>
+      </button>
+
+      <button class="nav-item" [class.active]="activeTab === 'users'" (click)="setTab('users')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </span>
+        <span>{{ text('users') }}</span>
+        <span class="nav-count">{{ stats.totalUsers }}</span>
+      </button>
+
+      <button class="nav-item" [class.active]="activeTab === 'gestion'" (click)="setTab('gestion')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </span>
+        <span>{{ text('faculty') }}</span>
+      </button>
+
+      <button class="nav-item" [class.active]="activeTab === 'notes'" (click)="setTab('notes')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </span>
+        <span>{{ text('grades') }}</span>
+      </button>
+
+      <button class="nav-item" [class.active]="activeTab === 'messages'" (click)="setTab('messages')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </span>
+        <span>{{ text('messages') }}</span>
+        <span class="nav-count">{{ stats.totalMessages }}</span>
+      </button>
+
+      <button class="nav-item" [class.active]="activeTab === 'documents'" (click)="setTab('documents')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </span>
+        <span>{{ text('documents') }}</span>
+      </button>
+
+      <button class="nav-item" [class.active]="activeTab === 'chat'" (click)="setTab('chat')">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4l3 3"/>
+          </svg>
+        </span>
+        <span>{{ text('bot') }}</span>
+      </button>
+
+      <button class="nav-item" (click)="goToKnowledgeBase()">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </span>
+        <span>Base RAG</span>
+        <span class="nav-badge">IA</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="lang-btn-side" (click)="toggleLanguage()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        {{ text('next_lang') }}
+      </button>
+      <button class="theme-btn-side" (click)="toggleTheme()">
+        <svg *ngIf="isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        </svg>
+        <svg *ngIf="!isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        {{ isDark ? 'Mode Clair' : 'Mode Sombre' }}
+      </button>
+      <button class="logout-btn-side" (click)="logout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        {{ t('app.logout') }}
+      </button>
+    </div>
+  </aside>
+
+  <!-- ======== MAIN CONTENT ======== -->
+  <main class="main-area">
+
+    <!-- Top header bar -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <span *ngIf="activeTab === 'stats'">{{ text('dashboard') }}</span>
+        <span *ngIf="activeTab === 'identities'">{{ text('identity_title') }}</span>
+        <span *ngIf="activeTab === 'users'">{{ text('users') }}</span>
+        <span *ngIf="activeTab === 'gestion'">{{ text('faculty') }}</span>
+        <span *ngIf="activeTab === 'notes'">{{ text('grades') }}</span>
+        <span *ngIf="activeTab === 'messages'">{{ text('messages') }}</span>
+        <span *ngIf="activeTab === 'documents'">{{ text('documents') }}</span>
+        <span *ngIf="activeTab === 'chat'">{{ text('bot') }}</span>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle-btn" (click)="toggleTheme()" title="Thème">
+          <svg *ngIf="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          </svg>
+          <svg *ngIf="!isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button class="back-topbar-btn" (click)="goBack()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Retour
+        </button>
+        <span class="admin-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          {{ text('admin_badge') }}
+        </span>
+      </div>
+    </header>
+
+    <div class="content-scroll">
+
+      <!-- ======= STATS DASHBOARD ======= -->
+      <div *ngIf="activeTab === 'stats'" class="section-fade">
+        <div class="stats-grid">
+          <div class="stat-card card-indigo">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-num">{{ stats.totalDocuments }}</div>
+              <div class="stat-label">{{ text('documents') }}</div>
+            </div>
+          </div>
+          <div class="stat-card card-purple">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-num">{{ stats.totalMessages }}</div>
+              <div class="stat-label">{{ text('messages') }}</div>
+            </div>
+          </div>
+          <div class="stat-card card-cyan">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-num">{{ stats.totalUsers }}</div>
+              <div class="stat-label">{{ text('users') }}</div>
+            </div>
+          </div>
+          <div class="stat-card card-amber">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-num">{{ stats.totalFilieres || 0 }}</div>
+              <div class="stat-label">{{ text('manage_programs') }}</div>
+            </div>
+          </div>
+          <div class="stat-card card-rose">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-num">{{ stats.totalSalles || 0 }}</div>
+              <div class="stat-label">{{ text('manage_rooms') }}</div>
+            </div>
+          </div>
+          <div class="stat-card card-teal">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-num">{{ stats.totalMatieres || 0 }}</div>
+              <div class="stat-label">{{ text('manage_subjects') }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Role breakdown -->
+        <div class="roles-card">
+          <h3 class="card-title">{{ text('users_breakdown') }}</h3>
+          <div class="roles-row">
+            <div class="role-pill pill-blue">
+              <span class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </span>
+              <div>
+                <div class="pill-count">{{ stats.nbEtudiants || 0 }}</div>
+                <div class="pill-label">{{ text('students') }}</div>
+              </div>
+            </div>
+            <div class="role-pill pill-green">
+              <span class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </span>
+              <div>
+                <div class="pill-count">{{ stats.nbProfesseurs || 0 }}</div>
+                <div class="pill-label">{{ text('professors') }}</div>
+              </div>
+            </div>
+            <div class="role-pill pill-red">
+              <span class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </span>
+              <div>
+                <div class="pill-count">{{ stats.nbAdmins || 0 }}</div>
+                <div class="pill-label">{{ text('admins') }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= IDENTIFIANTS ======= -->
+      <div *ngIf="activeTab === 'identities'" class="section-fade">
+        <div class="identity-layout">
+          <div class="identity-info-card">
+            <div class="icard-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="1.5" width="36" height="36"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>{{ text('identity_how') }}</h3>
+            <ol class="icard-steps">
+              <li>{{ text('identity_step1') }}</li>
+              <li>{{ text('identity_step2') }}</li>
+              <li>{{ text('identity_step3') }}</li>
+              <li>{{ text('identity_step4') }}</li>
+              <li>{{ text('identity_step5') }}</li>
+            </ol>
+            <div class="icard-note">
+              {{ text('identity_note') }}
+            </div>
+          </div>
+
+          <div class="identity-form-panel">
+            <h2 class="panel-title">{{ text('identity_generate_title') }}</h2>
+
+            <div class="form-field">
+              <label class="field-label">{{ text('identity_role') }}</label>
+              <select [(ngModel)]="identityData.role" class="field-select">
+                <option value="USER">{{ text('students') }} (12)</option>
+                <option value="PROFESSEUR">{{ text('professors') }} (8)</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label class="field-label">{{ t('register.first_name') }}</label>
+                <input type="text" [(ngModel)]="identityData.firstName" class="field-input" placeholder="..." />
+              </div>
+              <div class="form-field">
+                <label class="field-label">{{ t('register.last_name') }}</label>
+                <input type="text" [(ngModel)]="identityData.lastName" class="field-input" placeholder="..." />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="field-label">{{ t('register.cin') }}</label>
+              <input type="text" [(ngModel)]="identityData.cin" class="field-input" placeholder="..." />
+            </div>
+
+            <button class="generate-btn" [disabled]="isLoading" (click)="generateIdentity()">
+              <span *ngIf="!isLoading">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                {{ text('identity_generate_btn') }}
+              </span>
+              <span *ngIf="isLoading" class="loader-text">
+                <span class="spinner"></span> ...
+              </span>
+            </button>
+
+            <div class="id-error" *ngIf="identityError">{{ identityError }}</div>
+
+            <div class="id-result" *ngIf="generatedId">
+              <div class="result-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                {{ text('identity_success') }}
+              </div>
+              <div class="id-display-wrap">
+                <div class="id-display-number">{{ generatedId }}</div>
+                <button class="copy-btn" (click)="copyId()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  {{ text('copy') }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= USERS ======= -->
+      <div *ngIf="activeTab === 'users'" class="section-fade">
+        <div class="data-card">
+          <h2 class="card-title">{{ text('users') }} ({{ users.length }})</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{{ t('register.username') }}</th>
+                  <th>{{ t('register.email') }}</th>
+                  <th>{{ text('identity_role') }}</th>
+                  <th>Filières</th>
+                  <th>Matières enseignées</th>
+                  <th>{{ text('date') }}</th>
+                  <th>{{ text('action') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users">
+                  <td class="td-muted">{{ user.id }}</td>
+                  <td><strong>{{ user.username }}</strong></td>
+                  <td class="td-muted">{{ user.email }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'badge-blue': user.role === 'USER' || user.role === 'STUDENT',
+                      'badge-green': user.role === 'PROFESSEUR',
+                      'badge-red': user.role === 'ADMIN'
+                    }">
+                      {{ user.role === 'USER' || user.role === 'STUDENT' ? text('students') : user.role === 'PROFESSEUR' ? text('professors') : text('admins') }}
+                    </span>
+                  </td>
+                  <!-- Colonne Filières (prof only) -->
+                  <td>
+                    <ng-container *ngIf="user.role === 'PROFESSEUR'">
+                      <ng-container *ngIf="editingFilieresId === user.id; else showFil">
+                        <div class="filiere-picker">
+                          <label *ngFor="let f of filieres" class="filiere-check">
+                            <input type="checkbox" [checked]="isFiliereSelected(f.id)" (change)="toggleFiliere(f.id)" />
+                            <span>{{ f.code }}</span>
+                          </label>
+                          <div style="display:flex;gap:4px;margin-top:4px">
+                            <button class="btn-save-sm" (click)="saveFilieres(user.id)">✓ OK</button>
+                            <button class="btn-cancel-sm" (click)="cancelEditFilieres()">✕</button>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-template #showFil>
+                        <span class="spec-badge" (click)="startEditFilieres(user)" title="Cliquer pour assigner des filières">
+                          {{ getProfFiliereLabels(user) || '+ Assigner' }}
+                        </span>
+                      </ng-template>
+                    </ng-container>
+                    <span *ngIf="user.role !== 'PROFESSEUR'" class="td-muted">—</span>
+                  </td>
+                  <!-- Colonne Matières enseignées (prof only) -->
+                  <td>
+                    <ng-container *ngIf="user.role === 'PROFESSEUR'">
+                      <ng-container *ngIf="editingMatieresId === user.id; else showMat">
+                        <div class="filiere-picker" style="max-height:180px;overflow-y:auto;min-width:180px">
+                          <span *ngIf="getMatieresForProf(user).length === 0" style="font-size:11px;color:#94a3b8;padding:4px">
+                            Aucune matière (assignez d'abord une filière)
+                          </span>
+                          <label *ngFor="let m of getMatieresForProf(user)" class="filiere-check">
+                            <input type="checkbox" [checked]="isMatiereSelected(m.id)" (change)="toggleMatiere(m.id)" />
+                            <span title="{{ m.nom }}">{{ m.code }} – {{ m.nom }}</span>
+                          </label>
+                          <div style="display:flex;gap:4px;margin-top:4px">
+                            <button class="btn-save-sm" (click)="saveMatieres(user.id)">✓ OK</button>
+                            <button class="btn-cancel-sm" (click)="cancelEditMatieres()">✕</button>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-template #showMat>
+                        <span class="spec-badge" (click)="startEditMatieres(user)" title="Cliquer pour assigner des matières">
+                          {{ getProfMatiereLabels(user) || '+ Assigner' }}
+                        </span>
+                      </ng-template>
+                    </ng-container>
+                    <span *ngIf="user.role !== 'PROFESSEUR'" class="td-muted">—</span>
+                  </td>
+                  <td class="td-muted">{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
+                  <td>
+                    <button class="btn-danger-sm" (click)="deleteUser(user.id)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
+                        <path d="M9 6V4h6v2"/>
+                      </svg>
+                      {{ text('delete') }}
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="users.length === 0">
+                  <td colspan="8" class="empty-row">{{ text('no_users') }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= GESTION FACULTÃ‰ ======= -->
+      <div *ngIf="activeTab === 'gestion'" class="section-fade">
+        <div class="gestion-grid">
+          <div class="gestion-card gc-indigo" (click)="goToFilieres()">
+            <div class="gc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <h3>{{ text('manage_programs') }}</h3>
+            <p>{{ text('manage_programs_desc') }}</p>
+            <div class="gc-count">{{ stats.totalFilieres || 0 }}</div>
+          </div>
+          <div class="gestion-card gc-cyan" (click)="goToSalles()">
+            <div class="gc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            </div>
+            <h3>{{ text('manage_rooms') }}</h3>
+            <p>{{ text('manage_rooms_desc') }}</p>
+            <div class="gc-count">{{ stats.totalSalles || 0 }}</div>
+          </div>
+          <div class="gestion-card gc-amber" (click)="goToMatieres()">
+            <div class="gc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <h3>{{ text('manage_subjects') }}</h3>
+            <p>{{ text('manage_subjects_desc') }}</p>
+            <div class="gc-count">{{ stats.totalMatieres || 0 }}</div>
+          </div>
+          <div class="gestion-card gc-rose" (click)="goToPlanning()">
+            <div class="gc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8.01" y2="14"/><line x1="12" y1="14" x2="12.01" y2="14"/><line x1="16" y1="14" x2="16.01" y2="14"/></svg>
+            </div>
+            <h3>{{ text('timetable') }}</h3>
+            <p>{{ text('manage_timetable_desc') }}</p>
+            <div class="gc-count">{{ stats.totalCreneaux || 0 }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= NOTES — IMPORT ======= -->
+      <div *ngIf="activeTab === 'notes'" class="section-fade">
+
+        <!-- En-tête -->
+        <div class="notes-import-header">
+          <div>
+            <h2 class="ni-title">{{ text('grades') }}</h2>
+            <p class="ni-desc">{{ text('grades_desc') }}</p>
+          </div>
+        </div>
+
+        <!-- Zone d'import -->
+        <div class="ni-import-card">
+          <div class="ni-import-top">
+
+            <!-- Sélecteur de fichier -->
+            <label class="ni-file-label" for="notesFileInput">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              {{ importFileName || text('import_file') }}
+              <input id="notesFileInput" type="file" accept=".xlsx,.csv"
+                     (change)="onFileSelected($event)" style="display:none" />
+            </label>
+
+            <!-- Bouton importer -->
+            <button class="ni-import-btn" (click)="lancerImport()" [disabled]="isImporting">
+              <span *ngIf="!isImporting">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="8 17 12 21 16 17"/>
+                  <line x1="12" y1="12" x2="12" y2="21"/>
+                  <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>
+                </svg>
+                {{ text('import_btn') }}
+              </span>
+              <span *ngIf="isImporting" class="ni-spinner-wrap">
+                <span class="ni-spinner"></span> ...
+              </span>
+            </button>
+          </div>
+
+          <!-- Messages -->
+          <div class="ni-alert ni-alert-success" *ngIf="importSuccess && !importResult?.errors?.length">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ importSuccess }}
+          </div>
+          <div class="ni-alert ni-alert-error" *ngIf="importError">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            {{ importError }}
+          </div>
+
+          <!-- Rapport d'import -->
+          <div class="ni-report" *ngIf="importResult">
+            <div class="ni-report-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              {{ importSuccess }}
+            </div>
+            <div class="ni-stats-row">
+              <div class="ni-stat-box nstat-blue">
+                <div class="nstat-val">{{ importResult.totalLignes }}</div>
+                <div class="nstat-lbl">{{ text('import_lines') }}</div>
+              </div>
+              <div class="ni-stat-box nstat-green">
+                <div class="nstat-val">{{ importResult.inserted }}</div>
+                <div class="nstat-lbl">{{ text('import_inserted') }}</div>
+              </div>
+              <div class="ni-stat-box nstat-purple">
+                <div class="nstat-val">{{ importResult.updated }}</div>
+                <div class="nstat-lbl">{{ text('import_updated') }}</div>
+              </div>
+              <div class="ni-stat-box nstat-amber">
+                <div class="nstat-val">{{ importResult.skipped }}</div>
+                <div class="nstat-lbl">{{ text('import_skipped') }}</div>
+              </div>
+            </div>
+            <!-- Erreurs ligne par ligne -->
+            <div class="ni-errors-list" *ngIf="importResult.errors?.length > 0">
+              <div class="ni-errors-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                {{ text('import_errors') }} ({{ importResult.errors.length }})
+              </div>
+              <ul class="ni-err-items">
+                <li *ngFor="let err of importResult.errors">{{ err }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Guide format -->
+          <div class="ni-format-guide">
+            <div class="ni-format-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              {{ text('file_format_title') }}
+            </div>
+            <p class="ni-format-desc">{{ text('file_format_desc') }}</p>
+            <div class="ni-cols-grid">
+              <div class="ni-col-item ni-col-required">{{ text('col_cin') }}</div>
+              <div class="ni-col-item">{{ text('col_matiere') }}</div>
+              <div class="ni-col-item">{{ text('col_type') }}</div>
+              <div class="ni-col-item ni-col-required">{{ text('col_note') }}</div>
+              <div class="ni-col-item">{{ text('col_moyenne') }}</div>
+              <div class="ni-col-item">{{ text('col_commentaire') }}</div>
+            </div>
+            <div class="ni-example-label">Exemple :</div>
+            <div class="ni-example-table">
+              <table>
+                <thead><tr><th>cin</th><th>nomMatiere</th><th>typeEvaluation</th><th>note</th><th>moyenne</th><th>commentaire</th></tr></thead>
+                <tbody>
+                  <tr><td>12345678</td><td>Algorithmique</td><td>Examen</td><td>15.5</td><td>14</td><td>Très bien</td></tr>
+                  <tr><td>12345678</td><td>Bases de données</td><td>DS</td><td>12</td><td>13.5</td><td></td></tr>
+                  <tr><td>87654321</td><td>Algorithmique</td><td>Examen</td><td>8.5</td><td>9</td><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tableau des notes importées -->
+        <div class="data-card" *ngIf="notes.length > 0">
+          <h2 class="card-title">{{ text('grades') }} ({{ notes.length }})</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{{ text('students') }}</th>
+                  <th>Matière</th>
+                  <th>{{ text('evaluation') }}</th>
+                  <th>{{ text('note20') }}</th>
+                  <th>Moyenne</th>
+                  <th>{{ text('status') }}</th>
+                  <th>{{ text('date') }}</th>
+                  <th>{{ text('action') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let note of notes">
+                  <td class="td-muted">{{ note.id }}</td>
+                  <td><strong>{{ note.etudiant?.firstName }} {{ note.etudiant?.lastName }}</strong><br><span class="td-muted" style="font-size:11px">CIN: {{ note.etudiant?.cin }}</span></td>
+                  <td>{{ note.nomMatiere || note.matiere?.nom || '—' }}</td>
+                  <td class="td-muted">{{ note.typeEvaluation }}</td>
+                  <td><strong class="td-note">{{ note.valeur }}</strong></td>
+                  <td class="td-muted">{{ note.moyenne ?? '—' }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="note.valeur >= 10 ? 'badge-green' : 'badge-red'">
+                      {{ note.valeur >= 10 ? text('passed') : text('retake') }}
+                    </span>
+                  </td>
+                  <td class="td-muted">{{ note.dateSaisie | date:'dd/MM/yy' }}</td>
+                  <td>
+                    <button class="btn-danger-sm" (click)="supprimerNote(note.id)" title="Supprimer">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                        <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="data-card" *ngIf="notes.length === 0">
+          <div class="empty-row" style="padding:32px;text-align:center">{{ text('no_grades') }}</div>
+        </div>
+
+      </div>
+
+
+      <!-- ======= MESSAGES ======= -->
+      <div *ngIf="activeTab === 'messages'" class="section-fade">
+        <div class="data-card">
+          <h2 class="card-title">{{ text('messages') }} ({{ messages.length }})</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{{ text('user') }}</th>
+                  <th>{{ text('message') }}</th>
+                  <th>{{ text('response') }}</th>
+                  <th>{{ text('intent') }}</th>
+                  <th>{{ text('lang') }}</th>
+                  <th>{{ text('date') }}</th>
+                  <th>{{ text('action') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let msg of messages">
+                  <td class="td-muted">{{ msg.id }}</td>
+                  <td><strong>{{ msg.user?.username }}</strong></td>
+                  <td class="td-truncate">{{ msg.userMessage }}</td>
+                  <td class="td-truncate">{{ msg.botResponse }}</td>
+                  <td><span class="badge badge-purple">{{ msg.intention }}</span></td>
+                  <td class="td-muted">{{ msg.language }}</td>
+                  <td class="td-muted">{{ msg.createdAt | date:'dd/MM/yy HH:mm' }}</td>
+                  <td>
+                    <button class="btn-danger-sm" (click)="deleteMessage(msg.id)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
+                        <path d="M9 6V4h6v2"/>
+                      </svg>
+                      {{ text('delete') }}
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="messages.length === 0">
+                  <td colspan="8" class="empty-row">{{ text('no_messages') }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= DOCUMENTS ======= -->
+      <div *ngIf="activeTab === 'documents'" class="section-fade">
+        <div class="data-card">
+          <h2 class="card-title">{{ text('documents') }}</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>{{ text('user') }}</th>
+                  <th>{{ text('type') }}</th>
+                  <th>{{ text('name') }}</th>
+                  <th>{{ text('format') }}</th>
+                  <th>{{ text('status') }}</th>
+                  <th>{{ text('date') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let doc of documents">
+                  <td class="td-muted">{{ doc.id }}</td>
+                  <td>{{ doc.user?.username }}</td>
+                  <td><strong>{{ doc.documentType }}</strong></td>
+                  <td>{{ doc.fullName }}</td>
+                  <td class="td-muted">{{ doc.format }}</td>
+                  <td><span class="badge badge-green">{{ doc.status }}</span></td>
+                  <td class="td-muted">{{ doc.createdAt | date:'dd/MM/yy HH:mm' }}</td>
+                </tr>
+                <tr *ngIf="documents.length === 0">
+                  <td colspan="7" class="empty-row">{{ text('no_documents') }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= CHAT FPST SmartDesk ======= -->
+      <div *ngIf="activeTab === 'chat'" class="section-fade chat-section">
+        <app-chat></app-chat>
+      </div>
+
+    </div><!-- end content-scroll -->
+  </main>
+
+</div>

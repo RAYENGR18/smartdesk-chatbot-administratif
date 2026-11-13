@@ -1,0 +1,108 @@
+VIE SUR LE CAMPUS — SERVICES ET INFRASTRUCTURES FPST
+======================================================
+
+RESTAURATION ET CAFÉTÉRIA
+---------------------------
+Cafétéria principale (Bâtiment C, RDC) :
+- Petits-déjeuners : 07h30 – 09h30
+- Déjeuners : 12h00 – 14h30
+- Snacks / boissons : 07h30 – 18h00
+- Menus du jour : 4 à 7 DT (étudiant) — menu affiché chaque matin
+- Paiement : espèces ou carte rechargeable campus
+
+Distributeurs automatiques : disponibles aux Bâtiments A, B et D (24h/24)
+
+TRANSPORT ET NAVETTES
+----------------------
+Navette FPST (gratuite pour les étudiants) :
+- Départ Tunis Centre (station Barcelone) : 07h30 et 12h30
+- Retour : 13h00 et 18h30
+- Réservation par email : navette@fpst.tn
+- Ligne 2 : Ariana – La Marsa (arrêt devant l'université)
+
+Parking étudiant :
+- Parking couvert : accès avec badge étudiant (Entrée Ouest)
+- Places deux-roues : entrée principale, côté Est
+- Capacité : 200 véhicules + 80 motos
+
+SANTÉ ET SERVICES MÉDICAUX
+----------------------------
+Infirmerie (Bâtiment A, Bureau 010) :
+- Horaires : Lundi–Vendredi 08h00–17h00
+- Soins de premier secours, pansements, médicaments de base
+- Médecin consultatif : Mardi et Jeudi 10h00–12h00
+- Contact : infirmerie@fpst.tn
+
+Conventions santé : FPST est conventionne avec la clinique El Manar
+- Tarif préférentiel étudiant sur présentation carte
+- Contact clinique : +216 71 xxx xxx
+
+Soutien psychologique :
+- Psychologue disponible sur RDV : psy@fpst.tn
+- Service confidentiel et gratuit pour tous les étudiants
+- Permanences : Lundi et Mercredi 14h00–17h00, Bureau A012
+
+SÉCURITÉ ET ACCÈS
+------------------
+Sécurité 24h/24 à l'entrée principale
+Badge étudiant obligatoire pour entrer — le perdre = demander duplicata (10 DT, Bureau 101)
+Horaires d'ouverture du campus : 07h00–20h00 (Lundi–Samedi)
+En cas d'urgence : agent de sécurité poste central +216 XX XXX XXX
+
+BIBLIOTHÈQUE ET MÉDIATHÈQUE
+-----------------------------
+Bibliothèque (Bâtiment B, 1er étage) :
+- Horaires : Lundi–Vendredi 08h00–19h00 | Samedi 09h00–13h00
+- Fonds : 15 000 ouvrages + 5 000 ressources numériques
+- Prêt : 3 livres maximum / 15 jours renouvelable 1 fois
+- Retard : 0.5 DT / jour / livre
+- Accès bases de données : IEEE Xplore, ACM, Springer Link, ScienceDirect
+- Identifiants remis à l'inscription (intranet.fpst.tn)
+- Salle de lecture : 80 places (silence obligatoire)
+- Salle multimédia : 20 postes avec casques
+
+Réservation salle d'étude (groupes 2–8 personnes) : bibliotheque@fpst.tn
+
+SALLES INFORMATIQUES ET ÉQUIPEMENTS
+--------------------------------------
+Salle info A301 : 30 postes Dell, Windows 11, connexion 100 Mb/s
+Salle info A302 : 30 postes MacBook Pro M2 (pour design et développement)
+Lab Réseaux A303 : équipements Cisco, switches managés, routeurs
+Lab IA A304 : GPU NVIDIA RTX 4090, Python, TensorFlow, PyTorch installés
+Lab Sciences A203 : équipements électronique et mesure
+
+Accès hors cours sur réservation : support@fpst.tn — délai 24h
+
+WIFI ET CONNECTIVITÉ
+---------------------
+Réseau principal : FPST-WiFi (identifiant étudiant + mot de passe inscription)
+Réseau invité : FPST-Guest (limité à 1h/jour, sans inscription)
+Débit : 500 Mb/s partagé
+Usage strictement académique — streaming vidéo interdit
+VPN disponible pour accès aux ressources bibliographiques depuis l'extérieur
+
+SPORT ET ACTIVITÉS PHYSIQUES
+------------------------------
+Salle de sport (Bâtiment D) :
+- Équipements fitness, musculation, tapis de course
+- Accès gratuit : Lundi–Vendredi 16h00–19h00
+- Cours collectifs (yoga, pilates) : inscription au Bureau des sports (D001)
+
+Terrain extérieur :
+- Football 5 : réservable par équipes de 5 sur 5 (3h minimum)
+- Basket : accès libre non réservé
+- Contact : sport@fpst.tn
+
+ADMINISTRATION ET SECRÉTARIAT
+-------------------------------
+Secrétariat étudiant (Bureau A101) :
+- Lundi–Vendredi : 08h30–16h30
+- Service inscriptions : Bureau A102
+- Service financier : Bureau A103
+- Direction : Bureau A200
+- Doyen : Bureau A201
+
+Email principal : info@fpst.tn
+Téléphone standard : +216 71 000 000
+Site web : www.fpst.tn
+Portail étudiant : elearning.fpst.tn

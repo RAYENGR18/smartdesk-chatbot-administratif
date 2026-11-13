@@ -1,0 +1,160 @@
+RECRUTEMENT ET ÉVOLUTION DE CARRIÈRE — PROFESSEURS FPST
+=========================================================
+
+PROCESSUS DE RECRUTEMENT À LA FPST
+--------------------------------------
+La FPST recrute ses enseignants selon plusieurs profils et besoins pédagogiques.
+
+Postes CDI (temps plein) :
+Conditions minimales :
+- Diplôme Master 2 (ou équivalent) dans la spécialité concernée
+- Expérience professionnelle ou académique de 2 ans minimum
+- Maîtrise du français (niveau C1 minimum) et notions en arabe
+- Capacité à enseigner en présentiel et à distance (Moodle)
+
+Processus de sélection :
+1. Dépôt de candidature sur emplois.fpst.tn (CV + lettre de motivation)
+2. Présélection sur dossier (réponse sous 2 semaines)
+3. Test pédagogique écrit (1h — cas pratique de conception de cours)
+4. Entretien RH (30 min — profil, motivations, disponibilités)
+5. Leçon d'essai devant jury (30 min — sujet imposé 48h avant)
+6. Décision du Directeur pédagogique et de la DRH (délai 1 semaine)
+
+Période d'essai CDI :
+- Durée : 6 mois (renouvelable 1 fois)
+- Accompagnement par un mentor pendant la période d'essai
+- Évaluation formative à 3 mois et bilan final à 6 mois
+- CDI confirmé si évaluation ≥ 3/5
+
+Recrutement vacataires :
+- Processus allégé : CV + entretien téléphonique ou en visio
+- Contrat semestriel renouvelable
+- Délai de réponse : 1 semaine
+- Cours soumis en début de semestre pour validation pédagogique
+
+PROFILS RECHERCHÉS PAR SPÉCIALITÉ
+------------------------------------
+Informatique (LIG, LGL) :
+- Développement web/mobile (Java Spring, Angular, React, Flutter)
+- Architecture logicielle, design patterns, DevOps
+- Bases de données (SQL, NoSQL, data warehousing)
+- Expérience en entreprise valorisée (2+ ans en tant que développeur/architecte)
+
+Réseaux et Télécoms (LRT) :
+- Administration systèmes Linux/Windows Server
+- Réseaux Cisco (certification CCNA/CCNP fortement appréciée)
+- Cybersécurité, VPN, firewalls
+- Télécoms mobiles (4G/5G) et IoT
+
+Intelligence Artificielle (MIADS) :
+- Machine Learning (scikit-learn, XGBoost, MLflow)
+- Deep Learning (TensorFlow, PyTorch, Keras)
+- NLP, Computer Vision, IA Générative (LLMs)
+- Doctorat recommandé pour l'enseignement en Master
+
+Gestion et Marketing (LSG, LMD) :
+- Gestion financière, contrôle de gestion, comptabilité
+- Marketing digital, CRM, analytics
+- Droit des affaires, RH
+- Expérience professionnelle en entreprise exigée (3+ ans)
+
+ÉVOLUTION DE CARRIÈRE
+-----------------------
+Grille de progression (CDI) :
+Niveau 1 — Chargé de cours (0 à 2 ans) :
+- Enseignement des modules de base
+- Encadrement de stage L2/L3
+- Pas de responsabilité de filière
+
+Niveau 2 — Maître-assistant (2 à 5 ans) :
+- Enseignement tous niveaux
+- Encadrement PFE L3 et M1
+- Peut être coordinateur de module
+
+Niveau 3 — Maître de conférences (5 à 10 ans + Doctorat) :
+- Enseignement Master
+- Encadrement M2
+- Membre des jurys de soutenance
+- Peut postuler à Responsable de filière
+
+Niveau 4 — Professeur associé (10 ans + publications + HDR) :
+- Tous les niveaux d'enseignement
+- Responsable de département possible
+- Participation au Conseil de Faculté
+- Priorité pour missions Erasmus+ et conférences internationales
+
+Processus de promotion :
+1. L'enseignant soumet un dossier de demande de promotion (avant le 30 avril)
+2. Dossier : bilan d'activité, évaluations étudiants, publications, formations suivies
+3. Examen par une commission paritaire (3 professeurs + DRH)
+4. Décision communiquée avant le 30 juin (effet au 1er septembre)
+5. Réévaluation possible après 6 mois si refus avec motif pédagogique
+
+RESPONSABILITÉS ET POSTES À RESPONSABILITÉ
+--------------------------------------------
+Coordinateur de module :
+- Accessible dès Niveau 2
+- Responsable du syllabus, des ressources Moodle, harmonisation des évaluations
+- Décharge horaire : 20h ETD + prime 100 DT/mois
+
+Responsable de filière :
+- Accessible à partir du Niveau 3 (Maître de conférences)
+- Gestion pédagogique complète de la filière (curriculum, planification, stages)
+- Décharge horaire : 60h ETD + prime 200 DT/mois
+- Mandat de 2 ans renouvelable
+
+Chef de département :
+- Poste de direction : Niveau 4 (Professeur associé)
+- Supervision de plusieurs filières
+- Représentant au Conseil de Faculté
+- Prime de responsabilité : 500 DT/mois + décharge 100h ETD
+- Nomination par le Directeur général sur proposition du Directeur pédagogique
+
+Directeur adjoint pédagogique :
+- Poste de direction supérieur
+- Recrutement externe ou interne sur profil très expérimenté
+- Contact : direction@fpst.tn
+
+FORMATION À LA PRISE DE POSTE (NOUVEAUX ENSEIGNANTS)
+------------------------------------------------------
+Programme d'intégration "Bienvenue à FPST" (première semaine) :
+- Jour 1 : Visite campus, remise badges, accès informatiques
+- Jour 2 : Formation Moodle et outils numériques (obligatoire)
+- Jour 3 : Formation administrative (règlements, formulaires, processus notes)
+- Jour 4 : Séance avec le mentor désigné (parcours d'intégration)
+- Jour 5 : Observation d'un cours donné par un professeur expérimenté (avec accord)
+
+Documents à remettre à la DRH lors de la prise de poste :
+- CIN (copie certifiée conforme)
+- Diplômes (originaux pour vérification)
+- Relevé de notes Master/Doctorat
+- Extrait de casier judiciaire (modèle B3 — < 3 mois)
+- Photos d'identité (×4)
+- RIB bancaire
+- Attestation CNSS (si emploi précédent)
+- Certificat médical d'aptitude au travail
+
+Délais traitement dossier :
+- Badge et accès informatiques : Jour 1
+- Contrat signé : Jour 2 maximum
+- Premier salaire : fin du 1er mois de présence
+
+DÉPART ET DÉMISSION
+---------------------
+Démission d'un CDI :
+- Préavis : 2 mois (enseignants) ou 3 mois (responsables de filière)
+- Lettre recommandée à la DRH
+- Passation obligatoire des cours en cours (sauf accord contraire)
+- Remise de tous les documents, accès et matériaux FPST
+
+Solde de tout compte :
+- Payé dans les 30 jours suivant la fin du contrat
+- Inclut : congés non pris, heures supplémentaires, prorata 13ème mois
+
+Période post-contrat :
+- Clause de non-concurrence : interdiction d'enseigner dans un établissement
+  concurrent dans un rayon de 30 km pendant 1 an (clause contractuelle)
+- References professionnelles : attestation de travail remise sous 5 jours
+
+Emplois.fpst.tn — Portail carrières FPST
+DRH : rh@fpst.tn | Bureau B101 | Lundi–Vendredi 08h30–17h00

@@ -1,0 +1,120 @@
+SÉCURITÉ NUMÉRIQUE ET PROTECTION DES DONNÉES — FPST
+=====================================================
+
+PROTECTION DES DONNÉES PERSONNELLES
+--------------------------------------
+La FPST respecte la loi tunisienne n°63-2004 sur la protection des données personnelles
+et s'aligne sur les principes du RGPD européen.
+123
+Données collectées par la FPST :
+- Identité (nom, prénom, CIN, date de naissance)
+- Données académiques (notes, absences, résultats)
+- Données financières (paiements, bourses)
+- Données de connexion (logs du portail, accès WiFi)
+
+Droits des étudiants sur leurs données :
+- Droit d'accès : demander une copie de vos données → dpo@fpst.tn
+- Droit de rectification : corriger des données erronées → Secrétariat général
+- Droit à l'effacement : dans les limites légales (archives académiques conservées 10 ans)
+- Droit d'opposition : refus du traitement à des fins marketing
+Contact Délégué à la Protection des Données : dpo@fpst.tn
+
+SÉCURITÉ DES COMPTES ÉTUDIANTS
+---------------------------------
+Bonnes pratiques obligatoires :
+- Changer son mot de passe initial dans les 7 jours suivant la création du compte
+- Utiliser un mot de passe fort : 8+ caractères, majuscules, chiffres, symboles
+- Ne jamais partager ses identifiants avec quiconque (même amis, famille, personnel FPST)
+- Se déconnecter systématiquement des ordinateurs partagés (salles info, bibliothèque)
+- Activer la vérification en deux étapes si disponible
+
+Que faire si votre compte est compromis :
+1. Changer immédiatement le mot de passe via help.fpst.tn
+2. Contacter le support IT : support@fpst.tn ou Bureau A304
+3. Signaler à security@fpst.tn si une utilisation frauduleuse est suspectée
+4. Ne pas utiliser le compte compromis avant validation
+
+SÉCURITÉ SUR LE RÉSEAU WIFI CAMPUS
+------------------------------------
+Règles d'utilisation du WiFi FPST :
+- Réseau réservé aux étudiants et personnels FPST (identifiants requis)
+- Toute activité est journalisée (conformément à la loi)
+- Interdit : téléchargement illicite, peer-to-peer, streaming massif
+- Interdit : accès à des sites bloqués par contournement (VPN non autorisé sur WiFi campus)
+- Interdit : partage de sa session WiFi avec des tiers
+
+Connexion sécurisée depuis l'extérieur :
+- VPN officiel FPST disponible : vpn.fpst.tn (utiliser OpenVPN)
+- Identifiants = mêmes que le portail étudiant
+- Permet l'accès aux ressources académiques (IEEE, Moodle, bibliothèque numérique)
+- Ne pas utiliser de VPN tiers avec vos identifiants FPST
+
+CYBERSÉCURITÉ — MENACES COURANTES
+------------------------------------
+Phishing (hameçonnage) :
+- La FPST ne demande JAMAIS votre mot de passe par email
+- Vérifiez l'adresse expéditeur (@fpst.tn uniquement pour les officiels)
+- Ne cliquez pas sur des liens suspects dans les emails
+- Signalez tout email suspect à security@fpst.tn
+
+Ingénierie sociale :
+- Personne ne vous appellera pour demander vos identifiants
+- En cas de doute sur un appel ou un email prétendant venir de la FPST, raccrochez
+  et vérifiez directement auprès des services concernés en personne
+
+Malwares et virus :
+- N'installez que des logiciels depuis des sources officielles sur les postes FPST
+- Les clés USB personnelles sont interdites sur les postes des salles info
+- Signaler tout comportement anormal d'un poste informatique au Bureau A304
+
+ANTI-PLAGIAT ET INTÉGRITÉ ACADÉMIQUE
+----------------------------------------
+Système anti-plagiat Turnitin :
+- Intégré dans Moodle FPST pour tous les travaux soumis
+- Un rapport de similarité est généré automatiquement
+- Seuil acceptable : < 20% de similarité
+- Au-delà de 20% : avertissement ; au-delà de 40% : travail annulé
+
+Qu'est-ce qui constitue du plagiat numérique :
+- Copier-coller depuis Internet sans citation
+- Utilisation de travaux d'autres étudiants (même avec leur accord)
+- Soumission de travaux d'années précédentes ("self-plagiat")
+- Utilisation non déclarée d'IA générative pour rédiger un devoir (selon règles du module)
+
+Usage éthique de l'IA (ChatGPT, Copilot, etc.) :
+- Autorisé comme outil d'aide si déclaré et si la réflexion reste celle de l'étudiant
+- Interdit comme substitut de travail personnel
+- Certains modules ont des règles spécifiques → vérifier avec l'enseignant
+
+CONFIDENTIALITÉ DES EXAMENS ET NOTES
+----------------------------------------
+- Les notes sont personnelles et confidentielles
+- Ne pas photographier les copies d'examen des autres
+- Les sujets d'examen sont confidentiels avant diffusion officielle
+- Possession ou diffusion anticipée d'un sujet = faute disciplinaire grave
+
+INCIDENTS DE SÉCURITÉ — SIGNALEMENT
+--------------------------------------
+En cas d'incident (piratage, harcèlement en ligne, vol de données) :
+- Contact immédiat : security@fpst.tn
+- Pour les menaces physiques : Bureau de sécurité campus (Hall principal)
+- Pour le cyberharcèlement entre étudiants : Bureau de la vie étudiante A012
+  ou médiateur@fpst.tn (traitement confidentiel)
+- Pour les incidents impliquant des données personnelles : dpo@fpst.tn
+
+Délais de traitement :
+- Urgences de sécurité : réponse sous 2h (heures ouvrables)
+- Signalements standard : réponse sous 24h
+- Enquêtes disciplinaires : délai variable selon complexité
+
+PROPRIÉTÉ INTELLECTUELLE
+--------------------------
+Travaux réalisés dans le cadre académique FPST :
+- Les projets, mémoires et PFE restent propriété intellectuelle de l'étudiant
+- La FPST dispose d'un droit d'archivage et de diffusion interne
+- Pour toute publication externe de travaux FPST, accord préalable requis
+
+Projets réalisés en entreprise (stage) :
+- La convention de stage précise les droits PI
+- Par défaut, le code/travail produit pendant le stage appartient à l'entreprise
+- Vérifiez les clauses de confidentialité avant de partager votre rapport

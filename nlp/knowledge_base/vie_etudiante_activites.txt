@@ -1,0 +1,236 @@
+═══════════════════════════════════════════════════════════
+           VIE ÉTUDIANTE, CLUBS ET ACTIVITÉS
+      Faculté Privée des Sciences et Technologies (FPST)
+═══════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────
+🎓 L'EXPÉRIENCE FPST AU-DELÀ DES COURS
+────────────────────────────────────────────────────────
+
+La FPST croit que la formation ne se limite pas aux amphithéâtres.
+La vie associative, les événements et les activités extra-académiques
+sont des piliers essentiels du développement de nos étudiants.
+  
+────────────────────────────────────────────────────────
+🤝 CLUBS ET ASSOCIATIONS ÉTUDIANTES
+────────────────────────────────────────────────────────
+
+CLUB INFORMATIQUE ET TECHNOLOGIE (CIT)
+  Activités :
+  → Hackathons internes et inter-universités
+  → Ateliers techniques : Git, Docker, Cloud, IA
+  → Coding challenges hebdomadaires (LeetCode, HackerRank)
+  → Projets open source collaboratifs
+  → Conférences d'experts du secteur
+  Inscription : Gratuite — Bureau de la vie étudiante ou réunion de rentrée
+
+CLUB CYBERSÉCURITÉ ET CTF (Capture The Flag)
+  Activités :
+  → Entraînements CTF (hacking éthique, forensics, crypto)
+  → Participation aux compétitions nationales et internationales
+  → Ateliers pentest et sécurité web
+  → Conférences sur la sécurité numérique
+  Prérequis : Bases en réseaux ou sécurité (tous niveaux acceptés)
+
+CLUB ENTREPRENEURIAT ET INNOVATION (CEI)
+  Activités :
+  → Concours de startups et pitchs (remises de prix)
+  → Mentorat par des entrepreneurs tunisiens
+  → Ateliers business plan et levée de fonds
+  → Partenariat avec des incubateurs (ex: Smart Capital)
+  → Visites d'entreprises et de partenaires
+  Événement phare : "FPST Startup Day" (chaque Avril)
+
+CLUB CULTUREL ET ARTISTIQUE (CCA)
+  Activités :
+  → Théâtre et arts de la scène
+  → Musique et chant (chorale, groupes)
+  → Photographie et arts visuels
+  → Organisation de la Journée Culturelle annuelle (Mai)
+  → Participation au festival inter-universités
+
+CLUB SPORTIF (FSPU)
+  Sports pratiqués :
+  → Football (terrain synthétique, compétitions interfacultés)
+  → Basketball (terrain couvert)
+  → Volleyball
+  → Ping-pong
+  → Course et fitness (salle de sport partagée)
+  Entraînements : Lun, Mer, Ven de 16h00 à 18h00
+
+CLUB DÉBAT ET LEADERSHIP (CDL)
+  Activités :
+  → Débats formels en français et en anglais
+  → Simulations de l'ONU (MUN — Model United Nations)
+  → Ateliers prise de parole et éloquence
+  → Compétitions régionales et nationales
+
+JUNIOR ENTREPRISE FPST (JE-FPST)
+  Structure : Association étudiante gérant des missions réelles pour des clients
+  Activités :
+  → Réalisation de missions de conseil et développement pour des entreprises
+  → Expérience professionnelle rémunérée pendant les études
+  → Gestion de projets (marketing, IT, gestion)
+  → Répartition des revenus entre membres actifs
+
+────────────────────────────────────────────────────────
+📅 ÉVÉNEMENTS ANNUELS MAJEURS
+────────────────────────────────────────────────────────
+
+SEPTEMBRE — JOURNÉE D'ACCUEIL DES NOUVEAUX ÉTUDIANTS
+  → Présentation de la faculté, des filières et des clubs
+  → Visite guidée du campus
+  → Remise des kits étudiant (carte, accès plateforme)
+  → Buffet de bienvenue (gratuit)
+
+OCTOBRE — FORUM DES CLUBS
+  → Stand de chaque club pour recruter des membres
+  → Activités de démonstration
+  → Inscription directe sur place
+
+NOVEMBRE — HACKATHON FPST
+  → 48 heures de développement intensif
+  → Thème révélé le jour J
+  → Équipes de 3 à 5 personnes
+  → Jury composé de professionnels du secteur
+  → Prix : Matériel tech + stage accéléré chez partenaire
+
+MARS — FORUM ENTREPRISES-ÉTUDIANTS
+  → Plus de 40 entreprises présentes
+  → Dépôts de CV, entretiens spontanés
+  → Offres de stages et d'emplois
+  → Gratuit pour les étudiants de la FPST
+
+AVRIL — FPST STARTUP DAY
+  → Pitchs de projets étudiants devant des investisseurs
+  → Workshops innovation et design thinking
+  → Prix du meilleur projet (bourse + accompagnement)
+
+MAI — JOURNÉE CULTURELLE
+  → Performances artistiques (théâtre, musique, danse)
+  → Exposition photos et œuvres visuelles
+  → Stands culinaires des cultures du monde
+  → Remise des trophées des clubs
+
+JUIN / JUILLET — SOUTENANCES PFE ET REMISE DE DIPLÔMES
+  → Cérémonies de soutenance PFE (ouvertes aux familles)
+  → Cérémonie officielle de remise des diplômes (Décembre)
+
+────────────────────────────────────────────────────────
+🏋️ SERVICES ET ÉQUIPEMENTS SUR CAMPUS
+────────────────────────────────────────────────────────
+
+BIBLIOTHÈQUE :
+  → 15 000+ ouvrages (informatique, gestion, droit, langues)
+  → Accès bases de données IEEE Xplore, Springer, ACM
+  → Salle silencieuse (50 places) + espace groupe (20 places)
+  → Prêt : 3 ouvrages max, 2 semaines renouvelables
+  → Impression : 0.15 DT/page
+  Horaires : Lun-Ven 08h00-20h00 | Samedi 08h00-14h00
+
+SALLES INFORMATIQUES :
+  → 4 labos (30 postes chacun) — Windows + Linux dual boot
+  → Accès libre en dehors des heures de cours (sur disponibilité)
+  → Software disponible : JDK, Python, VS Code, Git, Docker, Adobe Suite, MATLAB, etc.
+  → Réservation de salle pour projets groupe : support@fpst.tn
+
+SALLE DE SPORT :
+  → Equipements fitness (vélos, tapis, haltères)
+  → Accès libre Lun-Ven 07h00-19h00 | Samedi 08h00-14h00
+  → Gratuit pour les étudiants inscrits
+
+CAFÉTÉRIA (Bâtiment B, RDC) :
+  → Petit-déjeuner : 07h30-09h30 (sandwichs, viennoiseries)
+  → Menu du jour : 3 DT à 5 DT (plat + boisson)
+  → Options végétariennes disponibles
+  → Espace détente avec tables de ping-pong
+  Horaires : 07h30 — 17h00
+
+ESPACE COWORKING ÉTUDIANT (Bâtiment C, 1er étage) :
+  → Espace de travail collaboratif ouvert 24h/24
+  → Wi-Fi, prises électriques, grands écrans
+  → Whiteboards pour brainstorming
+  → Accès avec badge étudiant
+
+PARKING :
+  → Parking voiture : 200 places (gratuit étudiants)
+  → Parking deux-roues : 100 places couvertes
+  → 10 places réservées personnes à mobilité réduite
+
+────────────────────────────────────────────────────────
+🌍 MOBILITÉ INTERNATIONALE
+────────────────────────────────────────────────────────
+
+ACCORDS D'ÉCHANGE INTERNATIONAUX :
+  La FPST a des partenariats avec des universités dans :
+  → France (Lyon, Bordeaux, Paris IUT)
+  → Canada (Québec, Montréal)
+  → Belgique (Bruxelles, Liège)
+  → Maroc, Algérie (coopération Maghreb)
+  → Allemagne (DAAD programme)
+
+PROGRAMME ERASMUS+ :
+  Mobilité étudiante : 1 semestre ou 1 an
+  Bourse : 500-700 € / mois (selon pays)
+  Conditions : Niveau B2 en langue du pays + Moyenne ≥ 12/20
+  Candidature : Service des Relations Internationales
+  Email : international@fpst.tn
+
+DOUBLE DIPLÔME :
+  Disponible avec certaines universités partenaires.
+  Renseignements : Bureau 201 (Direction Pédagogique)
+
+────────────────────────────────────────────────────────
+🎯 ORIENTATION ET SOUTIEN PSYCHOLOGIQUE
+────────────────────────────────────────────────────────
+
+SERVICE D'ORIENTATION ACADÉMIQUE :
+  → Aide au choix de spécialisation (L3, Master)
+  → Conseil pour la poursuite d'études à l'étranger
+  → Information sur les concours de la fonction publique
+
+SERVICE DE SOUTIEN PSYCHOLOGIQUE :
+  → Psychologue disponible sur rendez-vous
+  → Confidentiel et gratuit pour tous les étudiants
+  → Gestion du stress d'examens, difficultés personnelles
+  → Permanence : Mardi et Jeudi 10h00-16h00
+  Contact : soutien@fpst.tn | Bureau 112, Bâtiment A
+
+TUTORAT ENTRE PAIRS :
+  Des étudiants avancés (L3 ou Master) proposent
+  des séances de tutorat aux L1 et L2 en difficulté.
+  Gratuit. Inscription via le bureau de la vie étudiante.
+
+────────────────────────────────────────────────────────
+❓ QUESTIONS FRÉQUENTES SUR LA VIE ÉTUDIANTE
+────────────────────────────────────────────────────────
+
+Q: Comment m'inscrire à un club ?
+R: Rendez-vous au Bureau de la Vie Étudiante (Bureau 110)
+   ou lors du Forum des Clubs en octobre.
+   Inscription gratuite, aucun prérequis pour la plupart des clubs.
+
+Q: Puis-je créer mon propre club ?
+R: Oui ! Avec 10 membres fondateurs minimum et un enseignant tuteur,
+   vous pouvez déposer un dossier de création au Bureau 110.
+   La faculté fournit un budget de démarrage et un local.
+
+Q: Y a-t-il une résidence universitaire ?
+R: La FPST n'a pas de cité universitaire propre. Des logements
+   partenaires sont référencés via le bureau de la vie étudiante.
+   Une liste de colocations étudiantes proches du campus est disponible.
+
+Q: Y a-t-il des activités sportives compétitives inter-universités ?
+R: Oui, la FPST participe aux championnats inter-universités organisés
+   par le Ministère de l'Enseignement Supérieur (football, basketball, volleyball).
+
+Q: Comment bénéficier du tarif réduit TRANSTU (transport) ?
+R: Demandez une attestation de scolarité + votre carte étudiant
+   au guichet TRANSTU le plus proche ou sur transtu.com.tn.
+   Réduction : 50% sur les abonnements mensuels.
+
+═══════════════════════════════════════════════════════════
+Bureau de la Vie Étudiante : Bureau 110, Bâtiment A
+Email : vie.etudiante@fpst.tn | Tél : +216 71 XXX 110
+Horaires : Lun-Ven 08h30 — 17h00
+═══════════════════════════════════════════════════════════

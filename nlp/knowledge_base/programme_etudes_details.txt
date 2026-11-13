@@ -1,0 +1,205 @@
+PROGRAMME D'ÉTUDES DÉTAILLÉ PAR FILIÈRE — FPST
+===============================================
+
+LICENCE INFORMATIQUE DE GESTION (LIG)
+---------------------------------------
+Durée : 3 ans (6 semestres) | Crédits : 180 ECTS
+
+Semestre 1 :
+- Algorithmique et structures de données (6 ECTS)
+- Mathématiques discrètes (4 ECTS)
+- Introduction à la programmation (Python) (5 ECTS)
+- Comptabilité générale (4 ECTS)
+- Bureautique et systèmes d'exploitation (3 ECTS)
+- Anglais I (3 ECTS)
+- Communication et expression (3 ECTS)
+
+Semestre 2 :
+- Programmation orientée objet (Java) (6 ECTS)
+- Bases de données I (SQL) (5 ECTS)
+- Algèbre linéaire et probabilités (4 ECTS)
+- Gestion d'entreprise (4 ECTS)
+- Systèmes d'exploitation (Linux) (4 ECTS)
+- Anglais II (3 ECTS)
+- Stage d'observation L1 (4 ECTS)
+
+Semestre 3 (L2) :
+- Développement web (HTML, CSS, JS) (5 ECTS)
+- Bases de données II (PostgreSQL, NoSQL) (5 ECTS)
+- Architecture des ordinateurs (4 ECTS)
+- Réseaux I (TCP/IP) (4 ECTS)
+- Systèmes d'information (4 ECTS)
+- Anglais technique (4 ECTS)
+
+Semestre 4 (L2) :
+- Framework web (Spring/Angular) (5 ECTS)
+- Analyse et conception (UML) (5 ECTS)
+- Gestion de projet (Agile/Scrum) (4 ECTS)
+- Sécurité informatique (3 ECTS)
+- Business Intelligence (4 ECTS)
+- Stage d'observation L2 (3 ECTS)
+
+Semestre 5 (L3) :
+- Applications mobiles (Android/Flutter) (5 ECTS)
+- Cloud computing (AWS/Azure) (4 ECTS)
+- ERP et systèmes d'entreprise (4 ECTS)
+- Intelligence artificielle appliquée (4 ECTS)
+- Marketing digital (4 ECTS)
+
+Semestre 6 (L3) — PFE :
+- Projet de fin d'études (18 ECTS) — stage de 2 mois minimum en entreprise
+- Séminaire de professionnalisation (4 ECTS)
+
+LICENCE GÉNIE LOGICIEL (LGL)
+------------------------------
+Durée : 3 ans | Crédits : 180 ECTS | Focus : développement avancé, architecture logicielle
+
+Points spécifiques LGL vs LIG :
+- Plus fort accent sur les design patterns (Factory, Observer, MVC, MVVM)
+- Cours avancés : compilation, langages formels, test logiciel
+- Modules supplémentaires : DevOps (CI/CD, Docker, Kubernetes)
+- Projet long semestre 5 : développement d'une application complète en équipe
+- Matières spécifiques : Génie logiciel avancé, Qualité logicielle (ISO, CMMI)
+- Compétences cibles : Software architect, Lead developer, Full-stack senior
+
+LICENCE RÉSEAUX ET TÉLÉCOMMUNICATIONS (LRT)
+--------------------------------------------
+Durée : 3 ans | Crédits : 180 ECTS | Focus : infrastructure réseaux, télécoms
+
+Modules clés :
+- Réseaux I, II, III (TCP/IP, routage, switching)
+- Téléphonie IP et VoIP
+- Réseaux sans fil (WiFi, 4G/5G)
+- Sécurité des réseaux (firewalls, IDS/IPS)
+- Administration système (Windows Server, Linux Server)
+- Virtualisation et SDN (Software Defined Networking)
+- Cisco CCNA (préparation certification intégrée au cursus)
+- Travaux pratiques en labo réseau (routeurs Cisco, switches)
+- Compétences cibles : Administrateur réseau, Ingénieur télécoms, Consultant cybersécurité
+
+LICENCE SCIENCES DE GESTION (LSG)
+-----------------------------------
+Durée : 3 ans | Crédits : 180 ECTS | Focus : management, finance, RH
+
+Modules clés :
+- Comptabilité générale et analytique
+- Finance d'entreprise et marchés financiers
+- Droit des affaires et droit du travail
+- Gestion des ressources humaines
+- Marketing stratégique et opérationnel
+- Management et leadership
+- Statistiques et méthodes quantitatives
+- Économie générale et microéconomie
+- Informatique de gestion (Excel avancé, bases de données)
+- Compétences cibles : Responsable RH, Contrôleur de gestion, Chargé de marketing
+
+LICENCE MARKETING DIGITAL (LMD) — Nouveau programme
+------------------------------------------------------
+Durée : 3 ans | Crédits : 180 ECTS
+
+Modules innovants :
+- Marketing digital et e-commerce
+- SEO/SEM et référencement
+- Community management et réseaux sociaux
+- Data analytics et Google Analytics
+- UX/UI Design (Figma, Adobe XD)
+- Création de contenu et storytelling
+- CRM et marketing automation (HubSpot, Salesforce)
+- Entrepreneuriat digital
+- Droit du numérique et RGPD
+
+MASTER INTELLIGENCE ARTIFICIELLE ET DATA SCIENCE (MIADS)
+----------------------------------------------------------
+Durée : 2 ans | Crédits : 120 ECTS | Niveau avancé
+
+Semestre 1 (M1) :
+- Machine Learning fondamental (scikit-learn) (6 ECTS)
+- Deep Learning et réseaux de neurones (6 ECTS)
+- Big Data (Hadoop, Spark) (5 ECTS)
+- Statistiques avancées et probabilités (5 ECTS)
+- Éthique de l'IA et droit des données (4 ECTS)
+
+Semestre 2 (M1) :
+- NLP (traitement du langage naturel) (6 ECTS)
+- Computer Vision (6 ECTS)
+- MLOps et déploiement de modèles (5 ECTS)
+- Business Intelligence avancée (4 ECTS)
+- Stage technique M1 (3 mois) (9 ECTS)
+
+Semestre 3 (M2) :
+- IA Générative et LLMs (6 ECTS)
+- Reinforcement Learning (5 ECTS)
+- Data Engineering (pipelines, ETL) (5 ECTS)
+- Management de projets IA (4 ECTS)
+- Recherche et innovation (4 ECTS)
+
+Semestre 4 (M2) — Stage professionnel :
+- Stage de 4 à 6 mois en entreprise (30 ECTS)
+
+Profils visés : Data Scientist, ML Engineer, AI Researcher, Data Analyst senior
+
+MASTER CYBERSÉCURITÉ (MCS)
+----------------------------
+Durée : 2 ans | Crédits : 120 ECTS
+
+Modules clés :
+- Cryptographie et sécurité des communications
+- Sécurité des systèmes et réseaux (offensive/defensive)
+- Forensique numérique et investigation
+- Gestion des risques (ISO 27001, EBIOS)
+- Ethical hacking et tests de pénétration
+- Cloud Security (AWS/Azure)
+- SIEM et SOC (Security Operations Center)
+- Conformité légale et RGPD
+Certifications préparées : CEH, CompTIA Security+, CISSP (partiel)
+
+MASTER MANAGEMENT DES SYSTÈMES D'INFORMATION (MSI)
+----------------------------------------------------
+Durée : 2 ans | Crédits : 120 ECTS
+
+Modules clés :
+- Architecture d'entreprise (TOGAF)
+- Gouvernance IT (COBIT, ITIL)
+- ERP avancé (SAP, Oracle)
+- Management de projets SI (PMP, PRINCE2)
+- Audit informatique et contrôle interne
+- Transformation digitale des organisations
+- Business Process Management (BPM)
+- Compétences cibles : DSI, Chef de projet SI, Consultant ERP, Auditeur IT
+
+CRÉDITS ECTS ET TRANSFERT
+---------------------------
+Chaque ECTS correspond à environ 25-30 heures de travail total (cours + TD + travail personnel).
+La Licence = 180 ECTS = ~4500-5400 heures de formation totale.
+Le Master = 120 ECTS = ~3000-3600 heures de formation totale.
+
+Reconnaissance internationale :
+Les diplômes FPST sont reconnus dans les pays signataires de la Convention de Bologne.
+Pour les pays hors convention, une équivalence doit être demandée localement.
+
+PASSERELLES ENTRE FILIÈRES
+-----------------------------
+Après une Licence :
+- LIG → MIADS ou MCS ou MSI (sur dossier)
+- LGL → MIADS ou MCS (fort profil technique)
+- LRT → MCS (idéale) ou MIADS
+- LSG → MSI (idéale) ou MIADS (si profil data)
+- LMD → MSI (aspect digital transformation)
+
+Intégration en M2 directement :
+- Possible pour titulaires d'un M1 validé dans une filière compatible
+- Sur dossier + entretien devant le jury d'admission
+
+MÉTHODES PÉDAGOGIQUES
+------------------------
+Cours magistraux (CM) : 30-40% du temps (amphithéâtre, grands groupes)
+Travaux dirigés (TD) : 30-40% (groupes de 20-25 étudiants, exercices pratiques)
+Travaux pratiques (TP) : 20-30% (salles informatiques, laboratoires)
+Projets tutorés : 1 à 2 projets par semestre en équipe de 3-5 étudiants
+Conférences invitées : professionnels du secteur, 1 à 2 fois par module
+
+Ressources disponibles :
+- Supports de cours (PDF, vidéos) sur Moodle
+- Bibliothèque avec manuels et accès IEEE/ACM
+- Environnements de développement en salles info
+- Accès GitHub Education Pack (outils professionnels gratuits)

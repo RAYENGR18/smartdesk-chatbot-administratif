@@ -1,0 +1,128 @@
+STATUTS, CHARGES HORAIRES ET CONTRATS ENSEIGNANTS — FPST
+=========================================================
+
+CATÉGORIES DE PERSONNEL ENSEIGNANT
+-------------------------------------
+
+Professeurs permanents à temps plein :
+- Contrat CDI après 2 ans d'essai
+- Charge horaire : 384 heures équivalent TD / an (soit ~192h de CM ou mélange)
+- Salaire brut de base : 2 800 à 4 500 DT / mois selon grade et ancienneté
+- Avantages : mutuelle santé, prime de recherche, bureau fixe, accès labo
+- Obligation : participation aux conseils pédagogiques, jurys de soutenance
+
+Professeurs permanents à mi-temps :
+- 192 heures équivalent TD / an
+- Salaire proratisé
+- Possibilité de cumuler avec un autre poste (avec autorisation écrite de la direction)
+
+Chargés de cours vacataires :
+- Rémunération horaire : 35 à 55 DT / heure de cours selon qualification
+  * Doctorant / diplôme Master : 35 DT/h
+  * Docteur / Ingénieur expérimenté : 45 DT/h
+  * Expert senior / Consultant : 55 DT/h
+- Pas de minimum garanti, facturation par heure effectuée
+- Contrat signé en début de semestre, paiement en fin de semestre ou mensuel
+- Maximum légal : 192h / an par enseignant vacataire à la FPST
+
+RÉPARTITION DE LA CHARGE HORAIRE
+----------------------------------
+La charge de 384h ETD (équivalent TD) inclut :
+- 1h de CM = 1,5h ETD
+- 1h de TD = 1h ETD
+- 1h de TP = 0,67h ETD
+- Encadrement mémoire : 10h ETD / étudiant encadré (max 5 étudiants)
+- Participation jury soutenance : 2h ETD / jury
+
+Exemple de répartition annuelle type (prof temps plein) :
+- 60h CM (= 90h ETD) + 120h TD (= 120h ETD) + 60h TP (= 40h ETD) = 250h ETD
+- + 4 encadrements PFE (= 40h ETD) + jurys (= 30h ETD) ≈ 320h ETD
+- Complément via responsabilités : 64h ETD restants = coordination pédagogique
+
+Heures supplémentaires :
+- Déclenchées au-delà de 384h ETD pour les permanents
+- Taux horaire heure sup : 45 DT / heure (non imposable jusqu'à 96h/an)
+- Autorisation préalable du Directeur pédagogique requise
+
+RESPONSABILITÉS PÉDAGOGIQUES (avec compensation)
+--------------------------------------------------
+Responsable de filière :
+- Décharge de 60h ETD sur sa charge annuelle
+- Primes : 200 DT / mois
+- Rôle : coordination module, jury annuel, relation avec les entreprises
+
+Coordinateur de module :
+- Décharge de 20h ETD
+- Responsable du syllabus, des ressources Moodle, harmonisation des évaluations
+
+Responsable des stages :
+- Décharge de 30h ETD
+- Gestion des conventions, suivi des étudiants, contact entreprises
+
+Membre du Conseil Pédagogique :
+- 10h ETD déchargées / an (réunions officielles comptabilisées)
+- Présence obligatoire aux 3 à 4 réunions annuelles
+
+CONGÉS ET ABSENCES
+--------------------
+Congés payés (CDI) :
+- 30 jours ouvrables / an
+- Congés d'été : juillet–août (sous réserve de la session de rattrapage)
+- Congés de Noël / Aïd : alignés sur le calendrier académique officiel
+
+Absences pour raisons académiques (hors charge) :
+- Conférences, colloques : jusqu'à 5 jours / an avec accord du Directeur
+- Formations continues : jusqu'à 10 jours / an (voir budget formation)
+- Missions d'expertise à l'étranger : dossier DRH + accord direction
+
+Procédure d'absence imprévue :
+1. Notifier le secrétariat pédagogique (Bureau 202) dès que possible
+2. Proposer un cours de remplacement dans les 72h
+3. Notifier les étudiants via Moodle ou email officiel
+- Absence non récupérée : déduction sur salaire (1/22ème / jour)
+
+GRILLE SALARIALE INDICATIVE (CDI)
+-----------------------------------
+Maître-assistant (< 3 ans) : 2 800 – 3 200 DT / mois
+Maître-assistant confirmé (3–7 ans) : 3 200 – 3 800 DT / mois
+Maître de conférences (> 7 ans, Doctorat) : 3 800 – 4 500 DT / mois
+Professeur associé (> 10 ans, publications) : 4 500 – 5 500 DT / mois
+
+Primes régulières :
+- Prime de rendement semestriel : 150 à 400 DT (basée sur évaluations étudiants)
+- Prime de recherche : 200 DT / article publié dans revue indexée
+- Prime de fin d'année : 1 mois de salaire (pour CDI > 1 an)
+- Indemnité de transport : 80 DT / mois
+- Mutuelle santé prise en charge à 70% par la FPST
+
+Toute question salariale : DRH Bureau B101 | rh@fpst.tn
+
+RETRAITE ET COUVERTURE SOCIALE
+--------------------------------
+Affiliation obligatoire :
+- CNSS (Caisse Nationale de Sécurité Sociale) : cotisation salariale 9.18%
+- CNSS patronale : cotisation employeur 16.57%
+- Couverture : retraite, maladie, maternité, accidents du travail
+
+Complémentaire retraite (facultatif) :
+- Contrat groupe disponible via STAR Assurances (tarif préférentiel FPST)
+- Contact DRH pour adhésion
+
+ÉVALUATION DU PERSONNEL ENSEIGNANT
+-------------------------------------
+Évaluation annuelle par :
+1. Le Directeur pédagogique (entretien individuel, Juin)
+2. Les étudiants (questionnaire anonyme Moodle, fin de semestre)
+3. Auto-évaluation (rapport d'activité annuel à remettre avant le 30 juin)
+
+Critères d'évaluation :
+- Qualité pédagogique (clarté, disponibilité, supports)
+- Taux de réussite des étudiants du module
+- Respect des délais (publication des notes, dépôt des sujets)
+- Participation à la vie institutionnelle (conseils, jurys, encadrements)
+- Activités de recherche et publications
+
+Conséquences de l'évaluation :
+- Note ≥ 4/5 : augmentation annuelle automatique (2-3%)
+- Note 3-4/5 : plan d'amélioration proposé
+- Note < 3/5 deux années consécutives : entretien disciplinaire RH

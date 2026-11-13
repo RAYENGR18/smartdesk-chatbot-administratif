@@ -1,0 +1,134 @@
+FORMATION CONTINUE ET DÉVELOPPEMENT PROFESSIONNEL — PROFESSEURS FPST
+======================================================================
+
+POLITIQUE DE FORMATION CONTINUE
+----------------------------------
+La FPST encourage le développement professionnel continu de ses enseignants.
+Chaque professeur dispose d'un budget formation annuel et d'un droit à la formation.
+
+Budget formation individuel :
+- Professeurs CDI : 1 200 DT / an (peut être reporté sur l'année suivante, max 2 400 DT)
+- Chargés de cours vacataires : 300 DT / an (accès limité aux formations en ligne)
+
+Procédure de demande :
+1. Identifier la formation et obtenir un devis/programme
+2. Remplir le formulaire de demande (elearning.fpst.tn → RH → Demande formation)
+3. Validation par le Directeur pédagogique (délai : 5 jours ouvrables)
+4. Inscription prise en charge par la DRH si budget disponible
+5. Rapport de formation à remettre dans les 30 jours après la formation (1 page)
+
+Contact DRH pour formation : formation@fpst.tn | Bureau B101
+
+PLAN DE FORMATION ANNUEL FPST
+-------------------------------
+Catalogue de formations internes (organisées par la FPST, gratuites pour enseignants) :
+
+Pédagogie et innovation :
+- "Enseigner avec Moodle" (Septembre, 1 journée — obligatoire nouveaux enseignants)
+- "Pédagogie active et classes inversées" (Novembre, 2 jours)
+- "Évaluation par compétences" (Janvier, 1 journée)
+- "Accompagner les étudiants en difficulté" (Mars, demi-journée)
+- "Utilisation de l'IA dans l'enseignement" (Mai, 1 journée)
+
+Outils numériques :
+- Moodle avancé : quiz, H5P, forums (Octobre)
+- Microsoft Teams pour l'enseignement (Septembre)
+- Turnitin et anti-plagiat : utilisation et calibrage (Août — avant rentrée)
+
+Soft skills et communication :
+- Prise de parole et présentation efficace (Décembre)
+- Gestion du stress et prévention du burnout (Avril)
+- Leadership pédagogique et management d'équipe (Juin)
+
+CERTIFICATIONS ET TITRES PROFESSIONNELS
+-----------------------------------------
+La FPST prend en charge ou co-finance :
+
+Certifications techniques (filières informatiques) :
+- AWS Certified Practitioner / Associate : prise en charge 100% si pertinent pour l'enseignement
+- Microsoft Azure Fundamentals / Associate : 100%
+- Cisco CCNA / CCNP : 100% pour enseignants LRT
+- Certified Ethical Hacker (CEH) : 100% pour enseignants MCS
+- Google Professional Data Engineer : 50% co-financement
+
+Certifications pédagogiques :
+- Certificat Professionnel en Pédagogie Universitaire (CPPU) — Université de Tunis
+- Formation de formateurs (certifiée ATFP ou équivalent)
+- Diplôme Universitaire "Ingénierie pédagogique" (partenariat Université Paul Sabatier)
+
+Certifications académiques :
+- Soutien à l'inscription en doctorat : exonération 50% frais FPST, 1 jour/semaine libéré
+- HDR (Habilitation à Diriger des Recherches) : décharge de 30h ETD l'année de la rédaction
+
+CONGÉ DE FORMATION (POUR LES CDI)
+------------------------------------
+Congé formation longue durée :
+- Jusqu'à 6 mois consécutifs pour formation diplômante
+- Rémunération : 70% du salaire pendant la durée (sur budget FPST)
+- Conditions : 3 ans d'ancienneté, accord de la direction, remplacement assuré
+- Retour garanti au même poste (clause contractuelle)
+- Demande à déposer 3 mois à l'avance à la DRH
+
+Congé sabbatique (CDI > 7 ans) :
+- 1 semestre tous les 7 ans pour projet de recherche ou formation spécialisée
+- Rémunération : 80% du salaire
+- Rapport de valorisation attendu (publications, cours mis à jour, etc.)
+
+MOBILITÉ ET ÉCHANGES PROFESSIONNELS
+--------------------------------------
+Programme Erasmus+ pour enseignants (Staff Mobility) :
+- Enseignement dans une université partenaire : 5 à 30 jours
+- Indemnité : 160 à 180 € / jour selon pays de destination
+- Frais de voyage remboursés
+- Contact : international@fpst.tn
+
+Missions d'expertise (consultance) :
+- Autorisées dans la limite de 20% du temps de travail
+- Déclaration obligatoire à la DRH
+- Pas de conflit d'intérêt avec l'enseignement à la FPST
+
+Accueil de collègues étrangers :
+- Possibilité d'inviter des chercheurs ou professionnels pour des cours magistraux
+- Budget "conférenciers invités" : 500 DT / intervention (sur demande au Directeur)
+
+VEILLE TECHNOLOGIQUE ET ACADÉMIQUE
+-------------------------------------
+Ressources mises à disposition des enseignants :
+
+Bases de données académiques (accès depuis campus ou VPN) :
+- IEEE Xplore : publications techniques, conférences
+- ACM Digital Library : informatique
+- Springer / Elsevier / ScienceDirect : sciences et ingénierie
+- JSTOR : sciences humaines et sociales
+- Google Scholar + Semantic Scholar (libre)
+
+Outils de veille recommandés :
+- ResearchGate (réseau académique — profil recommandé)
+- Academia.edu (dépôt et partage de publications)
+- arXiv.org (prépublications IA, ML, CS)
+- LinkedIn Learning (formations courtes)
+
+Abonnements pris en charge :
+- O'Reilly Learning (accès illimité livres techniques) : 1 accès / département
+- Coursera for Campus (certifications pour enseignants) : via DRH
+- Pluralsight (développement professionnel IT) : sur demande budgétaire
+
+COMMUNAUTÉ D'APPRENTISSAGE PROFESSIONNEL
+------------------------------------------
+Groupes de travail pédagogique (GTP) :
+- Réunion mensuelle par filière (Mardi 14h, salle de réunion B203)
+- Partage de bonnes pratiques, co-construction de ressources
+- Animation tournante entre les membres
+
+Mentorat entre pairs :
+- Programme "1 Enseignant expérimenté = 1 Nouvel enseignant accompagné"
+- Durée : 1 an pour les nouvelles recrues
+- Observation mutuelle de cours (avec accord)
+
+Séminaire pédagogique annuel (Juin) :
+- Journée complète de partage de pratiques innovantes
+- Présentation des projets pédagogiques de l'année
+- Ateliers collaboratifs et networking interne
+
+Contact pour toute question sur la formation : formation@fpst.tn
+DRH : Bureau B101, Lundi–Vendredi 08h30–17h00

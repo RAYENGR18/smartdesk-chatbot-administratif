@@ -1,0 +1,101 @@
+OUTILS NUMÉRIQUES ET PLATEFORME E-LEARNING — FPST
+==================================================
+
+PORTAIL ÉTUDIANT — elearning.fpst.tn
+--------------------------------------
+Votre espace numérique principal pour :
+- Consulter vos notes et relevés de notes provisoires
+- Accéder aux cours, TDs, ressources pédagogiques
+- Télécharger les emplois du temps
+- Soumettre les travaux et devoirs
+- Communiquer avec les enseignants
+- Suivre vos absences
+- Télécharger les formulaires administratifs
+
+Identifiant : votre numéro étudiant (12 chiffres)
+Mot de passe initial : les 6 premiers chiffres de votre CIN
+Réinitialisation : support@fpst.tn ou Bureau A104
+
+MESSAGERIE ÉTUDIANTE
+---------------------
+Chaque étudiant dispose d'une adresse : prenom.nom@etudiant.fpst.tn
+Quota boîte mail : 10 Go
+Interface web : mail.fpst.tn (compatible mobile)
+Application mobile : utilisez l'app Gmail ou Outlook avec votre email FPST
+Toutes les communications officielles (convocations, résultats) sont envoyées à cette adresse.
+
+Important : consultez votre email FPST régulièrement !
+
+PLATEFORME DE COURS EN LIGNE
+------------------------------
+Moodle FPST (intégré dans elearning.fpst.tn) :
+- Cours déposés en PDF, PowerPoint, vidéos
+- Quiz en ligne avec correction automatique
+- Forums de discussion par module
+- Remise de TP et projets (avec anti-plagiat Turnitin intégré)
+- Suivi de progression et statistiques de participation
+
+Connexion Moodle = même identifiant que le portail étudiant
+
+OUTILS COLLABORATIFS
+---------------------
+Suite Microsoft 365 (gratuite pour tous les étudiants FPST) :
+- Word, Excel, PowerPoint, Teams, OneDrive (1 To de stockage)
+- Activation : support@fpst.tn → fournir votre email FPST
+- Teams utilisé pour les cours en ligne et visioconférences
+
+Google Workspace Education :
+- Gmail, Google Drive, Google Meet
+- Accessible depuis votre email @etudiant.fpst.tn
+
+OUTILS DE DÉVELOPPEMENT (salles info)
+---------------------------------------
+Environnements disponibles en libre accès :
+- Visual Studio Code, IntelliJ IDEA, Eclipse, PyCharm (licences étudiantes)
+- GitHub Education Pack (gratuit pour étudiants) : activez via github.com/education
+  → 13+ outils professionnels offerts, dont Copilot, JetBrains, Figma...
+- Docker Desktop, VirtualBox, VMware Workstation
+- Anaconda, Jupyter Notebook, Google Colab (via navigateur)
+
+Licences logiciels disponibles (demande à IT) :
+- MATLAB (accès réseau campus)
+- Cisco Packet Tracer (Réseaux)
+- AutoCAD (Génie civil, si applicable)
+- SPSS, SAS (filière Gestion/Marketing)
+
+ASSISTANCE TECHNIQUE (Help Desk)
+----------------------------------
+Service IT (Bureau A304) :
+- Horaires : Lundi–Vendredi 08h30–17h30
+- Email : support@fpst.tn
+- Ticket en ligne : help.fpst.tn
+- Délai de réponse : 4h pour urgences, 24h pour demandes standard
+
+Problèmes courants et solutions :
+- Mot de passe oublié → réinitialisation sur help.fpst.tn (avec email FPST)
+- WiFi ne fonctionne pas → vérifier identifiant ou contacter le support
+- Moodle inaccessible → vider le cache du navigateur, réessayer en navigation privée
+- Email non reçu → vérifier le dossier SPAM
+- Application mobile non disponible pour elearning
+
+COURS EN LIGNE ET RESSOURCES EXTERNES
+----------------------------------------
+Accès bibliographique depuis l'extérieur :
+- VPN FPST disponible : vpn.fpst.tn (installer OpenVPN)
+- Identifiants VPN = identifiant portail étudiant
+- Puis accéder aux bases : IEEE, ACM, Springer, ScienceDirect, etc.
+
+Ressources libres recommandées :
+- Coursera, edX : certifications reconnues (beaucoup de partenariats gratuits)
+- MIT OpenCourseWare : cours complets gratuits
+- Khan Academy : maths, sciences, algorithmique
+- freeCodeCamp : développement web
+- Kaggle : Machine Learning et Data Science (datasets + notebooks)
+
+RÈGLES D'UTILISATION DES OUTILS NUMÉRIQUES
+--------------------------------------------
+- Usage strictement académique et professionnel
+- Partage de compte interdit
+- Téléchargement de contenu illicite via le réseau FPST = sanction disciplinaire
+- Confidentialité des données d'autrui respectée (RGPD/loi tunisienne 63-2004)
+- En cas de cyberincident : signaler immédiatement à security@fpst.tn

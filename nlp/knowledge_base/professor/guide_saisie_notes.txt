@@ -1,0 +1,48 @@
+GUIDE DE SAISIE DES NOTES - FPST
+=================================
+
+ACCES AU SYSTEME
+----------------
+Pour saisir les notes, connectez-vous sur l'application FASTO avec vos identifiants professeur.
+Dans votre espace professeur, cliquez sur l'onglet "Saisie des notes".
+
+PROCESSUS DE SAISIE
+--------------------
+1. Selectionnez la matiere concernee dans la liste deroulante
+2. Choisissez le type d'evaluation :
+   - DS (Devoir Surveille / Controle continu)
+   - Examen (Examen de session principale ou rattrapage)
+   - TP/TD (Travaux Pratiques / Travaux Diriges)
+   - Projet (Projet de fin de module)
+3. Entrez la date de l'evaluation
+4. Saisissez la note de chaque etudiant sur 20
+5. Ajoutez un commentaire facultatif
+6. Cliquez sur "Enregistrer"
+
+REGLES DE NOTATION
+-------------------
+- Les notes sont saisies sur 20 points
+- Note >= 10 : etudiant valide (statut Admis)
+- Note < 10 : etudiant en rattrapage (statut Rattrapage)
+- Il est possible de corriger une note saisie avant validation definitive
+- Une note ne peut pas depasser 20/20
+
+DELAIS DE SAISIE
+-----------------
+- DS / Controles continus : saisie sous 7 jours apres l'evaluation
+- Examens de session : saisie obligatoire sous 48h apres l'examen
+- Projets : saisie a la remise finale du projet
+
+TYPES D'EVALUATIONS ACCEPTES
+------------------------------
+- DS (coefficient variable selon le module)
+- Examen final de session
+- TP noté
+- Projet individuel ou de groupe
+- Exposé oral
+
+CONTACT ADMINISTRATION
+-----------------------
+Pour toute correction ou probleme technique lié à la saisie, contactez le service scolarite.
+Email : scolarite@fpst.tn
+Tel : +216 71 XXX XXX

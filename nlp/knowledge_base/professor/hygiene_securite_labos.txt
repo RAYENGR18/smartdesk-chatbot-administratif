@@ -1,0 +1,146 @@
+HYGIÈNE, SÉCURITÉ ET UTILISATION DES LABORATOIRES — FPST
+==========================================================
+
+LABORATOIRES DISPONIBLES
+--------------------------
+Laboratoire Informatique LI-01 (Bâtiment C, RDC) :
+- 30 postes PC, écrans 24", clavier/souris
+- OS : Windows 11 + Ubuntu 22.04 (dual boot)
+- Logiciels : Visual Studio Code, IntelliJ, Eclipse, XAMPP, Docker, VirtualBox
+- Capacité : 30 étudiants max
+
+Laboratoire Informatique LI-02 (Bâtiment C, 1er étage) :
+- 25 postes récents (processeurs i7, 16 Go RAM)
+- Spécialisé ML/IA : Anaconda, Jupyter, TensorFlow, PyTorch pré-installés
+- GPU disponibles (2 stations RTX 3080 pour projets intensifs)
+- Réservation prioritaire MIADS
+
+Laboratoire Réseaux LR-01 (Bâtiment C, 1er étage) :
+- Équipements Cisco : routeurs 2911, switches 2960, 3560
+- Câblage réseau, table de brassage, simulateur Packet Tracer
+- Matériel WiFi et pare-feux (Fortinet)
+- Capacité : 20 étudiants
+
+Laboratoire Réseaux LR-02 (Bâtiment C, 2ème étage) :
+- Environnement virtualisé (VMware vSphere)
+- Serveurs physiques pour TP administration système
+- Capacité : 15 étudiants
+
+Salle de TP Électronique (Bâtiment C, RDC, salle C003) :
+- Oscilloscopes, générateurs de signaux, multimètres
+- Kits Arduino, Raspberry Pi, ESP32
+- Réservé aux filières LRT et LGL (IoT)
+
+PROCÉDURES DE RÉSERVATION DES LABORATOIRES
+--------------------------------------------
+Réservation standard :
+1. Connectez-vous à elearning.fpst.tn → "Ressources" → "Laboratoires"
+2. Sélectionnez le labo, la date, l'horaire et le nombre d'étudiants
+3. Décrivez brièvement les activités prévues (TP, examen, projet)
+4. Validation automatique si créneau libre (confirmation email)
+5. Validation manuelle par le technicien si logiciels spéciaux requis
+
+Délais :
+- TP ordinaires : réservation 48h à l'avance minimum
+- Examens pratiques : 1 semaine à l'avance
+- Sessions intensives (>4h) : 2 semaines à l'avance, accord Directeur pédagogique
+
+Annulation :
+- Annuler au moins 24h à l'avance sur elearning.fpst.tn
+- Annulation tardive répétée (>3 fois/semestre) = suspension de réservation 2 semaines
+
+Contact technicien labo : techlab@fpst.tn | Bureau C101 | Tél : poste 3101
+
+RÈGLES D'UTILISATION DES LABORATOIRES
+----------------------------------------
+Responsabilité du professeur :
+- L'enseignant est responsable de la salle pendant la durée de sa session
+- Présence obligatoire ou désignation d'un remplaçant (sûr et compétent)
+- Signalement de tout incident (casse, panne, comportement) au technicien sous 2h
+
+Règles pour les étudiants (à rappeler en début de TP) :
+- Pas de nourriture ni de boissons dans les labos informatiques
+- Interdiction de modifier les paramètres système (registry, BIOS, réseau)
+- Tout branchement de périphérique externe (clé USB) nécessite l'accord de l'enseignant
+- Laisser le poste dans l'état initial (fermer les applications, ne pas changer le fond d'écran)
+- Signaler tout dysfonctionnement en levant la main (ne pas tenter de réparer)
+
+En fin de TP :
+- S'assurer que tous les postes sont correctement éteints
+- Vérifier que les câbles et équipements sont bien rangés (labo réseaux)
+- Fermer les fenêtres de session (déconnexion de tous les comptes)
+- Signaler au technicien tout problème constaté
+- Remplir le registre de sortie (papier ou numérique selon le labo)
+
+SÉCURITÉ DANS LES LABORATOIRES
+---------------------------------
+Sécurité électrique :
+- Ne jamais ouvrir les boîtiers d'ordinateurs (intervention technicien uniquement)
+- Signaler tout câble endommagé ou prise défaillante
+- Éteindre l'alimentation principale en cas d'urgence (disjoncteur mural, marqué en rouge)
+- Interdit : multiprises personnelles non homologuées
+
+Incendie et évacuation :
+- Extincteurs : à chaque entrée de labo (type CO2 pour équipements électriques)
+- En cas d'incendie : couper l'alimentation, déclencher l'alarme, évacuer ordonnément
+- Point de rassemblement : cour intérieure du Bâtiment C (panneau "Point R")
+- Contact sécurité : Poste 0 (Hall principal) ou 71 XXX XXX
+
+Sécurité réseau (labo réseaux) :
+- Les équipements réseau sont configurés en VLAN isolé (pas d'accès Internet direct)
+- Ne pas connecter d'équipements personnels au réseau physique des labos
+- Les configurations modifiées pendant un TP doivent être remises à zéro en fin de session
+- Toute capture de trafic (Wireshark, etc.) limitée au réseau de TP encadré
+
+Sécurité physique du matériel :
+- Le matériel spécialisé (Cisco, oscilloscopes) ne quitte pas le labo
+- Inventaire vérifié à chaque début et fin de session (fiche de sortie labo)
+- Casse ou perte : déclaration au technicien + formulaire DRH si casse par négligence
+
+INCIDENTS ET PANNES
+---------------------
+Panne matérielle pendant TP :
+1. Informer le technicien immédiatement (téléphone interne 3101)
+2. Proposer une alternative pédagogique (simulation, binôme, exercice théorique)
+3. Documenter l'incident dans le registre
+
+Panne logicielle :
+- Reset de session : Ctrl+Alt+Suppr → Déconnexion → Reconnexion
+- Si le problème persiste : contacter le support IT (help.fpst.tn, ticket urgence)
+- Salle de secours disponible : LI-01 ou la bibliothèque (8 postes libre accès)
+
+Perte ou vol d'équipement :
+1. Signalement immédiat au technicien labo ET à la sécurité campus
+2. Remplir un rapport d'incident (Bureau sécurité, Hall principal)
+3. La FPST assure le matériel — aucune pénalité pour l'enseignant en cas de force majeure
+
+INSTALLATION DE LOGICIELS SUPPLÉMENTAIRES
+------------------------------------------
+Logiciels déjà disponibles (liste complète sur elearning.fpst.tn → Labos → Logiciels) :
+- Développement : VS Code, IntelliJ IDEA, Eclipse, PyCharm, Android Studio
+- BD & SQL : MySQL Workbench, pgAdmin, MongoDB Compass, DBeaver
+- Réseaux : Wireshark, Cisco Packet Tracer, GNS3, Nmap
+- IA/Data : Anaconda, Jupyter, MATLAB, R Studio, Weka, RapidMiner
+- Bureautique : Microsoft Office 365, LibreOffice
+- Virtualisation : VirtualBox, VMware Workstation
+
+Demander un nouveau logiciel :
+- Formulaire : elearning.fpst.tn → IT → "Demande logiciel labo"
+- Délai installation : 5 jours ouvrables (logiciels libres) / 10 jours (licences)
+- Fournir la justification pédagogique et la version requise
+- Les logiciels commerciaux nécessitent une licence FPST (vérifier disponibilité)
+
+ACCÈS HORS HEURES DE COURS
+-----------------------------
+Les enseignants peuvent utiliser les labos hors cours pour :
+- Préparer des TP, tester des configurations
+- Projets de recherche (priorité sur les périodes libres)
+
+Procédure accès lab hors cours :
+- Demander un badge d'accès permanent au technicien labo (sur autorisation DRH)
+- Accès possible de 07h30 à 21h00 (avec badge)
+- Au-delà : autorisation spéciale du Directeur (sécurité campus présente)
+
+Contact global laboratoires :
+Technicien principal : techlab@fpst.tn | Bureau C101 | Poste 3101
+Service IT (matériel) : support@fpst.tn | Bureau A304

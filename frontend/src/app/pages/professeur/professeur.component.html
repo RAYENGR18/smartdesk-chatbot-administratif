@@ -1,0 +1,274 @@
+<div class="dashboard-container" [dir]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <!-- Logo row -->
+      <div class="sidebar-logo-row">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <span class="sidebar-logo-name">FPST SmartDesk</span>
+      </div>
+      <!-- User pill -->
+      <div class="sidebar-user-pill">
+        <div class="sidebar-avatar">
+          {{ (profile?.firstName || 'P').charAt(0).toUpperCase() }}
+        </div>
+        <div class="sidebar-user-info">
+          <p class="user-name">{{ profile?.firstName }} {{ profile?.lastName }}</p>
+          <p class="user-level">{{ profile?.department || text('professor_space') }}</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button [class.active]="activeTab === 'accueil'" (click)="setTab('accueil')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        {{ text('dashboard') }}
+      </button>
+      <button [class.active]="activeTab === 'chat'" (click)="setTab('chat')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        {{ text('assistant') }}
+      </button>
+      <button [class.active]="activeTab === 'planning'" (click)="setTab('planning')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        {{ text('timetable') }}
+      </button>
+      <button [class.active]="activeTab === 'notes'" (click)="setTab('notes')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        {{ text('grades') }}
+      </button>
+      <button [class.active]="activeTab === 'profil'" (click)="setTab('profil')">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        {{ text('profile') }}
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="theme-btn-side" (click)="toggleTheme()">
+        <svg *ngIf="isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        </svg>
+        <svg *ngIf="!isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        {{ isDark ? 'Mode Clair' : 'Mode Sombre' }}
+      </button>
+      <button class="logout-btn" (click)="logout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        {{ text('logout') }}
+      </button>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN CONTENT ─── -->
+  <main class="main-content">
+    <button class="page-back-btn" (click)="goBack()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Retour
+    </button>
+
+    <!-- Dashboard Tab -->
+    <div class="tab-content" *ngIf="activeTab === 'accueil'">
+      <div class="welcome-banner">
+        <div class="welcome-content">
+          <div class="welcome-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            FPST · {{ text('professor_space') }}
+          </div>
+          <h1>{{ text('welcome') }}, {{ currentLang === 'en' ? 'Prof.' : currentLang === 'ar' ? 'أ.' : 'Pr.' }} {{ profile?.lastName }} !</h1>
+          <p>{{ text('welcome_desc') }}</p>
+        </div>
+        <div class="welcome-deco" aria-hidden="true">
+          <svg viewBox="0 0 80 80" fill="none" width="100" height="100" opacity="0.15">
+            <path d="M40 8L72 24V40C72 56 56 69 40 72C24 69 8 56 8 40V24L40 8Z" fill="white"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card card-teal">
+          <div class="stat-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">{{ currentLang === 'ar' ? 'المواد المُدرَّسة' : currentLang === 'en' ? 'Subjects taught' : 'Matières enseignées' }}</div>
+            <div class="matiere-badges" *ngIf="getMatiereLabels().length > 0; else noMat">
+              <span class="matiere-badge" *ngFor="let m of getMatiereLabels()">{{ m }}</span>
+            </div>
+            <ng-template #noMat>
+              <div class="stat-value muted">{{ text('undefined') }}</div>
+            </ng-template>
+          </div>
+        </div>
+        <div class="stat-card card-cyan">
+          <div class="stat-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-label">{{ text('classes') }}</div>
+            <div class="stat-value">{{ text('classes_count') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Tab -->
+    <div class="tab-content no-padding" *ngIf="activeTab === 'chat'">
+      <app-chat></app-chat>
+    </div>
+
+    <!-- Planning Tab -->
+    <div class="tab-content" *ngIf="activeTab === 'planning'">
+      <app-planning></app-planning>
+    </div>
+
+    <!-- Notes Tab -->
+    <div class="tab-content" *ngIf="activeTab === 'notes'">
+      <div class="notes-info-banner">
+        <div class="nib-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <h2 class="nib-title">
+          {{ currentLang === 'ar' ? 'إدارة الأعداد' : currentLang === 'en' ? 'Grade Management' : 'Gestion des notes' }}
+        </h2>
+        <p class="nib-desc">
+          {{ currentLang === 'ar'
+            ? 'يتم الآن إدخال الأعداد وإدارتها من قِبَل مدير المنصة عبر استيراد ملف. لم تعد تحتاج إلى إدخالها يدويًا.'
+            : currentLang === 'en'
+            ? 'Grades are now managed by the platform administrator via file import. Manual entry is no longer required from your side.'
+            : 'Les notes sont désormais gérées par l\'administrateur via l\'import d\'un fichier. Vous n\'avez plus à les saisir manuellement.' }}
+        </p>
+        <div class="nib-steps">
+          <div class="nib-step">
+            <span class="step-num">1</span>
+            <span>{{ currentLang === 'ar' ? 'يقوم المدير بتحميل ملف النتائج (Excel / CSV)' : currentLang === 'en' ? 'The admin uploads the results file (Excel / CSV)' : 'L\'administrateur importe le fichier de résultats (Excel / CSV)' }}</span>
+          </div>
+          <div class="nib-step">
+            <span class="step-num">2</span>
+            <span>{{ currentLang === 'ar' ? 'يتعرف النظام تلقائيًا على كل طالب عبر رقم بطاقته' : currentLang === 'en' ? 'The system automatically identifies each student by CIN' : 'Le système identifie automatiquement chaque étudiant par CIN' }}</span>
+          </div>
+          <div class="nib-step">
+            <span class="step-num">3</span>
+            <span>{{ currentLang === 'ar' ? 'يمكن لكل طالب الاطلاع على نتائجه من فضائه' : currentLang === 'en' ? 'Each student can view their grades in their own space' : 'Chaque étudiant peut consulter ses notes depuis son espace' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Tab -->
+    <div class="tab-content" *ngIf="activeTab === 'profil'">
+      <div class="profile-header">
+        <h2 class="profile-title">{{ text('profile_title') }}</h2>
+        <button *ngIf="!isEditingProfile" (click)="startEditProfile()" class="btn-edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          {{ currentLang === 'ar' ? 'تعديل' : currentLang === 'en' ? 'Edit' : 'Modifier' }}
+        </button>
+      </div>
+
+      <div *ngIf="profileSaveMsg" class="alert alert-success">{{ profileSaveMsg }}</div>
+      <div *ngIf="profileSaveError" class="alert alert-error">{{ profileSaveError }}</div>
+
+      <!-- View mode -->
+      <div class="profile-card" *ngIf="!isEditingProfile">
+        <div class="profile-row">
+          <span class="label">{{ text('full_name') }}</span>
+          <span class="value">{{ profile?.firstName }} {{ profile?.lastName }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">{{ text('academic_email') }}</span>
+          <span class="value">{{ profile?.email }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">{{ text('phone') }}</span>
+          <span class="value">{{ profile?.phone || text('undefined') }}</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">{{ currentLang === 'ar' ? 'المواد المُدرَّسة' : currentLang === 'en' ? 'Subjects taught' : 'Matières enseignées' }}</span>
+          <span class="value">
+            <ng-container *ngIf="getMatiereLabels().length > 0; else noMatProfile">
+              <span class="matiere-badge" *ngFor="let m of getMatiereLabels()">{{ m }}</span>
+            </ng-container>
+            <ng-template #noMatProfile>{{ text('undefined') }}</ng-template>
+          </span>
+        </div>
+      </div>
+
+      <!-- Edit mode -->
+      <div class="profile-card profile-card-edit" *ngIf="isEditingProfile">
+        <div class="edit-form-grid">
+          <div class="form-group">
+            <label class="form-label">{{ currentLang === 'ar' ? 'الاسم' : currentLang === 'en' ? 'First name' : 'Prénom' }}</label>
+            <input type="text" [(ngModel)]="editProfile.firstName" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ currentLang === 'ar' ? 'اللقب' : currentLang === 'en' ? 'Last name' : 'Nom' }}</label>
+            <input type="text" [(ngModel)]="editProfile.lastName" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ text('academic_email') }}</label>
+            <input type="email" [(ngModel)]="editProfile.email" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">{{ text('phone') }}</label>
+            <input type="tel" [(ngModel)]="editProfile.phone" class="form-input">
+          </div>
+          <div class="form-group form-group-full">
+            <label class="form-label">{{ currentLang === 'ar' ? 'العنوان' : currentLang === 'en' ? 'Address' : 'Adresse' }}</label>
+            <input type="text" [(ngModel)]="editProfile.address" class="form-input">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button (click)="cancelEditProfile()" class="btn btn-secondary">
+            {{ currentLang === 'ar' ? 'إلغاء' : currentLang === 'en' ? 'Cancel' : 'Annuler' }}
+          </button>
+          <button (click)="saveProfile()" class="btn btn-primary">
+            {{ currentLang === 'ar' ? 'حفظ' : currentLang === 'en' ? 'Save' : 'Enregistrer' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

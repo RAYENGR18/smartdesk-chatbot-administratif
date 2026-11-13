@@ -1,0 +1,160 @@
+JURYS DE SOUTENANCE ET PFE — GUIDE PROFESSEUR — FPST
+=====================================================
+
+TYPES DE SOUTENANCES À LA FPST
+---------------------------------
+
+1. Soutenance PFE Licence (L3) :
+   - Durée du stage : 2 mois minimum en entreprise
+   - Composition du jury : 2 membres minimum (1 encadrant FPST + 1 professionnel ou 2 professeurs)
+   - Durée soutenance : 20 min exposé + 15 min questions
+   - Rapport : 30 à 60 pages, déposé 10 jours avant
+
+2. Soutenance de stage M1 :
+   - Durée du stage : 3 mois
+   - Jury : 2 à 3 membres (encadrant FPST + rapporteur)
+   - Durée soutenance : 25 min + 20 min questions
+   - Rapport : 40 à 70 pages
+
+3. Soutenance de mémoire M2 (PFE Master) :
+   - Durée du stage : 4 à 6 mois
+   - Jury : 3 membres (président du jury + encadrant FPST + représentant entreprise)
+   - Durée soutenance : 30 min exposé + 25 min questions + 5 min délibération
+   - Mémoire : 60 à 100 pages, déposé 15 jours avant
+   - Version numérique sur Moodle (soumission Turnitin obligatoire, similarité < 25%)
+
+RÔLES DANS LE JURY
+-------------------
+Président du jury :
+- Ouvre et clôt la séance
+- Présente les membres du jury à l'étudiant
+- Rédige et signe le procès-verbal de soutenance (PV)
+- Annonce la note finale et la mention
+- Doit être un professeur permanent FPST ou HDR
+
+Encadrant FPST (directeur de mémoire) :
+- Présente un rapport d'encadrement écrit (1 page) avant la soutenance
+- Évalue le travail tout au long du stage/projet
+- Note : 40% basée sur le suivi, 60% sur la soutenance
+- Ne préside pas le jury de son propre étudiant
+
+Rapporteur / Second lecteur :
+- Lit le rapport et prépare des questions écrites
+- Rédige un rapport de lecture (1 à 2 pages) remis le jour de la soutenance
+- Note : basée sur la qualité du rapport écrit et de la présentation orale
+
+Représentant entreprise (tuteur professionnel) :
+- Évalue l'intégration, le sérieux, les compétences professionnelles
+- Participe aux questions (portion professionnelle du travail)
+- Peut être membre non votant si non-enseignant (selon règlement)
+
+CALENDRIER DES SOUTENANCES
+-----------------------------
+Session principale :
+- PFE L3 : Juin–Juillet (fin du 2ème semestre)
+- PFE M2 : Juin–Juillet (fin du stage professionnel)
+- Stage M1 : Septembre (retour de stage d'été)
+
+Session de rattrapage :
+- Septembre–Octobre pour les étudiants n'ayant pas soutenu en session principale
+- Conditions : rapport déposé, encadrant FPST confirmé, accord du Directeur pédagogique
+
+Planification des jurys :
+- Le Secrétariat pédagogique propose les créneaux (Bureau 202)
+- Les professeurs confirment leur disponibilité 3 semaines à l'avance
+- En cas d'indisponibilité, proposer un remplaçant de même spécialité
+
+GRILLE D'ÉVALUATION DE SOUTENANCE
+------------------------------------
+La note finale de soutenance est calculée sur 20 points :
+
+Rapport écrit (40%) :
+- Qualité rédactionnelle et structure (5 pts)
+- Profondeur technique et analyse critique (5 pts)
+- Pertinence des références bibliographiques (3 pts)
+- Respect du format FPST (2 pts — voir guide elearning.fpst.tn)
+
+Présentation orale (35%) :
+- Clarté de l'exposé et maîtrise du sujet (5 pts)
+- Qualité des supports visuels (3 pts)
+- Gestion du temps (2 pts)
+- Langage professionnel et posture (4 pts)
+
+Réponses aux questions (25%) :
+- Capacité à argumenter et défendre ses choix (5 pts)
+- Profondeur des connaissances techniques (5 pts)
+
+Note de l'encadrant entreprise (bonus possible) :
+- Jusqu'à 1 point bonus pour implication et initiative exceptionnelles
+
+Mentions :
+- ≥ 18/20 : Très bien avec félicitations
+- 16 à 17.99 : Très bien
+- 14 à 15.99 : Bien
+- 12 à 13.99 : Assez bien
+- 10 à 11.99 : Passable
+- < 10 : Non validé (report ou refus)
+
+PROCÉDURE ADMINISTRATIVE POUR LES PROFESSEURS
+------------------------------------------------
+Avant la soutenance :
+1. Confirmer votre participation au Secrétariat pédagogique (Bureau 202)
+2. Récupérer le dossier de soutenance (rapport + fiche d'évaluation)
+3. Lire le rapport et préparer vos questions
+4. Si rapporteur : rédiger votre rapport de lecture
+
+Le jour de la soutenance :
+1. Arriver 10 min avant l'heure prévue
+2. Accueillir l'étudiant et lui expliquer le déroulement
+3. Conduire la soutenance selon le protocole
+4. Délibérer hors présence de l'étudiant
+5. Remplir la fiche d'évaluation et la signer
+6. Annoncer la décision à l'étudiant
+7. Remettre toutes les fiches signées au Secrétariat sous 24h
+
+Après la soutenance :
+- Le PV de soutenance doit être remis au Bureau 202 dans les 48h
+- Les notes sont saisies dans le système par le Secrétariat
+- Le diplôme est préparé après validation par le Directeur pédagogique
+
+INDISPONIBILITÉ ET REMPLACEMENT D'UN MEMBRE DU JURY
+------------------------------------------------------
+Si un membre du jury est indisponible < 48h avant la soutenance :
+- Contacter immédiatement le Secrétariat pédagogique (Bureau 202)
+- Un professeur remplaçant de la même spécialité est désigné
+- Si aucun remplaçant disponible : report de 1 à 5 jours (notification à l'étudiant)
+- L'étudiant ne peut être pénalisé par une indisponibilité de jury
+
+Si l'étudiant est absent :
+- Absence justifiée (urgence médicale documentée) : report automatique
+- Absence non justifiée : note 0, report au maximum en session de rattrapage
+
+ENCADREMENT DE PFE — PRATIQUES RECOMMANDÉES
+--------------------------------------------
+Fréquence des réunions de suivi :
+- Minimum : 1 réunion / 3 semaines (en personne ou visioconférence)
+- Recommandé : toutes les 2 semaines pour M2
+- Documenter chaque réunion (email récapitulatif envoyé à l'étudiant)
+
+Points à valider avant la soutenance :
+- Sujet clairement défini et approuvé (dès le début du stage)
+- Plan du rapport validé (au plus tard 1 mois avant soutenance)
+- Version préliminaire relue par l'encadrant (3 semaines avant)
+- Répétition générale de la présentation (recommandée)
+
+Refus de soutenance (cas rares) :
+- Rapport non rendu dans les délais sans justificatif
+- Plagiat détecté (similarité > 40% sur Turnitin)
+- Stage non effectué ou convention non signée
+→ Dans ces cas, contacter le Directeur pédagogique AVANT de décider
+
+FORMULAIRES ET RESSOURCES
+---------------------------
+Disponibles sur elearning.fpst.tn → Enseignants → Jury :
+- Modèle de rapport d'encadrement
+- Grille d'évaluation officielle (à imprimer et signer)
+- Procès-verbal vierge de soutenance
+- Guide de rédaction du mémoire (à transmettre aux étudiants)
+- Charte anti-plagiat (à faire signer par l'étudiant dès le début du stage)
+
+Contact administratif soutenances : scolarite@fpst.tn | Bureau 202

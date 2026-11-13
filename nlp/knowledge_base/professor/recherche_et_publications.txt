@@ -1,0 +1,84 @@
+RECHERCHE SCIENTIFIQUE ET PUBLICATIONS - FPST
+==============================================
+
+POLITIQUE DE RECHERCHE
+------------------------
+La FPST encourage et soutient la recherche scientifique de son corps enseignant.
+Chaque enseignant-chercheur est invite a publier au moins 1 article par an.
+Les publications sont prises en compte dans l'evaluation annuelle et la promotion.
+
+LABORATOIRES DE RECHERCHE
+---------------------------
+Laboratoire d'Informatique et Systemes Intelligents (LISI) :
+- Domaines : Intelligence Artificielle, Systemes distribues, IoT
+- Responsable : Dr. [Nom du responsable]
+- Contact : lisi@fpst.tn
+
+Laboratoire de Gestion et Management Digital (LGMD) :
+- Domaines : Management, Marketing digital, E-commerce
+- Contact : lgmd@fpst.tn
+
+Laboratoire Cybersecurite et Systemes (LCS) :
+- Domaines : Securite informatique, Cryptographie, Forensique
+- Contact : lcs@fpst.tn
+
+RESSOURCES POUR LA PUBLICATION
+--------------------------------
+Bases de donnees scientifiques accessibles :
+- IEEE Xplore Digital Library
+- ACM Digital Library
+- Science Direct (Elsevier)
+- Springer Link
+- Google Scholar (gratuit)
+- ResearchGate (gratuit)
+
+Revues partenaires :
+- Revue Africaine d'Informatique et de Mathematiques Appliquees
+- International Journal of Computer Applications
+- Journal of Computer Science and Technology
+
+CONFERENCES RECOMMANDEES
+--------------------------
+Internationales :
+- IEEE International Conference on Computer Science and Engineering
+- ACM International Conference on Information Technology
+- International Conference on Artificial Intelligence and Machine Learning
+
+Nationales (Tunisie) :
+- Journees Scientifiques Nationales en Informatique (JSNI)
+- Conference Nationale sur l'Intelligence Artificielle en Afrique
+
+AIDE A LA PUBLICATION
+----------------------
+La FPST propose :
+- Correction de l'anglais scientifique (service traduction)
+- Financement des frais de publication (APC) pour les revues open access indexees
+- Aide a la soumission et au suivi des articles
+- Seminaires de methodologie de la recherche
+
+Procedure de financement APC :
+1. Soumettre la demande de financement au service recherche avant soumission
+2. Joindre la preuve d'acceptation de la revue
+3. Validation par le comite de recherche dans les 5 jours
+4. Remboursement sur presentation de facture
+
+ENCADREMENT DE DOCTORATS
+--------------------------
+Les professeurs habilites peuvent encadrer des theses de doctorat.
+Contact avec les universites partenaires (Universite de Tunis, ENIT, etc.)
+Co-encadrement international possible.
+
+VALORISATION DE LA RECHERCHE
+------------------------------
+- Depot de brevets : service juridique accompagne les enseignants
+- Transfert de technologie : partenariats avec le secteur prive
+- Projets de recherche finances : appels a projets nationaux et europeens
+- Start-up issues de la recherche : incubateur FPST disponible
+
+INDICATEURS DE PERFORMANCE RECHERCHE
+--------------------------------------
+- Nombre de publications (revues indexees Q1, Q2, Q3, Q4)
+- Facteur H (h-index sur Google Scholar/Scopus)
+- Nombre de citations
+- Projets de recherche finances
+- Encadrements de doctorats et masters recherche

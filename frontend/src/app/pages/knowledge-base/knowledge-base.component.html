@@ -1,0 +1,346 @@
+<div class="kb-container" >
+
+  <!-- ── HEADER ── -->
+  <div class="kb-header">
+    <div class="kb-header-left">
+      <button class="back-btn" (click)="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        {{ text('back') }}
+      </button>
+      <div class="kb-title-group">
+        <div class="kb-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="kb-title">{{ text('page_title') }}</h1>
+          <p class="kb-subtitle">{{ text('page_subtitle') }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="kb-header-actions">
+      <button class="btn-reindex" (click)="reindexAll()" [disabled]="isReindexing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        {{ isReindexing ? text('reindexing') : text('reindex_all') }}
+      </button>
+      <button class="btn-theme" (click)="toggleTheme()">
+        <svg *ngIf="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        <svg *ngIf="!dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── ALERTS ── -->
+  <div class="alert alert-success" *ngIf="successMsg">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="20 6 9 17 4 12"/></svg>
+    {{ successMsg }}
+  </div>
+  <div class="alert alert-error" *ngIf="errorMsg">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    {{ errorMsg }}
+  </div>
+
+  <!-- ── STATUS ROW ── -->
+  <div class="status-row" *ngIf="status">
+    <div class="status-card" [class.ready]="status.status==='ready'" [class.partial]="status.status==='partial'" [class.missing]="status.status==='missing_api_key'">
+      <div class="status-dot"></div>
+      <div class="status-info">
+        <span class="status-label">{{ text('rag_service') }}</span>
+        <span class="status-value">{{ status.status==='ready' ? text('rag_ok') : status.status==='partial' ? text('rag_partial') : text('rag_missing') }}</span>
+      </div>
+    </div>
+    <div class="status-card neutral">
+      <div class="status-icon">🎓</div>
+      <div class="status-info"><span class="status-label">{{ text('docs_students') }}</span><span class="status-value">{{ status.knowledge_base_files }} {{ text('file_count') }}</span></div>
+    </div>
+    <div class="status-card neutral">
+      <div class="status-icon">👨‍🏫</div>
+      <div class="status-info"><span class="status-label">{{ text('docs_professors') }}</span><span class="status-value">{{ status.professor_files || 0 }} {{ text('file_count') }}</span></div>
+    </div>
+    <div class="status-card neutral">
+      <div class="status-icon">🤖</div>
+      <div class="status-info"><span class="status-label">{{ text('ai_model') }}</span><span class="status-value">{{ status.groq_configured ? 'Groq LLaMA 70b' : text('not_configured') }}</span></div>
+    </div>
+  </div>
+
+  <!-- ── AUDIENCE TABS ── -->
+  <div class="audience-tabs">
+    <button class="aud-tab" [class.active]="audienceTab==='student'" (click)="setAudienceTab('student')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      {{ text('tab_students') }}
+      <span class="tab-count">{{ studentDocs.length }}</span>
+    </button>
+    <button class="aud-tab" [class.active]="audienceTab==='professor'" (click)="setAudienceTab('professor')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      {{ text('tab_professors') }}
+      <span class="tab-count">{{ profDocs.length }}</span>
+    </button>
+  </div>
+
+  <!-- ── SOUS-ONGLETS ── -->
+  <div class="sub-tabs">
+    <button class="sub-tab" [class.active]="subTab==='docs'" (click)="setSubTab('docs')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      {{ text('subtab_docs') }}
+    </button>
+    <button class="sub-tab" [class.active]="subTab==='notifs'" (click)="setSubTab('notifs')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      {{ text('subtab_notifs') }}
+      <span class="tab-count warn" *ngIf="currentNotifs.length > 0">{{ currentNotifs.length }}</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION DOCUMENTS RAG                  -->
+  <!-- ══════════════════════════════════════ -->
+  <ng-container *ngIf="subTab==='docs'">
+
+    <!-- Upload zone -->
+    <div class="upload-zone" [class.drag-over]="isDragOver"
+         (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)"
+         (click)="triggerUpload()">
+      <input #fileInput type="file" accept=".pdf,.docx,.txt" style="display:none" (change)="onFileSelected($event)">
+      <div class="upload-content" *ngIf="!isUploading">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="34" height="34"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <p class="upload-text">{{ text('upload_drag') }} <span class="upload-link">{{ text('upload_click') }}</span></p>
+        <p class="upload-hint">
+          {{ text('upload_dest') }} : <strong>{{ audienceTab === 'student' ? text('tab_students') : text('tab_professors') }}</strong>
+          — {{ text('upload_hint') }}
+        </p>
+      </div>
+      <div class="upload-spinner" *ngIf="isUploading">
+        <div class="spinner"></div><p>{{ text('indexing') }}</p>
+      </div>
+    </div>
+
+    <!-- Liste documents -->
+    <div class="docs-section">
+      <div class="docs-toolbar">
+        <h2 class="docs-section-title">
+          {{ audienceTab === 'student' ? text('docs_title_s') : text('docs_title_p') }}
+          <span class="count-badge">{{ currentDocs.length }}</span>
+        </h2>
+        <div class="filter-tabs">
+          <button [class.active]="filterType==='ALL'" (click)="filterType='ALL'">{{ text('filter_all') }}</button>
+          <button [class.active]="filterType==='PDF'" (click)="filterType='PDF'">PDF</button>
+          <button [class.active]="filterType==='DOCX'" (click)="filterType='DOCX'">DOCX</button>
+          <button [class.active]="filterType==='TXT'" (click)="filterType='TXT'">TXT</button>
+        </div>
+      </div>
+
+      <div class="loading-row" *ngIf="isLoadingDocs"><div class="spinner"></div><span>{{ text('loading') }}</span></div>
+
+      <div class="empty-state" *ngIf="!isLoadingDocs && currentDocs.length === 0">
+        <div class="empty-icon">📭</div>
+        <p class="empty-title">{{ text('no_docs') }}</p>
+        <p class="empty-desc">{{ text('no_docs_desc') }} {{ audienceTab === 'student' ? text('students_lbl') : text('professors_lbl') }}.</p>
+      </div>
+
+      <div class="docs-table-wrap" *ngIf="!isLoadingDocs && currentDocs.length > 0">
+        <table class="docs-table">
+          <thead><tr>
+            <th>{{ text('doc_col') }}</th>
+            <th>{{ text('type_col') }}</th>
+            <th>{{ text('size_col') }}</th>
+            <th>{{ text('modified_col') }}</th>
+            <th>{{ text('actions_col') }}</th>
+          </tr></thead>
+          <tbody>
+            <tr *ngFor="let doc of currentDocs">
+              <td class="doc-name-cell">
+                <span class="doc-file-icon">{{ typeIcon(doc.type) }}</span>
+                <span class="doc-name">{{ doc.name }}</span>
+              </td>
+              <td><span class="type-badge" [class]="typeBadgeClass(doc.type)">{{ doc.type }}</span></td>
+              <td class="text-muted">{{ formatSize(doc.size) }}</td>
+              <td class="text-muted">{{ doc.modified }}</td>
+              <td class="actions-cell">
+                <button class="btn-edit-doc" *ngIf="doc.editable" (click)="openEdit(doc)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  {{ text('edit_btn') }}
+                </button>
+                <span class="readonly-badge" *ngIf="!doc.editable" title="{{ text('read_only') }}">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  {{ text('read_only') }}
+                </span>
+                <button class="btn-delete-doc" (click)="deleteDoc(doc)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                  {{ text('delete_btn') }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- SECTION INFORMATIONS IMPORTANTES        -->
+  <!-- ══════════════════════════════════════ -->
+  <ng-container *ngIf="subTab==='notifs'">
+    <div class="notifs-section">
+
+      <!-- Bouton créer -->
+      <div class="notifs-toolbar">
+        <h2 class="docs-section-title">
+          {{ audienceTab === 'student' ? text('notifs_title_s') : text('notifs_title_p') }}
+          <span class="count-badge warn">{{ currentNotifs.length }}</span>
+        </h2>
+        <button class="btn-create-notif" (click)="toggleNotifForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          {{ text('new_notif') }}
+        </button>
+      </div>
+
+      <!-- Formulaire création -->
+      <div class="notif-form-card" *ngIf="showNotifForm">
+        <h3 class="notif-form-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          {{ audienceTab === 'student' ? text('create_notif_s') : text('create_notif_p') }}
+        </h3>
+
+        <div class="form-row">
+          <label class="form-label">{{ text('field_title') }}</label>
+          <input [(ngModel)]="newNotif.title" class="form-input" [placeholder]="text('title_placeholder')" />
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">{{ text('field_message') }}</label>
+          <textarea [(ngModel)]="newNotif.content" class="form-textarea" rows="4"
+            [placeholder]="text('content_placeholder')"></textarea>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">{{ text('field_priority') }}</label>
+          <div class="priority-btns">
+            <button class="prio-btn prio-info" [class.active]="newNotif.priority==='INFO'" (click)="newNotif.priority='INFO'">{{ text('prio_info') }}</button>
+            <button class="prio-btn prio-warning" [class.active]="newNotif.priority==='WARNING'" (click)="newNotif.priority='WARNING'">{{ text('prio_warning') }}</button>
+            <button class="prio-btn prio-urgent" [class.active]="newNotif.priority==='URGENT'" (click)="newNotif.priority='URGENT'">{{ text('prio_urgent') }}</button>
+          </div>
+        </div>
+
+        <!-- Ciblage ÉTUDIANT : par filière -->
+        <div class="form-row" *ngIf="audienceTab==='student'">
+          <label class="form-label">{{ text('field_filieres') }}</label>
+          <div class="target-grid">
+            <button class="target-btn" [class.active]="allFilieres" (click)="toggleAllFilieres()">
+              {{ text('all_filieres') }}
+            </button>
+            <button class="target-btn" *ngFor="let f of filieres"
+              [class.active]="isFiliereSelected(f)"
+              (click)="toggleFiliere(f); allFilieres=false">{{ f }}</button>
+          </div>
+          <p class="form-hint" *ngIf="filieres.length === 0" style="color:var(--text-muted);">
+            {{ text('no_filieres') }}
+          </p>
+          <p class="form-hint" *ngIf="!allFilieres && selectedFilieres.length > 0">
+            {{ text('hint_filieres') }} <strong>{{ selectedFilieres.join(', ') }}</strong>
+          </p>
+        </div>
+
+        <!-- Ciblage PROFESSEUR : liste avec cases à cocher -->
+        <div class="form-row" *ngIf="audienceTab==='professor'">
+          <label class="form-label">{{ text('field_recipients') }}</label>
+          <div class="prof-target-list">
+            <label class="prof-check-item" [class.selected]="allProfessors">
+              <input type="checkbox" [checked]="allProfessors" (change)="toggleAllProfs()" />
+              <span class="prof-check-name">{{ text('all_profs') }}</span>
+            </label>
+            <label class="prof-check-item" *ngFor="let p of availableProfessors"
+                   [class.selected]="isProfSelected(p.id)">
+              <input type="checkbox"
+                     [checked]="isProfSelected(p.id)"
+                     (change)="toggleProf(p.id); allProfessors=false" />
+              <span class="prof-check-name">{{ p.firstName }} {{ p.lastName }}</span>
+              <span class="prof-check-dept" *ngIf="p.department">— {{ p.department }}</span>
+            </label>
+          </div>
+          <p class="form-hint" *ngIf="availableProfessors.length === 0" style="color:var(--text-muted);">
+            {{ text('no_profs') }}
+          </p>
+          <p class="form-hint" *ngIf="!allProfessors && selectedProfIds.length > 0">
+            {{ text('envoyé à') }} <strong>{{ selectedProfIds.length }}</strong> {{ text('hint_profs') }}
+          </p>
+        </div>
+
+        <div class="notif-form-actions">
+          <button class="btn-cancel" (click)="showNotifForm=false">{{ text('cancel') }}</button>
+          <button class="btn-send-notif" (click)="saveNotif()" [disabled]="isSavingNotif">
+            <svg *ngIf="!isSavingNotif" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <div class="spinner-sm" *ngIf="isSavingNotif"></div>
+            {{ isSavingNotif ? text('sending') : text('send_notif') }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Liste notifications -->
+      <div class="notifs-empty" *ngIf="currentNotifs.length === 0">
+        <div class="empty-icon">🔔</div>
+        <p class="empty-title">{{ text('no_notifs') }}</p>
+        <p class="empty-desc">{{ text('no_notifs_desc') }} {{ audienceTab === 'student' ? text('students_lbl') : text('professors_lbl') }}.</p>
+      </div>
+
+      <div class="notif-list" *ngIf="currentNotifs.length > 0">
+        <div class="notif-item" *ngFor="let n of currentNotifs" [class.inactive]="!n.active">
+          <div class="notif-item-header">
+            <div class="notif-meta">
+              <span class="notif-prio-badge" [class]="priorityClass(n.priority)">{{ priorityLabel(n.priority) }}</span>
+              <span class="notif-target-badge">{{ targetLabel(n) }}</span>
+              <span class="notif-date">{{ n.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="notif-actions">
+              <button class="btn-toggle-notif" [class.is-active]="n.active" (click)="toggleNotif(n)"
+                [title]="n.active ? activeLabel() : inactiveLabel()">
+                {{ n.active ? activeLabel() : inactiveLabel() }}
+              </button>
+              <button class="btn-del-notif" (click)="deleteNotif(n)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <h4 class="notif-title">{{ n.title }}</h4>
+          <p class="notif-content">{{ n.content }}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ── ÉDITEUR TXT ── -->
+  <div class="editor-overlay" *ngIf="editingDoc" (click)="cancelEdit()">
+    <div class="editor-modal" (click)="$event.stopPropagation()">
+      <div class="editor-header">
+        <div class="editor-title-group">
+          <span class="editor-icon">📃</span>
+          <div>
+            <h3 class="editor-title">{{ text('edit_btn') }} — {{ editingDoc.name }}</h3>
+            <p class="editor-subtitle">{{ text('editor_subtitle') }}</p>
+          </div>
+        </div>
+        <button class="editor-close" (click)="cancelEdit()">✕</button>
+      </div>
+      <div class="editor-body">
+        <div class="editor-loading" *ngIf="isLoadingEdit"><div class="spinner"></div><span>{{ text('editor_loading') }}</span></div>
+        <div class="editor-error-msg" *ngIf="!isLoadingEdit && errorMsg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+          {{ errorMsg }}
+        </div>
+        <textarea *ngIf="!isLoadingEdit" [(ngModel)]="editContent" class="editor-textarea" [placeholder]="text('no_docs_desc') + '...'"></textarea>
+      </div>
+      <div class="editor-footer">
+        <span class="char-count" *ngIf="!isLoadingEdit">{{ editContent.length }} {{ text('editor_chars') }}</span>
+        <div class="editor-actions">
+          <button class="btn-cancel" (click)="cancelEdit()">{{ text('cancel') }}</button>
+          <button class="btn-save" (click)="saveEdit()" [disabled]="isSavingEdit || isLoadingEdit">
+            <div class="spinner-sm" *ngIf="isSavingEdit"></div>
+            {{ isSavingEdit ? text('editor_saving') : text('editor_save') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

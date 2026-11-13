@@ -1,0 +1,76 @@
+CONTACTS ET SERVICES INTERNES - FPST (PROFESSEURS)
+====================================================
+
+DIRECTION ET ADMINISTRATION
+-----------------------------
+Direction Generale :
+- Directeur General : direction@fpst.tn | Poste 100
+- Directrice Adjointe Pedagogique : pedago@fpst.tn | Poste 101
+- Secretaire de Direction : secretariat.direction@fpst.tn | Poste 102
+
+DEPARTEMENTS
+-------------
+Departement Informatique et Systemes :
+- Chef de departement : dept.info@fpst.tn | Poste 110
+- Secretariat departement : sec.info@fpst.tn | Poste 111
+
+Departement Gestion et Management :
+- Chef de departement : dept.gestion@fpst.tn | Poste 120
+- Secretariat departement : sec.gestion@fpst.tn | Poste 121
+
+Departement Sciences et Technologies :
+- Chef de departement : dept.sciences@fpst.tn | Poste 130
+
+SERVICES ADMINISTRATIFS
+--------------------------
+Service Scolarite :
+- Email : scolarite@fpst.tn
+- Tel : +216 71 XXX XXX | Poste 140
+- Horaires : 08h30 - 16h30 (Lun-Ven), 08h30 - 12h30 (Sam)
+- Missions : inscriptions, certificats, gestion des notes, diplomes
+
+Service Ressources Humaines (RH) :
+- Email : rh@fpst.tn | Poste 150
+- Gestion des contrats, conges, formations, salaires
+
+Service Comptabilite et Finance :
+- Email : finance@fpst.tn | Poste 160
+- Remboursements missions, frais, gestion budgetaire
+
+Service Technique et Informatique :
+- Email : technique@fpst.tn | Poste 170
+- Support informatique, pannes, reseau, projets
+
+Service Planification :
+- Email : planning@fpst.tn | Poste 180
+- Emplois du temps, salles, calendrier academique
+
+Service Reprographie :
+- Email : reprographie@fpst.tn | Poste 190
+- Impression des supports de cours, copies d'examens
+
+Bibliotheque :
+- Email : bibliotheque@fpst.tn | Poste 200
+- Gestion des ressources documentaires
+
+CONTACTS D'URGENCE
+-------------------
+Securite / Gardiennage : Poste 999
+Infirmerie : Poste 210
+Maintenance batiments : Poste 220
+
+ADRESSE DE L'ETABLISSEMENT
+----------------------------
+Faculte Privee des Sciences et Technologies (FPST)
+[Adresse de l'etablissement]
+Code postal : XXXXX
+Ville, Tunisie
+Tel : +216 71 XXX XXX
+Site web : www.fpst.tn
+Email general : contact@fpst.tn
+
+HORAIRES D'OUVERTURE ADMINISTRATION
+-------------------------------------
+Du Lundi au Vendredi : 08h00 - 17h00
+Samedi : 08h00 - 12h30
+Dimanche et jours feries : Ferme
