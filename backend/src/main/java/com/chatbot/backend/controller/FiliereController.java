@@ -4,6 +4,7 @@ import com.chatbot.backend.model.Filiere;
 import com.chatbot.backend.repository.FiliereRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/filieres")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:61748"})
 @RequiredArgsConstructor
 public class FiliereController {
 
@@ -32,7 +32,9 @@ public class FiliereController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody Filiere filiere) {
+        filiere.setId(null);
         if (filiereRepository.existsByCode(filiere.getCode())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Le code filière existe déjà");
@@ -42,6 +44,7 @@ public class FiliereController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Filiere> update(@PathVariable Long id, @RequestBody Filiere filiere) {
         Filiere existing = filiereRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Filière non trouvée"));
@@ -55,6 +58,7 @@ public class FiliereController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         filiereRepository.deleteById(id);
         Map<String, String> response = new HashMap<>();

@@ -49,4 +49,8 @@ public interface EmploiDuTempsRepository extends JpaRepository<EmploiDuTemps, Lo
 
     // Supprimer tout le planning d'une filière (avant régénération)
     void deleteByFiliereId(Long filiereId);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @Query("UPDATE EmploiDuTemps e SET e.professeur = null WHERE e.professeur.id = :userId")
+    int detachProfesseur(@Param("userId") Long userId);
 }

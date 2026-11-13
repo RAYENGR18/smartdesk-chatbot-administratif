@@ -1,76 +1,77 @@
 package com.chatbot.backend.service;
 
+import com.chatbot.backend.exception.ApiException;
 import com.chatbot.backend.model.*;
-import com.chatbot.backend.repository.UserRepository;
 import com.chatbot.backend.repository.UniversityIdentityRepository;
+import com.chatbot.backend.repository.UserRepository;
 import com.chatbot.backend.security.JwtService;
+import com.chatbot.backend.security.LoginAttemptService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
+    /** Hash BCrypt factice : évite de révéler par le temps de réponse qu'un compte n'existe pas. */
+    private volatile String dummyHash;
+
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final UniversityIdentityRepository universityIdentityRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LoginAttemptService loginAttemptService;
 
     // ============================================
     // INSCRIPTION AVEC PROFIL COMPLET
     // ============================================
+    @Transactional
     public AuthResponse register(RegisterRequest request) {
-        // Vérifications
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username déjà utilisé");
+        String username = request.getUsername().trim();
+        String email = request.getEmail().trim().toLowerCase(Locale.ROOT);
+
+        if (userRepository.existsByUsername(username)) {
+            throw ApiException.conflict("Nom d'utilisateur déjà utilisé.");
         }
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email déjà utilisé");
+        if (userRepository.existsByEmailIgnoreCase(email)) {
+            throw ApiException.conflict("Email déjà utilisé.");
         }
 
-        // Vérification de l'identifiant fourni (studentId)
-        String providedId = request.getStudentId();
-        if (providedId == null || providedId.trim().isEmpty()) {
-            throw new RuntimeException("Un identifiant généré par l'administration est obligatoire pour s'inscrire.");
+        // Seuls les rôles étudiant (USER) et professeur peuvent s'inscrire
+        String requestedRole = request.getRole() == null || request.getRole().isBlank()
+                ? "USER" : request.getRole().trim().toUpperCase(Locale.ROOT);
+        if (!requestedRole.equals("USER") && !requestedRole.equals("PROFESSEUR")) {
+            throw ApiException.badRequest("Rôle invalide.");
         }
 
+        // L'identifiant doit avoir été généré par l'administration
+        String providedId = request.getStudentId().trim();
         UniversityIdentity identity = universityIdentityRepository.findByIdentifier(providedId)
-                .orElseThrow(() -> new RuntimeException("Cet identifiant est introuvable."));
+                .orElseThrow(() -> ApiException.badRequest("Identifiant ou CIN incorrect."));
 
-        if (!identity.getCin().trim().equalsIgnoreCase(request.getCin().trim())) {
-             throw new RuntimeException("Le CIN ne correspond pas à cet identifiant.");
+        if (identity.getCin() == null
+                || !identity.getCin().trim().equalsIgnoreCase(request.getCin().trim())) {
+            throw ApiException.badRequest("Identifiant ou CIN incorrect.");
         }
-
         if (identity.isUsed()) {
-            throw new RuntimeException("Cet identifiant a déjà été utilisé pour une inscription.");
+            throw ApiException.conflict("Cet identifiant a déjà été utilisé pour une inscription.");
+        }
+        if (!identity.getRole().equals(requestedRole)) {
+            throw ApiException.badRequest("Le rôle choisi ne correspond pas à l'identifiant fourni.");
         }
 
-        // On peut s'assurer que le rôle correspond
-        String expectedRole = request.getRole() != null ? request.getRole().toUpperCase() : "USER";
-        if (!identity.getRole().equals(expectedRole)) {
-             throw new RuntimeException("Le rôle choisi ne correspond pas à l'identifiant fourni.");
-        }
-
-        // Création utilisateur
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
+        user.setUsername(username);
+        user.setEmail(email);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(User.Role.valueOf(requestedRole));
 
-        // Rôle (par défaut USER = étudiant)
-        if (request.getRole() != null && !request.getRole().isEmpty()) {
-            try {
-                user.setRole(User.Role.valueOf(request.getRole().toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                user.setRole(User.Role.USER);
-            }
-        } else {
-            user.setRole(User.Role.USER);
-        }
-
-        // Profil personnel
-        // Utilisation du Nom et Prénom de l'identifiant admin pour l'intégrité
+        // Nom, prénom et CIN viennent de l'identité créée par l'administration (intégrité)
         user.setFirstName(identity.getFirstName());
         user.setLastName(identity.getLastName());
         user.setCin(identity.getCin());
@@ -82,7 +83,7 @@ public class AuthService {
         user.setAddress(request.getAddress());
 
         // Profil académique
-        user.setStudentId(request.getStudentId());
+        user.setStudentId(providedId);
         user.setFieldOfStudy(request.getFieldOfStudy());
         user.setAcademicLevel(request.getAcademicLevel());
         user.setAcademicYear(request.getAcademicYear());
@@ -95,33 +96,51 @@ public class AuthService {
         // Famille
         user.setFatherName(request.getFatherName());
         user.setMotherName(request.getMotherName());
-
-        // Infos supp
         user.setAdditionalInfo(request.getAdditionalInfo());
 
         User savedUser = userRepository.save(user);
 
-        // Marquer l'identifiant comme utilisé
         identity.setUsed(true);
         universityIdentityRepository.save(identity);
 
-        // Générer token
-        String token = jwtService.generateToken(savedUser.getUsername());
-        return new AuthResponse(token, savedUser.getUsername(), savedUser.getRole().name(), savedUser.getId());
+        return toResponse(savedUser);
     }
 
     // ============================================
     // CONNEXION
     // ============================================
-    public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    public AuthResponse login(LoginRequest request, String clientIp) {
+        String username = request.getUsername().trim();
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Mot de passe incorrect");
+        if (loginAttemptService.isBlocked(username, clientIp)) {
+            throw new ApiException(HttpStatus.TOO_MANY_REQUESTS,
+                    "Trop de tentatives échouées. Réessayez dans "
+                            + loginAttemptService.lockMinutes() + " minutes.");
         }
 
-        String token = jwtService.generateToken(user.getUsername());
+        User user = userRepository.findByUsername(username).orElse(null);
+        String hash = user != null ? user.getPassword() : dummyHash();
+        boolean passwordOk = passwordEncoder.matches(request.getPassword(), hash);
+
+        if (user == null || !passwordOk) {
+            loginAttemptService.loginFailed(username, clientIp);
+            // Message volontairement identique : on ne révèle pas si le compte existe
+            throw ApiException.unauthorized("Nom d'utilisateur ou mot de passe incorrect.");
+        }
+
+        loginAttemptService.loginSucceeded(username, clientIp);
+        return toResponse(user);
+    }
+
+    private String dummyHash() {
+        if (dummyHash == null) {
+            dummyHash = passwordEncoder.encode(java.util.UUID.randomUUID().toString());
+        }
+        return dummyHash;
+    }
+
+    private AuthResponse toResponse(User user) {
+        String token = jwtService.generateToken(user);
         return new AuthResponse(token, user.getUsername(), user.getRole().name(), user.getId());
     }
 }

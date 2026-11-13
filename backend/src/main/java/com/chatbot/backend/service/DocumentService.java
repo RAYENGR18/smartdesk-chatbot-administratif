@@ -22,9 +22,16 @@ import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.*;
+import com.chatbot.backend.exception.ApiException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -37,7 +44,59 @@ public class DocumentService {
     private final UserRepository userRepository;
     private final com.chatbot.backend.repository.NoteRepository noteRepository;
 
-    private final String UPLOAD_DIR = "documents/";
+    private static final Logger log = LoggerFactory.getLogger(DocumentService.class);
+
+    /** Types de documents acceptés (le type sert aussi dans le nom du fichier : liste fermée). */
+    public static final Set<String> ALLOWED_TYPES = Set.of(
+            "attestation_travail", "attestation_scolarite", "certificat_scolarite",
+            "attestation_residence", "attestation_presence", "attestation_stage",
+            "attestation_salaire", "demande_releve_notes", "lettre_motivation",
+            "lettre_demande", "lettre_reclamation", "note_service", "declaration_honneur",
+            "copie_conforme", "demande_conge", "demande_conge_academique", "cv",
+            "contrat_travail", "fiche_paie", "demande_cin", "demande_extrait_naissance",
+            "demande_mutation", "demande_passeport", "lettre_resiliation", "demande_stage");
+
+    private static final int MAX_NAME_LENGTH = 150;
+    private static final int MAX_INFO_LENGTH = 5000;
+
+    /** Dossier de stockage des documents générés (DOCUMENTS_DIR). */
+    @Value("${app.documents.dir:./documents}")
+    private String documentsDir;
+
+    private Path baseDir() throws IOException {
+        Path dir = Paths.get(documentsDir).toAbsolutePath().normalize();
+        Files.createDirectories(dir);
+        return dir;
+    }
+
+    /** Fichier d'un document, en vérifiant qu'il se trouve bien dans le dossier de stockage. */
+    public File resolveFile(DocumentRequest doc) {
+        try {
+            Path base = baseDir();
+            Path stored = Paths.get(doc.getFilePath());
+            Path file = (stored.isAbsolute() ? stored : base.resolve(stored.getFileName())).normalize();
+            if (!file.startsWith(base)) {
+                // Anciennes entrées "documents/xxx.pdf" : on ne garde que le nom du fichier
+                file = base.resolve(stored.getFileName()).normalize();
+            }
+            if (!file.startsWith(base) || !Files.isRegularFile(file)) {
+                throw ApiException.notFound("Fichier non trouvé sur le serveur.");
+            }
+            return file.toFile();
+        } catch (IOException e) {
+            throw ApiException.notFound("Fichier non trouvé sur le serveur.");
+        }
+    }
+
+    public void deleteFileQuietly(DocumentRequest doc) {
+        try {
+            if (doc.getFilePath() != null) {
+                Files.deleteIfExists(resolveFile(doc).toPath());
+            }
+        } catch (Exception e) {
+            log.debug("Fichier du document {} déjà absent", doc.getId());
+        }
+    }
 
     // ── FPST Brand Colors ───────────────────────────────────────────────────
     private static final DeviceRgb FPST_BLUE    = new DeviceRgb(0,  64, 140);
@@ -65,11 +124,32 @@ public class DocumentService {
     ) throws Exception {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> ApiException.notFound("Utilisateur non trouvé."));
 
-        new File(UPLOAD_DIR).mkdirs();
+        if (documentType == null || !ALLOWED_TYPES.contains(documentType)) {
+            throw ApiException.badRequest("Type de document invalide.");
+        }
+        format = "WORD".equalsIgnoreCase(format) || "DOCX".equalsIgnoreCase(format) ? "WORD" : "PDF";
+        if (additionalInfo != null && additionalInfo.length() > MAX_INFO_LENGTH) {
+            throw ApiException.badRequest("Informations supplémentaires trop longues.");
+        }
 
-        String fileName = documentType + "_" + username + "_" + System.currentTimeMillis();
+        // Le nom officiel est celui enregistré par l'administration (s'il existe)
+        String registeredName = ((Objects.toString(user.getFirstName(), "") + " "
+                + Objects.toString(user.getLastName(), "")).trim());
+        if (!registeredName.isEmpty() && user.getRole() != User.Role.ADMIN) {
+            fullName = registeredName;
+        }
+        if (fullName == null || fullName.isBlank()) {
+            throw ApiException.badRequest("Le nom complet est obligatoire.");
+        }
+        fullName = fullName.trim();
+        if (fullName.length() > MAX_NAME_LENGTH) {
+            throw ApiException.badRequest("Nom trop long.");
+        }
+
+        // Nom de fichier sans donnée fournie par l'utilisateur (hors type, déjà validé)
+        String fileName = documentType + "_" + user.getId() + "_" + UUID.randomUUID();
         String filePath = format.equals("PDF")
                 ? generatePDF(fileName, documentType, fullName, additionalInfo, user)
                 : generateWord(fileName, documentType, fullName, additionalInfo, user);
@@ -88,7 +168,7 @@ public class DocumentService {
 
     public List<DocumentRequest> getUserDocuments(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> ApiException.notFound("Utilisateur non trouvé."));
         return documentRepository.findByUserId(user.getId());
     }
 
@@ -103,7 +183,7 @@ public class DocumentService {
             User user
     ) throws Exception {
 
-        String filePath = UPLOAD_DIR + fileName + ".pdf";
+        String filePath = baseDir().resolve(fileName + ".pdf").toString();
 
         PdfWriter   writer  = new PdfWriter(filePath);
         PdfDocument pdfDoc  = new PdfDocument(writer);
@@ -261,7 +341,7 @@ public class DocumentService {
             User user
     ) throws Exception {
 
-        String filePath = UPLOAD_DIR + fileName + ".docx";
+        String filePath = baseDir().resolve(fileName + ".docx").toString();
         XWPFDocument document = new XWPFDocument();
 
         String date   = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -324,10 +404,11 @@ public class DocumentService {
                 "FPST – Ce document est établi sous la responsabilité de l'établissement.",
                 8, false, "999999", ParagraphAlignment.CENTER);
 
-        FileOutputStream out = new FileOutputStream(filePath);
-        document.write(out);
-        out.close();
-        document.close();
+        try (FileOutputStream out = new FileOutputStream(filePath)) {
+            document.write(out);
+        } finally {
+            document.close();
+        }
 
         return filePath;
     }

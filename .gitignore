@@ -73,3 +73,11 @@ backend/documents/
 ######################################
 *.tmp
 *.tmp.*
+######################################
+# Secrets et données locales
+######################################
+.env
+*.env.local
+documents/
+backend/documents/
+nlp/chroma_db_prof/

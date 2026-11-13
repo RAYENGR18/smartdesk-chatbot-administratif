@@ -5,6 +5,7 @@ import com.chatbot.backend.model.Salle;
 import com.chatbot.backend.service.PlanningService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
@@ -14,7 +15,6 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/planning")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:61748"})
 @RequiredArgsConstructor
 public class PlanningController {
 
@@ -33,6 +33,7 @@ public class PlanningController {
     // ============================================
     @GetMapping("/professeur/{id}")
     public ResponseEntity<List<EmploiDuTemps>> getPlanningByProfesseur(@PathVariable Long id) {
+        com.chatbot.backend.security.CurrentUser.requireSelfOrAdmin(id);
         return ResponseEntity.ok(planningService.getPlanningByProfesseur(id));
     }
 
@@ -40,6 +41,7 @@ public class PlanningController {
     // PLANNING PAR SALLE
     // ============================================
     @GetMapping("/salle/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EmploiDuTemps>> getPlanningBySalle(@PathVariable Long id) {
         return ResponseEntity.ok(planningService.getPlanningBySalle(id));
     }
@@ -48,6 +50,7 @@ public class PlanningController {
     // TOUS LES CRÉNEAUX
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EmploiDuTemps>> getAllCreneaux() {
         return ResponseEntity.ok(planningService.getAllCreneaux());
     }
@@ -55,6 +58,7 @@ public class PlanningController {
     // AJOUTER UN CRÉNEAU
 
     @PostMapping("/creneaux")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> ajouterCreneau(@RequestBody Map<String, Object> request) {
         try {
             EmploiDuTemps.Jour jour = EmploiDuTemps.Jour.valueOf((String) request.get("jour"));
@@ -84,6 +88,7 @@ public class PlanningController {
     // SUPPRIMER UN CRÉNEAU
     // ============================================
     @DeleteMapping("/creneaux/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> supprimerCreneau(@PathVariable Long id) {
         planningService.supprimerCreneau(id);
         Map<String, String> response = new HashMap<>();
@@ -95,6 +100,7 @@ public class PlanningController {
     // GÉNÉRATION AUTOMATIQUE
     // ============================================
     @PostMapping("/generer")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> genererPlanning(@RequestBody Map<String, Object> request) {
         try {
             Long filiereId = Long.valueOf(request.get("filiereId").toString());
@@ -118,6 +124,7 @@ public class PlanningController {
     // SALLES DISPONIBLES POUR UN CRÉNEAU
     // ============================================
     @GetMapping("/salles-disponibles")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Salle>> getSallesDisponibles(
             @RequestParam String jour,
             @RequestParam String heureDebut,

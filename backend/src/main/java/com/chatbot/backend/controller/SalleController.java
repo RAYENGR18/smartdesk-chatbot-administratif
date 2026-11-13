@@ -4,6 +4,7 @@ import com.chatbot.backend.model.Salle;
 import com.chatbot.backend.repository.SalleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/salles")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:61748"})
 @RequiredArgsConstructor
 public class SalleController {
 
@@ -42,7 +42,9 @@ public class SalleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody Salle salle) {
+        salle.setId(null);
         if (salleRepository.existsByNom(salle.getNom())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Le nom de salle existe déjà");
@@ -52,6 +54,7 @@ public class SalleController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Salle> update(@PathVariable Long id, @RequestBody Salle salle) {
         Salle existing = salleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Salle non trouvée"));
@@ -65,6 +68,7 @@ public class SalleController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         salleRepository.deleteById(id);
         Map<String, String> response = new HashMap<>();

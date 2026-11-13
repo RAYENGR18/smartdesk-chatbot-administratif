@@ -17,6 +17,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChatService {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ChatService.class);
+
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
     private final NlpService nlpService;
@@ -81,16 +83,19 @@ public class ChatService {
     );
 
     public ChatMessage sendMessage(String userMessage, String username) {
-        return sendMessage(userMessage, username, null, null);
+        return sendMessage(userMessage, username, null);
     }
 
-    public ChatMessage sendMessage(String userMessage, String username,
-                                   String language, Map<String, Object> studentContext) {
+    public ChatMessage sendMessage(String userMessage, String username, String language) {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
         String userRole = user.getRole() != null ? user.getRole().name() : "USER";
+
+        // Contexte transmis à l'IA, construit côté serveur à partir du profil.
+        // Pas de CIN, d'adresse ni de téléphone : ces données ne quittent pas l'application.
+        Map<String, Object> studentContext = buildUserContext(user);
 
         // ── Step 1: Full conversation history (drives both rewriting and AI answers) ──
         List<Map<String, String>> conversationHistory = buildConversationHistory(user.getId());
@@ -172,7 +177,7 @@ public class ChatService {
                     message, language, studentContext, userRole, conversationHistory);
             return (String) groqResult.get("answer");
         } catch (Exception e) {
-            System.err.println("Groq call failed: " + e.getMessage());
+            log.warn("Appel Groq échoué : {}", e.getMessage());
             return null;
         }
     }
@@ -194,7 +199,7 @@ public class ChatService {
             }
             return answer;
         } catch (Exception e) {
-            System.err.println("RAG call failed: " + e.getMessage());
+            log.warn("Appel RAG échoué : {}", e.getMessage());
             return null;
         }
     }
@@ -218,7 +223,7 @@ public class ChatService {
             }
             return history;
         } catch (Exception e) {
-            System.err.println("Could not load conversation history: " + e.getMessage());
+            log.warn("Historique de conversation indisponible : {}", e.getMessage());
             return Collections.emptyList();
         }
     }
@@ -257,6 +262,27 @@ public class ChatService {
             return "💡 I'm **FPST SmartDesk**, your AI assistant! Ask me anything!\n\nI can help with:\n📄 Documents | 📅 Schedule | 🎓 Programs | 📝 Registration\n💰 Scholarships | 💼 Internships | 📜 Rules | 🔧 Support\n\nWhat do you need? 😊";
         }
         return "💡 Je suis **FPST SmartDesk**, votre assistant IA ! Posez-moi votre question !\n\nJe peux vous aider avec :\n📄 Documents | 📅 Planning | 🎓 Filières | 📝 Inscription\n💰 Bourses | 💼 Stages | 📜 Règlement | 🔧 Support\n\nDites-moi de quoi avez-vous besoin ! 😊";
+    }
+
+    private Map<String, Object> buildUserContext(User user) {
+        Map<String, Object> ctx = new HashMap<>();
+        putIfPresent(ctx, "firstName", user.getFirstName());
+        putIfPresent(ctx, "lastName", user.getLastName());
+        putIfPresent(ctx, "role", user.getRole() != null ? user.getRole().name() : null);
+        putIfPresent(ctx, "fieldOfStudy", user.getFieldOfStudy());
+        putIfPresent(ctx, "academicLevel", user.getAcademicLevel());
+        putIfPresent(ctx, "academicYear", user.getAcademicYear());
+        putIfPresent(ctx, "institution", user.getInstitution());
+        putIfPresent(ctx, "faculty", user.getFaculty());
+        putIfPresent(ctx, "department", user.getDepartment());
+        putIfPresent(ctx, "specialite", user.getSpecialite());
+        return ctx;
+    }
+
+    private static void putIfPresent(Map<String, Object> map, String key, String value) {
+        if (value != null && !value.isBlank()) {
+            map.put(key, value);
+        }
     }
 
     public List<ChatMessage> getHistory(String username) {

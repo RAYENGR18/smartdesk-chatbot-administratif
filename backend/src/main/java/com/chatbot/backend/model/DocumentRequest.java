@@ -1,6 +1,7 @@
 package com.chatbot.backend.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class DocumentRequest {
     private String fullName;
 
     // informations supplémentaires
+    @Column(columnDefinition = "TEXT")
     private String additionalInfo;
 
     // format : PDF ou WORD
@@ -33,6 +35,7 @@ public class DocumentRequest {
     private String status = "EN_ATTENTE";
 
     // chemin du fichier généré
+    @JsonIgnore
     private String filePath;
 
     // qui a demandé ce document

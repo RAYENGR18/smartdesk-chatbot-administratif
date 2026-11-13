@@ -1,38 +1,124 @@
 package com.chatbot.backend.controller;
 
+import com.chatbot.backend.exception.ApiException;
 import com.chatbot.backend.model.User;
 import com.chatbot.backend.repository.UserRepository;
+import com.chatbot.backend.security.AuthenticatedUser;
+import com.chatbot.backend.security.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/student")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:61748"})
 @RequiredArgsConstructor
 public class StudentController {
 
+    private static final int MAX_FIELD_LENGTH = 255;
+
     private final UserRepository userRepository;
 
-
-    // RÉCUPÉRER LE PROFIL ÉTUDIANT
-
-    @GetMapping("/profile")
-    public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String authHeader) {
-
-        return ResponseEntity.ok(Map.of("message", "Utilisez /profile/{username}"));
+    // PROFIL DE L'UTILISATEUR CONNECTÉ
+    @GetMapping({"/profile", "/me"})
+    public ResponseEntity<Map<String, Object>> getMyProfile() {
+        AuthenticatedUser me = CurrentUser.get();
+        return ResponseEntity.ok(toProfile(findByUsername(me.username())));
     }
 
+    // PROFIL PAR NOM D'UTILISATEUR (soi-même ou admin)
     @GetMapping("/profile/{username}")
-    public ResponseEntity<?> getProfileByUsername(@PathVariable String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    public ResponseEntity<Map<String, Object>> getProfileByUsername(@PathVariable String username) {
+        CurrentUser.requireSelfOrAdmin(username);
+        return ResponseEntity.ok(toProfile(findByUsername(username)));
+    }
 
+    // METTRE À JOUR LE PROFIL (soi-même ou admin)
+    @PutMapping("/profile/{username}")
+    public ResponseEntity<Map<String, String>> updateProfile(@PathVariable String username,
+                                                             @RequestBody Map<String, String> updates) {
+        CurrentUser.requireSelfOrAdmin(username);
+        User user = findByUsername(username);
+
+        for (Map.Entry<String, String> e : updates.entrySet()) {
+            if (e.getValue() != null && e.getValue().length() > MAX_FIELD_LENGTH) {
+                throw ApiException.badRequest("Le champ '" + e.getKey() + "' est trop long.");
+            }
+        }
+
+        // Nom et prénom viennent de l'identité administrative : non modifiables ici
+        if (updates.containsKey("phone")) user.setPhone(updates.get("phone"));
+        if (updates.containsKey("address")) user.setAddress(updates.get("address"));
+        if (updates.containsKey("fieldOfStudy")) user.setFieldOfStudy(updates.get("fieldOfStudy"));
+        if (updates.containsKey("academicLevel")) user.setAcademicLevel(updates.get("academicLevel"));
+        if (updates.containsKey("email")) {
+            String email = updates.get("email") == null ? "" : updates.get("email").trim().toLowerCase(Locale.ROOT);
+            if (!email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+                throw ApiException.badRequest("Email invalide.");
+            }
+            if (userRepository.existsByEmailIgnoreCaseAndIdNot(email, user.getId())) {
+                throw ApiException.conflict("Email déjà utilisé.");
+            }
+            user.setEmail(email);
+        }
+
+        userRepository.save(user);
+        return ResponseEntity.ok(Map.of("message", "Profil mis à jour avec succès"));
+    }
+
+    // FILIÈRES DISTINCTES DES ÉTUDIANTS (admin : ciblage des notifications)
+    @GetMapping("/filieres")
+    public ResponseEntity<List<String>> getFilieres() {
+        List<String> filieres = userRepository.findByRole(User.Role.USER).stream()
+                .map(User::getFieldOfStudy)
+                .filter(f -> f != null && !f.isBlank())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(filieres);
+    }
+
+    // LISTE DES PROFESSEURS (admin : ciblage des notifications)
+    @GetMapping("/professors")
+    public ResponseEntity<List<Map<String, Object>>> getProfessors() {
+        List<Map<String, Object>> profs = userRepository.findByRole(User.Role.PROFESSEUR).stream()
+                .map(u -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("id", u.getId());
+                    m.put("firstName", Objects.toString(u.getFirstName(), ""));
+                    m.put("lastName", Objects.toString(u.getLastName(), ""));
+                    m.put("email", Objects.toString(u.getEmail(), ""));
+                    m.put("department", Objects.toString(u.getDepartment(), ""));
+                    return m;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(profs);
+    }
+
+    // NOM D'UN ÉTUDIANT PAR ID (admin : ciblage)
+    @GetMapping("/{id}/name")
+    public ResponseEntity<Map<String, Object>> getStudentById(@PathVariable Long id) {
+        return userRepository.findById(id)
+                .filter(u -> u.getRole() == User.Role.USER)
+                .map(u -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("id", u.getId());
+                    m.put("firstName", Objects.toString(u.getFirstName(), ""));
+                    m.put("lastName", Objects.toString(u.getLastName(), ""));
+                    m.put("fieldOfStudy", Objects.toString(u.getFieldOfStudy(), ""));
+                    return ResponseEntity.ok(m);
+                })
+                .orElseThrow(() -> ApiException.notFound("Étudiant non trouvé."));
+    }
+
+    private User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> ApiException.notFound("Utilisateur non trouvé."));
+    }
+
+    private static Map<String, Object> toProfile(User user) {
         Map<String, Object> profile = new HashMap<>();
         profile.put("id", user.getId());
         profile.put("username", user.getUsername());
@@ -54,90 +140,10 @@ public class StudentController {
         profile.put("faculty", user.getFaculty());
         profile.put("department", user.getDepartment());
         profile.put("additionalInfo", user.getAdditionalInfo());
-        profile.put("role", user.getRole().name());
+        profile.put("role", user.getRole() != null ? user.getRole().name() : "USER");
         profile.put("specialite", user.getSpecialite());
         profile.put("filieresProfesseur", user.getFilieresProfesseur());
         profile.put("matieresEnseignees", user.getMatieresEnseignees());
-
-        return ResponseEntity.ok(profile);
-    }
-
-    // ============================================
-    // METTRE À JOUR LE PROFIL
-    // ============================================
-    @PutMapping("/profile/{username}")
-    public ResponseEntity<?> updateProfile(
-            @PathVariable String username,
-            @RequestBody Map<String, String> updates
-    ) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-
-        if (updates.containsKey("firstName")) user.setFirstName(updates.get("firstName"));
-        if (updates.containsKey("lastName")) user.setLastName(updates.get("lastName"));
-        if (updates.containsKey("phone")) user.setPhone(updates.get("phone"));
-        if (updates.containsKey("address")) user.setAddress(updates.get("address"));
-        if (updates.containsKey("email")) user.setEmail(updates.get("email"));
-        if (updates.containsKey("fieldOfStudy")) user.setFieldOfStudy(updates.get("fieldOfStudy"));
-        if (updates.containsKey("academicLevel")) user.setAcademicLevel(updates.get("academicLevel"));
-
-        userRepository.save(user);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Profil mis à jour avec succès");
-        return ResponseEntity.ok(response);
-    }
-
-    // ============================================
-    // FILIÈRES DISTINCTES (pour admin notifications)
-    // ============================================
-    @GetMapping("/filieres")
-    public ResponseEntity<List<String>> getFilieres() {
-        List<String> filieres = userRepository.findByRole(User.Role.USER)
-                .stream()
-                .map(User::getFieldOfStudy)
-                .filter(f -> f != null && !f.isBlank())
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(filieres);
-    }
-
-    // ============================================
-    // LISTE DES PROFESSEURS (pour admin notifications)
-    // ============================================
-    @GetMapping("/professors")
-    public ResponseEntity<List<Map<String, Object>>> getProfessors() {
-        List<Map<String, Object>> profs = userRepository.findByRole(User.Role.PROFESSEUR)
-                .stream()
-                .map(u -> {
-                    Map<String, Object> m = new HashMap<>();
-                    m.put("id", u.getId());
-                    m.put("firstName", u.getFirstName() != null ? u.getFirstName() : "");
-                    m.put("lastName", u.getLastName() != null ? u.getLastName() : "");
-                    m.put("email", u.getEmail() != null ? u.getEmail() : "");
-                    m.put("department", u.getDepartment() != null ? u.getDepartment() : "");
-                    return m;
-                })
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(profs);
-    }
-
-    // ============================================
-    // CHERCHER UN ÉTUDIANT PAR ID (pour ciblage)
-    // ============================================
-    @GetMapping("/{id}/name")
-    public ResponseEntity<?> getStudentById(@PathVariable Long id) {
-        return userRepository.findById(id)
-                .filter(u -> u.getRole() == User.Role.USER)
-                .map(u -> {
-                    Map<String, Object> m = new HashMap<>();
-                    m.put("id", u.getId());
-                    m.put("firstName", u.getFirstName() != null ? u.getFirstName() : "");
-                    m.put("lastName", u.getLastName() != null ? u.getLastName() : "");
-                    m.put("fieldOfStudy", u.getFieldOfStudy() != null ? u.getFieldOfStudy() : "");
-                    return ResponseEntity.ok(m);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        return profile;
     }
 }

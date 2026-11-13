@@ -1,25 +1,18 @@
 package com.chatbot.backend.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/** Données envoyées par le frontend lors de la connexion. */
 @Data
-//classe java on cree  un Objet utilisé pour transporter les données API.
 public class LoginRequest {
-    //nom utilisateur envoyé depuis Angular.
+
+    @NotBlank(message = "Le nom d'utilisateur est obligatoire.")
+    @Size(max = 100)
     private String username;
+
+    @NotBlank(message = "Le mot de passe est obligatoire.")
+    @Size(max = 200)
     private String password;
 }
-
-//Ce fichier sert à recevoir les données quand l’utilisateur se connecte.
-//
-//Quand utilisateur fait :
-// Login
-//il envoie :
-//username
-//password
-//| Classe            | Rôle                        |
-//| ----------------- | --------------------------- |
-//| `RegisterRequest` | inscription                 |
-//| `LoginRequest`    | connexion                   |
-//| `User`            | table database              |
-//| `AuthResponse`    | réponse envoyée au frontend |

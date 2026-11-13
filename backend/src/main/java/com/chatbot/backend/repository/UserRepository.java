@@ -17,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
     java.util.List<User> findByRole(com.chatbot.backend.model.User.Role role);
     Optional<User> findByCinIgnoreCase(String cin);
+    boolean existsByEmailIgnoreCase(String email);
+    boolean existsByEmailIgnoreCaseAndIdNot(String email, Long id);
+    long countByRole(com.chatbot.backend.model.User.Role role);
 }

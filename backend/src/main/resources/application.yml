@@ -1,32 +1,56 @@
+# =====================================================================
+# SmartDesk - configuration du backend
+# Aucune valeur secrète ici : tout vient des variables d'environnement
+# ou du fichier .env à la racine du projet (voir .env.example).
+# =====================================================================
+
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
 
 spring:
   application:
-    name: chatbot-backend
-  devtools:
-    livereload:
-      enabled: false
+    name: smartdesk-backend
+  config:
+    # Lit le .env de la racine (lancement depuis backend/) ou du dossier courant
+    import:
+      - optional:file:../.env[.properties]
+      - optional:file:./.env[.properties]
   datasource:
-    url: jdbc:postgresql://localhost:5432/chatbot_db
-    username: postgres
-    password: CHANGE_ME
-    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/chatbot_db}
+    username: ${DB_USERNAME:smartdesk}
+    password: ${DB_PASSWORD:}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${JPA_DDL_AUTO:update}
     open-in-view: false
-    show-sql: true
+    show-sql: ${JPA_SHOW_SQL:false}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB
 
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
-      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
-
-jwt:
-  secret: CHANGE_ME
-  expiration: 86400000
-
-# URL du service NLP (localhost pour dev, nlp pour Docker)
-nlp:
-  url: http://localhost:8000
+app:
+  jwt:
+    # Au moins 32 caractères aléatoires (le script setup.ps1 en génère une)
+    secret: ${JWT_SECRET:}
+    expiration-ms: ${JWT_EXPIRATION_MS:28800000}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200,http://localhost:61748}
+  nlp:
+    url: ${NLP_URL:http://localhost:8000}
+    # Clé partagée backend <-> service NLP (en-tête X-API-Key)
+    api-key: ${NLP_API_KEY:}
+  documents:
+    dir: ${DOCUMENTS_DIR:./documents}
+  admin:
+    # Compte admin créé au premier démarrage seulement (jamais écrasé ensuite)
+    username: ${ADMIN_USERNAME:admin}
+    email: ${ADMIN_EMAIL:admin@fpst.tn}
+    password: ${ADMIN_PASSWORD:}
+  security:
+    max-login-attempts: ${MAX_LOGIN_ATTEMPTS:5}
+    login-lock-minutes: ${LOGIN_LOCK_MINUTES:15}

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -12,16 +12,16 @@ import java.util.List;
 @Service
 public class NlpService {
 
-    @Value("${nlp.url:http://localhost:8000}")
-    private String nlpBaseUrl;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(NlpService.class);
+
+    private final String nlpBaseUrl;
 
     private final RestTemplate restTemplate;
 
-    public NlpService() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(5000);
-        factory.setReadTimeout(30000);
-        this.restTemplate = new RestTemplate(factory);
+    public NlpService(@Value("${app.nlp.url:http://localhost:8000}") String nlpBaseUrl,
+                      @Qualifier("nlpRestTemplate") RestTemplate restTemplate) {
+        this.nlpBaseUrl = nlpBaseUrl;
+        this.restTemplate = restTemplate;
     }
 
     // ============================================
@@ -56,7 +56,7 @@ public class NlpService {
             return response.getBody();
 
         } catch (Exception e) {
-            System.err.println("NLP service unreachable: " + e.getMessage());
+            log.warn("NLP service unreachable: {}", e.getMessage());
             return buildLocalNlpResponse(message, language);
         }
     }
@@ -100,7 +100,7 @@ public class NlpService {
             return response.getBody();
 
         } catch (Exception e) {
-            System.err.println("RAG service unreachable: " + e.getMessage());
+            log.warn("RAG service unreachable: {}", e.getMessage());
             Map<String, Object> defaultResponse = new HashMap<>();
             defaultResponse.put("answer", null);
             defaultResponse.put("used_rag", false);
@@ -162,7 +162,7 @@ public class NlpService {
             return responseBody;
 
         } catch (Exception e) {
-            System.err.println("Groq service unreachable: " + e.getMessage());
+            log.warn("Groq service unreachable: {}", e.getMessage());
             Map<String, Object> defaultResponse = new HashMap<>();
             defaultResponse.put("answer", null);
             defaultResponse.put("used_groq", false);
@@ -199,7 +199,7 @@ public class NlpService {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Rewrite service unreachable: " + e.getMessage());
+            log.warn("Rewrite service unreachable: {}", e.getMessage());
         }
         return message; // fallback: keep original
     }

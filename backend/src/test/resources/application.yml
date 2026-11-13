@@ -1,0 +1,29 @@
+# Configuration de test : base H2 en mémoire, aucun service externe
+spring:
+  datasource:
+    url: jdbc:h2:mem:smartdesk;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+
+app:
+  jwt:
+    secret: test-secret-0123456789-abcdefghijklmnopqrstuvwxyz
+    expiration-ms: 3600000
+  cors:
+    allowed-origins: http://localhost:4200
+  nlp:
+    url: http://127.0.0.1:9
+    api-key: test-nlp-key
+  documents:
+    dir: ./target/test-documents
+  admin:
+    username: admin
+    email: admin@test.local
+    password: Admin-Test-123
+  security:
+    max-login-attempts: 5
+    login-lock-minutes: 15

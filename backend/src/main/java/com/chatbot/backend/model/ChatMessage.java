@@ -18,11 +18,11 @@ public class ChatMessage {
     private Long id;
 
     // le message de l'utilisateur
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String userMessage;
 
     // la réponse du bot
-    @Column(nullable = false, length = 2000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String botResponse;
 
     // l'intention détectée par le NLP

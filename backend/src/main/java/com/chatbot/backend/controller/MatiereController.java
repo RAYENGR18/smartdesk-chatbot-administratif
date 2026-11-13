@@ -6,6 +6,7 @@ import com.chatbot.backend.repository.MatiereRepository;
 import com.chatbot.backend.repository.FiliereRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -13,7 +14,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/matieres")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:61748"})
 @RequiredArgsConstructor
 public class MatiereController {
 
@@ -40,6 +40,7 @@ public class MatiereController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody Map<String, Object> request) {
         try {
             String code = (String) request.get("code");
@@ -95,6 +96,7 @@ public class MatiereController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Map<String, Object> request) {
         try {
             Matiere existing = matiereRepository.findById(id)
@@ -144,6 +146,7 @@ public class MatiereController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         matiereRepository.deleteById(id);
         Map<String, String> response = new HashMap<>();
