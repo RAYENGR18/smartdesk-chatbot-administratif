@@ -81,22 +81,14 @@ export class AdminComponent implements OnInit {
   toggleTheme(): void   { this.themeService.toggleTheme(); }
 
   ngOnInit() {
-    console.log('[AdminComponent] localStorage.role =', localStorage.getItem('role'));
-    console.log('[AdminComponent] localStorage.username =', localStorage.getItem('username'));
 
     const role = this.authService.getRole();
-    console.log('[AdminComponent] ngOnInit – rôle détecté:', role);
-    console.log('[AdminComponent] Route actuelle =', this.router.url);
 
     if (role !== 'ADMIN') {
       console.warn('[AdminComponent] Accès refusé (rôle ≠ ADMIN) → redirection /login');
-      this.router.navigateByUrl('/login', { replaceUrl: true }).then(() => {
-        console.log('[AdminComponent] Route finale après redirection =', this.router.url);
-      });
+      this.router.navigateByUrl('/login', { replaceUrl: true });
       return;
     }
-
-    console.log('[AdminComponent] Accès ADMIN validé, maintien sur /admin');
     this.loadStats();
     this.loadUsers();
     this.loadMessages();

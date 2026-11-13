@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -13,7 +13,7 @@ import { NotificationService, Notification } from '../../services/notification.s
 @Component({
   selector: 'app-professeur',
   standalone: true,
-  imports: [CommonModule, FormsModule, ChatComponent, PlanningComponent],
+  imports: [FormsModule, ChatComponent, PlanningComponent],
   templateUrl: './professeur.component.html',
   styleUrls: ['./professeur.component.css']
 })

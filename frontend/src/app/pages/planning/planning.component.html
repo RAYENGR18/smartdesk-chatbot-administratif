@@ -9,162 +9,214 @@
         Retour
       </button>
       <h1>{{ text('title') }}</h1>
-      <span class="subtitle" *ngIf="getFiliereNom()">{{ getFiliereNom() }}</span>
+      @if (getFiliereNom()) {
+        <span class="subtitle">{{ getFiliereNom() }}</span>
+      }
     </div>
     <div class="header-actions">
       <button class="btn-nav" (click)="goToChat()">{{ text('chat') }}</button>
-      <button class="btn-nav" *ngIf="role === 'ADMIN'" (click)="goToAdmin()">{{ text('admin') }}</button>
+      @if (role === 'ADMIN') {
+        <button class="btn-nav" (click)="goToAdmin()">{{ text('admin') }}</button>
+      }
       <button class="btn-logout" (click)="logout()">{{ text('logout') }}</button>
     </div>
   </header>
 
   <!-- Control Bar (Admin only) -->
-  <div class="control-bar" *ngIf="role === 'ADMIN'">
-    <div class="view-toggle">
-      <button [class.active]="viewMode === 'FILIERE'" (click)="setViewMode('FILIERE')">{{ text('by_program') }}</button>
-      <button [class.active]="viewMode === 'PROFESSEUR'" (click)="setViewMode('PROFESSEUR')">{{ text('by_professor') }}</button>
+  @if (role === 'ADMIN') {
+    <div class="control-bar">
+      <div class="view-toggle">
+        <button [class.active]="viewMode === 'FILIERE'" (click)="setViewMode('FILIERE')">{{ text('by_program') }}</button>
+        <button [class.active]="viewMode === 'PROFESSEUR'" (click)="setViewMode('PROFESSEUR')">{{ text('by_professor') }}</button>
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Program Selector -->
-  <div class="filter-bar" *ngIf="role !== 'PROFESSEUR'">
-    <!-- Filière Selection -->
-    <div class="filter-group" *ngIf="viewMode === 'FILIERE' && role === 'ADMIN'">
-      <label>{{ text('select_program') }}</label>
-      <select [(ngModel)]="selectedFiliereId" (change)="onFiliereChange()">
-        <option *ngFor="let f of filieres" [ngValue]="f.id">{{ f.nom }} - {{ f.niveau }}</option>
-      </select>
+  @if (role !== 'PROFESSEUR') {
+    <div class="filter-bar">
+      <!-- Filière Selection -->
+      @if (viewMode === 'FILIERE' && role === 'ADMIN') {
+        <div class="filter-group">
+          <label>{{ text('select_program') }}</label>
+          <select [(ngModel)]="selectedFiliereId" (change)="onFiliereChange()">
+            @for (f of filieres; track f) {
+              <option [ngValue]="f.id">{{ f.nom }} - {{ f.niveau }}</option>
+            }
+          </select>
+        </div>
+      }
+      <!-- Professeur Selection -->
+      @if (viewMode === 'PROFESSEUR' && role === 'ADMIN') {
+        <div class="filter-group">
+          <label>{{ text('select_professor') }}</label>
+          <select [(ngModel)]="selectedProfesseurId" (change)="onProfesseurChange()">
+            @for (p of professeurs; track p) {
+              <option [ngValue]="p.id">{{ text('teacher_prefix') }} {{ p.firstName }} {{ p.lastName }}</option>
+            }
+          </select>
+        </div>
+      }
+      @if (role === 'USER') {
+        <div class="filter-group">
+          <label>{{ text('my_program') }}</label>
+          <strong>{{ getFiliereNom() }}</strong>
+        </div>
+      }
+      <!-- Actions Admin -->
+      @if (role === 'ADMIN') {
+        <div class="admin-actions">
+          <button class="btn-generate" (click)="genererPlanningAuto()" [disabled]="isGenerating || viewMode !== 'FILIERE'">
+            @if (!isGenerating) {
+              <span>{{ text('generate_auto') }}</span>
+            }
+            @if (isGenerating) {
+              <span>{{ text('generating') }}</span>
+            }
+          </button>
+          <button class="btn-add-manual" (click)="isAddingSlot = !isAddingSlot">
+            {{ isAddingSlot ? text('close') : text('add_manual') }}
+          </button>
+        </div>
+      }
     </div>
-
-    <!-- Professeur Selection -->
-    <div class="filter-group" *ngIf="viewMode === 'PROFESSEUR' && role === 'ADMIN'">
-      <label>{{ text('select_professor') }}</label>
-      <select [(ngModel)]="selectedProfesseurId" (change)="onProfesseurChange()">
-        <option *ngFor="let p of professeurs" [ngValue]="p.id">{{ text('teacher_prefix') }} {{ p.firstName }} {{ p.lastName }}</option>
-      </select>
-    </div>
-
-    <div class="filter-group" *ngIf="role === 'USER'">
-      <label>{{ text('my_program') }}</label>
-      <strong>{{ getFiliereNom() }}</strong>
-    </div>
-
-    <!-- Actions Admin -->
-    <div class="admin-actions" *ngIf="role === 'ADMIN'">
-      <button class="btn-generate" (click)="genererPlanningAuto()" [disabled]="isGenerating || viewMode !== 'FILIERE'">
-        <span *ngIf="!isGenerating">{{ text('generate_auto') }}</span>
-        <span *ngIf="isGenerating">{{ text('generating') }}</span>
-      </button>
-      <button class="btn-add-manual" (click)="isAddingSlot = !isAddingSlot">
-        {{ isAddingSlot ? text('close') : text('add_manual') }}
-      </button>
-    </div>
-  </div>
+  }
 
   <!-- Manual Slot Form (Admin) -->
-  <div class="manual-form-overlay" *ngIf="isAddingSlot && role === 'ADMIN'">
-    <div class="manual-form-card">
-      <h3>{{ text('add_manual_title') }}</h3>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>{{ text('day') }}</label>
-          <select [(ngModel)]="newSlot.jour">
-            <option *ngFor="let j of jours" [value]="j">{{ getDayLabel(j) }}</option>
-          </select>
+  @if (isAddingSlot && role === 'ADMIN') {
+    <div class="manual-form-overlay">
+      <div class="manual-form-card">
+        <h3>{{ text('add_manual_title') }}</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>{{ text('day') }}</label>
+            <select [(ngModel)]="newSlot.jour">
+              @for (j of jours; track j) {
+                <option [value]="j">{{ getDayLabel(j) }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>{{ text('start') }}</label>
+            <select [(ngModel)]="newSlot.heureDebut">
+              @for (h of heures; track h) {
+                <option [value]="h">{{ h }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>{{ text('end') }}</label>
+            <input type="time" [(ngModel)]="newSlot.heureFin" />
+          </div>
+          <div class="form-group">
+            <label>{{ text('subject') }}</label>
+            <select [(ngModel)]="newSlot.matiereId">
+              @for (m of matieres; track m) {
+                <option [value]="m.id">{{ m.nom }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>{{ text('room') }}</label>
+            <select [(ngModel)]="newSlot.salleId">
+              @for (s of salles; track s) {
+                <option [value]="s.id">{{ s.nom }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>{{ text('program') }}</label>
+            <select [(ngModel)]="newSlot.filiereId">
+              @for (f of filieres; track f) {
+                <option [value]="f.id">{{ f.nom }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>{{ text('professor_optional') }}</label>
+            <select [(ngModel)]="newSlot.professeurId">
+              <option value="">{{ text('none') }}</option>
+              @for (p of professeurs; track p) {
+                <option [value]="p.id">{{ p.lastName }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>{{ text('group') }}</label>
+            <input type="text" [(ngModel)]="newSlot.groupe" [placeholder]="text('group_placeholder')" />
+          </div>
         </div>
-        <div class="form-group">
-          <label>{{ text('start') }}</label>
-          <select [(ngModel)]="newSlot.heureDebut">
-            <option *ngFor="let h of heures" [value]="h">{{ h }}</option>
-          </select>
+        <div class="form-actions">
+          <button class="btn-cancel" (click)="isAddingSlot = false">{{ text('cancel') }}</button>
+          <button class="btn-save" (click)="ajouterCreneauManuel()">{{ text('save') }}</button>
         </div>
-        <div class="form-group">
-          <label>{{ text('end') }}</label>
-          <input type="time" [(ngModel)]="newSlot.heureFin" />
-        </div>
-        <div class="form-group">
-          <label>{{ text('subject') }}</label>
-          <select [(ngModel)]="newSlot.matiereId">
-            <option *ngFor="let m of matieres" [value]="m.id">{{ m.nom }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>{{ text('room') }}</label>
-          <select [(ngModel)]="newSlot.salleId">
-            <option *ngFor="let s of salles" [value]="s.id">{{ s.nom }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>{{ text('program') }}</label>
-          <select [(ngModel)]="newSlot.filiereId">
-            <option *ngFor="let f of filieres" [value]="f.id">{{ f.nom }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>{{ text('professor_optional') }}</label>
-          <select [(ngModel)]="newSlot.professeurId">
-            <option value="">{{ text('none') }}</option>
-            <option *ngFor="let p of professeurs" [value]="p.id">{{ p.lastName }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>{{ text('group') }}</label>
-          <input type="text" [(ngModel)]="newSlot.groupe" [placeholder]="text('group_placeholder')" />
-        </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn-cancel" (click)="isAddingSlot = false">{{ text('cancel') }}</button>
-        <button class="btn-save" (click)="ajouterCreneauManuel()">{{ text('save') }}</button>
       </div>
     </div>
-  </div>
+  }
 
   <!-- Loading -->
-  <div class="loading" *ngIf="isLoading">
-    <div class="spinner"></div>
-    <p>{{ text('loading') }}</p>
-  </div>
+  @if (isLoading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>{{ text('loading') }}</p>
+    </div>
+  }
 
   <!-- Empty state -->
-  <div class="empty-state" *ngIf="!isLoading && creneaux.length === 0">
-    <span class="empty-icon">PL</span>
-    <h3>{{ text('empty_title') }}</h3>
-    <p>{{ text('empty_desc') }}</p>
-  </div>
+  @if (!isLoading && creneaux.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">PL</span>
+      <h3>{{ text('empty_title') }}</h3>
+      <p>{{ text('empty_desc') }}</p>
+    </div>
+  }
 
   <!-- Planning Grid -->
-  <div class="planning-grid" *ngIf="!isLoading && creneaux.length > 0">
-    <table>
-      <thead>
-        <tr>
-          <th class="hour-col">{{ text('hour') }}</th>
-          <th *ngFor="let jour of jours" class="day-col">{{ getDayLabel(jour) }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let heure of heures">
-          <td class="hour-cell">{{ heure }}</td>
-          <td *ngFor="let jour of jours" class="slot-cell">
-            <div class="creneau-card"
-                 *ngIf="getCreneauPourCase(jour, heure) as creneau"
-                 [ngClass]="'type-' + (creneau.matiere?.type || 'CM').toLowerCase()">
-              <div class="creneau-matiere">{{ creneau.matiere?.nom }}</div>
-              <div class="creneau-info">
-                <span class="creneau-salle">{{ text('room') }}: {{ creneau.salle?.nom }}</span>
-                <span class="creneau-prof" *ngIf="creneau.professeur">
-                  {{ text('teacher_prefix') }} {{ creneau.professeur.firstName }} {{ creneau.professeur.lastName }}
-                </span>
-              </div>
-              <div class="creneau-time">
-                {{ creneau.heureDebut?.substring(0,5) }} - {{ creneau.heureFin?.substring(0,5) }}
-              </div>
-              <span class="creneau-type">{{ creneau.matiere?.type }}</span>
-              <button class="btn-delete" *ngIf="role === 'ADMIN'"
-                      (click)="supprimerCreneau(creneau.id)">X</button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  @if (!isLoading && creneaux.length > 0) {
+    <div class="planning-grid">
+      <table>
+        <thead>
+          <tr>
+            <th class="hour-col">{{ text('hour') }}</th>
+            @for (jour of jours; track jour) {
+              <th class="day-col">{{ getDayLabel(jour) }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (heure of heures; track heure) {
+            <tr>
+              <td class="hour-cell">{{ heure }}</td>
+              @for (jour of jours; track jour) {
+                <td class="slot-cell">
+                  @if (getCreneauPourCase(jour, heure); as creneau) {
+                    <div class="creneau-card"
+                      [ngClass]="'type-' + (creneau.matiere?.type || 'CM').toLowerCase()">
+                      <div class="creneau-matiere">{{ creneau.matiere?.nom }}</div>
+                      <div class="creneau-info">
+                        <span class="creneau-salle">{{ text('room') }}: {{ creneau.salle?.nom }}</span>
+                        @if (creneau.professeur) {
+                          <span class="creneau-prof">
+                            {{ text('teacher_prefix') }} {{ creneau.professeur.firstName }} {{ creneau.professeur.lastName }}
+                          </span>
+                        }
+                      </div>
+                      <div class="creneau-time">
+                        {{ creneau.heureDebut?.substring(0,5) }} - {{ creneau.heureFin?.substring(0,5) }}
+                      </div>
+                      <span class="creneau-type">{{ creneau.matiere?.type }}</span>
+                      @if (role === 'ADMIN') {
+                        <button class="btn-delete"
+                        (click)="supprimerCreneau(creneau.id)">X</button>
+                      }
+                    </div>
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

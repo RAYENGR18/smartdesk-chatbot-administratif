@@ -8,22 +8,25 @@ import { GestionFilieresComponent } from './pages/gestion-filieres/gestion-filie
 import { GestionSallesComponent } from './pages/gestion-salles/gestion-salles.component';
 import { GestionMatieresComponent } from './pages/gestion-matieres/gestion-matieres.component';
 import { KnowledgeBaseComponent } from './pages/knowledge-base/knowledge-base.component';
-
 import { EtudiantComponent } from './pages/etudiant/etudiant.component';
 import { ProfesseurComponent } from './pages/professeur/professeur.component';
+import { guestGuard, roleGuard } from './core/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'etudiant', component: EtudiantComponent },
-  { path: 'professeur', component: ProfesseurComponent },
-  { path: 'chat', component: ChatComponent },
-  { path: 'admin', component: AdminComponent },
-  { path: 'planning', component: PlanningComponent },
-  { path: 'gestion/filieres', component: GestionFilieresComponent },
-  { path: 'gestion/salles', component: GestionSallesComponent },
-  { path: 'gestion/matieres', component: GestionMatieresComponent },
-  { path: 'gestion/knowledge-base', component: KnowledgeBaseComponent },
+  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
+
+  { path: 'etudiant', component: EtudiantComponent, canActivate: [roleGuard('USER')] },
+  { path: 'professeur', component: ProfesseurComponent, canActivate: [roleGuard('PROFESSEUR')] },
+  { path: 'chat', component: ChatComponent, canActivate: [roleGuard()] },
+  { path: 'planning', component: PlanningComponent, canActivate: [roleGuard()] },
+
+  { path: 'admin', component: AdminComponent, canActivate: [roleGuard('ADMIN')] },
+  { path: 'gestion/filieres', component: GestionFilieresComponent, canActivate: [roleGuard('ADMIN')] },
+  { path: 'gestion/salles', component: GestionSallesComponent, canActivate: [roleGuard('ADMIN')] },
+  { path: 'gestion/matieres', component: GestionMatieresComponent, canActivate: [roleGuard('ADMIN')] },
+  { path: 'gestion/knowledge-base', component: KnowledgeBaseComponent, canActivate: [roleGuard('ADMIN')] },
+
   { path: '**', redirectTo: '/login' }
 ];

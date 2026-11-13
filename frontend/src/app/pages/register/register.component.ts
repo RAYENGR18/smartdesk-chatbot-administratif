@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -9,7 +9,7 @@ import { ThemeService } from '../../services/theme.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
@@ -141,8 +141,8 @@ export class RegisterComponent {
       this.errorMessage = this.L('Nom d\'utilisateur trop court (min 3).', 'Username too short (min 3).', 'اسم المستخدم قصير جدا.');
       return;
     }
-    if (!this.password || this.password.length < 6) {
-      this.errorMessage = this.L('Mot de passe trop court (min 6).', 'Password too short (min 6).', 'كلمة المرور قصيرة جدا.');
+    if (!this.password || this.password.length < 8) {
+      this.errorMessage = this.L('Mot de passe trop court (min 8).', 'Password too short (min 8).', 'كلمة المرور قصيرة جدا.');
       return;
     }
     if (this.password !== this.confirmPassword) {

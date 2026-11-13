@@ -43,10 +43,10 @@ export class ChatComponent implements OnInit {
   isAdmin = false;
   currentLang = 'fr';
 
-  // RÃ´le utilisateur â€” clÃ© pour la sidebar adaptative
+  // Rôle utilisateur — clé pour la sidebar adaptative
   userRole = '';
 
-  // Profil Ã©tudiant
+  // Profil étudiant
   studentProfile: any = null;
   showProfilePanel = false;
 
@@ -100,7 +100,7 @@ export class ChatComponent implements OnInit {
   complaintDescription = '';
   leaveReason = '';
 
-  // Suggestions rapides â€” translation keys
+  // Suggestions rapides — translation keys
   quickSuggestionKeys = [
     'suggestion.timetable',
     'suggestion.certificate',
@@ -133,7 +133,7 @@ export class ChatComponent implements OnInit {
 
     this.username = this.authService.getUsername() || 'Utilisateur';
 
-    // RÃ©cupÃ©rer le rÃ´le et l'adapter
+    // Récupérer le rôle et l'adapter
     const role = this.authService.getRole() || 'ETUDIANT';
     this.userRole = role.toUpperCase();
     this.isAdmin = this.userRole === 'ADMIN';
@@ -145,7 +145,7 @@ export class ChatComponent implements OnInit {
       this.documentType = 'certificat_scolarite';
     }
 
-    // Charger le profil Ã©tudiant
+    // Charger le profil étudiant
     this.studentProfile = this.authService.getStoredProfile();
     if (!this.studentProfile) {
       this.authService.getStudentProfile().subscribe({
@@ -160,7 +160,7 @@ export class ChatComponent implements OnInit {
       });
     }
 
-    // PrÃ©-remplir fullName depuis le profil
+    // Pré-remplir fullName depuis le profil
     if (this.studentProfile) {
       this.fullName = `${this.studentProfile.firstName || ''} ${this.studentProfile.lastName || ''}`.trim();
     }
@@ -205,7 +205,7 @@ export class ChatComponent implements OnInit {
   }
 
   // ============================================
-  // LABEL DU RÃ”LE pour la sidebar
+  // LABEL DU RÔLE pour la sidebar
   // ============================================
   getRoleLabel(): string {
     switch (this.userRole) {
@@ -216,7 +216,7 @@ export class ChatComponent implements OnInit {
   }
 
   // ============================================
-  // MESSAGE DE BIENVENUE PERSONNALISÃ‰
+  // MESSAGE DE BIENVENUE PERSONNALISÉ
   // ============================================
   getWelcomeMessage(): string {
     if (this.studentProfile) {
@@ -337,7 +337,7 @@ export class ChatComponent implements OnInit {
   }
 
   // ============================================
-  // RÃ‰PONDRE LOCALEMENT AUX QUESTIONS PROFIL
+  // RÉPONDRE LOCALEMENT AUX QUESTIONS PROFIL
   // ============================================
   handleProfileQuestion(message: string): string | null {
     if (!this.studentProfile) return null;
@@ -438,7 +438,7 @@ export class ChatComponent implements OnInit {
   }
 
   // ============================================
-  // EXTRACTION RÃ‰PONSE BOT
+  // EXTRACTION RÉPONSE BOT
   // ============================================
   private extractBotText(payload: any): string | null {
     if (!payload) return null;
@@ -473,7 +473,7 @@ export class ChatComponent implements OnInit {
     if (isFirst) this.updateChatTitle(message);
     this.userMessage = '';
 
-    // RÃ©ponse locale profil
+    // Réponse locale profil
     const localAnswer = this.handleProfileQuestion(message);
     if (localAnswer) {
       setTimeout(() => {
@@ -484,11 +484,10 @@ export class ChatComponent implements OnInit {
     }
 
     this.isTyping = true;
+    // L'utilisateur et son profil sont déterminés par le backend à partir du token
     const payload: ChatRequest = {
-      message,
-      language: this.currentLang,
-      student_context: this.studentProfile || null,
-      username: this.username
+      message: message.slice(0, 1000),
+      language: this.currentLang
     };
 
     this.chatService.sendMessage(payload).subscribe({
@@ -546,7 +545,7 @@ export class ChatComponent implements OnInit {
   }
 
   // ============================================
-  // GÃ‰NÃ‰RER DOCUMENT
+  // GÉNÉRER DOCUMENT
   // ============================================
   generateDocument() {
     if (!this.fullName.trim()) {
@@ -569,56 +568,56 @@ export class ChatComponent implements OnInit {
       if (!this.schoolName && this.studentProfile.previousSchool) this.schoolName = this.studentProfile.previousSchool;
       if (!this.academicYear) this.academicYear = '2025/2026';
       if (!this.jobTitle && this.studentProfile.fieldOfStudy)
-        this.jobTitle = `${this.studentProfile.fieldOfStudy} â€” ${this.studentProfile.academicLevel}`;
+        this.jobTitle = `${this.studentProfile.fieldOfStudy} — ${this.studentProfile.academicLevel}`;
     }
 
     if (ctx === 'PRO') {
       if (this.companyName)        richInfo += `Entreprise : ${this.companyName}\n`;
       if (this.jobTitle)           richInfo += `Poste : ${this.jobTitle}\n`;
-      if (this.startDate)          richInfo += `Date dÃ©but : ${this.startDate}\n`;
+      if (this.startDate)          richInfo += `Date début : ${this.startDate}\n`;
       if (this.salary)             richInfo += `Salaire : ${this.salary} DT\n`;
-      if (this.requestedLeaveType) richInfo += `Type congÃ© : ${this.requestedLeaveType}\n`;
+      if (this.requestedLeaveType) richInfo += `Type congé : ${this.requestedLeaveType}\n`;
       if (this.leaveStartDate)     richInfo += `Du : ${this.leaveStartDate}\n`;
       if (this.leaveEndDate)       richInfo += `Au : ${this.leaveEndDate}\n`;
       if (this.leaveReason)        richInfo += `Motif : ${this.leaveReason}\n`;
     } else if (ctx === 'STAGE') {
       if (this.internshipCompany)  richInfo += `Entreprise de stage : ${this.internshipCompany}\n`;
-      if (this.internshipDuration) richInfo += `DurÃ©e : ${this.internshipDuration}\n`;
-      if (this.jobTitle)           richInfo += `DÃ©partement : ${this.jobTitle}\n`;
-      if (this.schoolName)         richInfo += `Ã‰tablissement : ${this.schoolName}\n`;
+      if (this.internshipDuration) richInfo += `Durée : ${this.internshipDuration}\n`;
+      if (this.jobTitle)           richInfo += `Département : ${this.jobTitle}\n`;
+      if (this.schoolName)         richInfo += `Établissement : ${this.schoolName}\n`;
     } else if (ctx === 'CIVIL') {
       if (this.originalDocType)    richInfo += `Type de document : ${this.originalDocType}\n`;
       if (this.cin)                richInfo += `CIN : ${this.cin}\n`;
       if (this.address)            richInfo += `Adresse : ${this.address}\n`;
       if (this.birthDate)          richInfo += `Date naissance : ${this.birthDate}\n`;
       if (this.birthPlace)         richInfo += `Lieu naissance : ${this.birthPlace}\n`;
-      if (this.fatherName)         richInfo += `PÃ¨re : ${this.fatherName}\n`;
-      if (this.motherName)         richInfo += `MÃ¨re : ${this.motherName}\n`;
-      if (this.nationality)        richInfo += `NationalitÃ© : ${this.nationality}\n`;
+      if (this.fatherName)         richInfo += `Père : ${this.fatherName}\n`;
+      if (this.motherName)         richInfo += `Mère : ${this.motherName}\n`;
+      if (this.nationality)        richInfo += `Nationalité : ${this.nationality}\n`;
     } else if (ctx === 'COM') {
       if (this.clientName)         richInfo += `Client : ${this.clientName}\n`;
       if (this.amount)             richInfo += `Montant : ${this.amount} DT\n`;
     } else if (ctx === 'SCHOOL') {
-      if (this.schoolName)         richInfo += `Ã‰tablissement : ${this.schoolName}\n`;
-      if (this.academicYear)       richInfo += `AnnÃ©e universitaire : ${this.academicYear}\n`;
-      if (this.jobTitle)           richInfo += `FiliÃ¨re/Niveau : ${this.jobTitle}\n`;
-      if (this.studentProfile?.studentId) richInfo += `NÂ° Ã‰tudiant : ${this.studentProfile.studentId}\n`;
+      if (this.schoolName)         richInfo += `Établissement : ${this.schoolName}\n`;
+      if (this.academicYear)       richInfo += `Année universitaire : ${this.academicYear}\n`;
+      if (this.jobTitle)           richInfo += `Filière/Niveau : ${this.jobTitle}\n`;
+      if (this.studentProfile?.studentId) richInfo += `N° Étudiant : ${this.studentProfile.studentId}\n`;
     } else if (ctx === 'LETTER') {
       if (this.companyName)        richInfo += `Destinataire : ${this.companyName}\n`;
       if (this.jobTitle)           richInfo += `Objet : ${this.jobTitle}\n`;
       if (this.address)            richInfo += `Adresse : ${this.address}\n`;
       if (this.email)              richInfo += `Email : ${this.email}\n`;
-      if (this.phoneNumber)        richInfo += `TÃ©lÃ©phone : ${this.phoneNumber}\n`;
+      if (this.phoneNumber)        richInfo += `Téléphone : ${this.phoneNumber}\n`;
       if (this.complaintDescription) richInfo += `Description du probleme : ${this.complaintDescription}\n`;
     } else if (ctx === 'CV') {
-      if (this.jobTitle)           richInfo += `Poste recherchÃ© : ${this.jobTitle}\n`;
+      if (this.jobTitle)           richInfo += `Poste recherché : ${this.jobTitle}\n`;
       if (this.email)              richInfo += `Email : ${this.email}\n`;
-      if (this.phoneNumber)        richInfo += `TÃ©lÃ©phone : ${this.phoneNumber}\n`;
+      if (this.phoneNumber)        richInfo += `Téléphone : ${this.phoneNumber}\n`;
       if (this.address)            richInfo += `Adresse : ${this.address}\n`;
       if (this.schoolName)         richInfo += `Formation : ${this.schoolName}\n`;
     }
 
-    if (this.additionalInfo.trim()) richInfo += `\nInformations supplÃ©mentaires :\n${this.additionalInfo}`;
+    if (this.additionalInfo.trim()) richInfo += `\nInformations supplémentaires :\n${this.additionalInfo}`;
 
     this.documentService.generateDocument(
       this.documentType,
@@ -726,7 +725,7 @@ export class ChatComponent implements OnInit {
   // HELPERS
   // ============================================
   downloadDocument(id: number) {
-    window.open(`http://localhost:8080/api/documents/download/${id}`, '_blank');
+    this.documentService.downloadDocument(id);
   }
 
   addUserMessage(text: string) {
@@ -781,7 +780,7 @@ export class ChatComponent implements OnInit {
     if (!text) return '';
     let html = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\n/g, '<br>');
-    html = html.replace(/^â€¢ /gm, '&bull; ');
+    html = html.replace(/^• /gm, '&bull; ');
     html = html.replace(/^- /gm, '&ndash; ');
     html = html.replace(
       /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,

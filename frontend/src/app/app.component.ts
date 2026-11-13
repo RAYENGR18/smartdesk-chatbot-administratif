@@ -3,12 +3,12 @@ import { RouterOutlet, Router } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { LanguageService } from './services/language.service';
 import { AuthService } from './services/auth.service';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

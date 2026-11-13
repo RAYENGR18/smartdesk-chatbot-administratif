@@ -8,10 +8,16 @@
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
       </div>
-      <span class="brand-name" *ngIf="isSidebarOpen">FPST SmartDesk <span class="v-badge">v2.0</span></span>
+      @if (isSidebarOpen) {
+        <span class="brand-name">FPST SmartDesk <span class="v-badge">v2.0</span></span>
+      }
       <button class="icon-btn-sm toggle-btn" (click)="isSidebarOpen = !isSidebarOpen">
-        <svg *ngIf="isSidebarOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        <svg *ngIf="!isSidebarOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        @if (isSidebarOpen) {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        }
+        @if (!isSidebarOpen) {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        }
       </button>
     </div>
 
@@ -19,61 +25,79 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
       </svg>
-      <span *ngIf="isSidebarOpen">{{ t('chat.new_assistant') }}</span>
+      @if (isSidebarOpen) {
+        <span>{{ t('chat.new_assistant') }}</span>
+      }
     </button>
 
     <div class="sidebar-scroll">
 
       <!-- Profile Mini Card -->
-      <div class="user-profile-card" *ngIf="isSidebarOpen && studentProfile"
-           (click)="showProfilePanel = !showProfilePanel">
-        <div class="avatar-sm">{{ studentProfile.firstName ? studentProfile.firstName[0] : 'U' }}</div>
-        <div class="user-meta" *ngIf="isSidebarOpen">
-          <span class="u-name">{{ studentProfile.firstName }} {{ studentProfile.lastName }}</span>
-          <span class="u-role">{{ getRoleLabel() }}</span>
+      @if (isSidebarOpen && studentProfile) {
+        <div class="user-profile-card"
+          (click)="showProfilePanel = !showProfilePanel">
+          <div class="avatar-sm">{{ studentProfile.firstName ? studentProfile.firstName[0] : 'U' }}</div>
+          @if (isSidebarOpen) {
+            <div class="user-meta">
+              <span class="u-name">{{ studentProfile.firstName }} {{ studentProfile.lastName }}</span>
+              <span class="u-role">{{ getRoleLabel() }}</span>
+            </div>
+          }
+          <svg class="chevron" [class.open]="showProfilePanel" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
         </div>
-        <svg class="chevron" [class.open]="showProfilePanel" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 9l6 6 6-6"/>
-        </svg>
-      </div>
+      }
 
-      <div class="profile-dropdown" *ngIf="showProfilePanel && isSidebarOpen">
-        <div class="p-item"><span>📧</span> {{ studentProfile?.email }}</div>
-        <div class="p-item"><span>🆔</span> {{ studentProfile?.studentId }}</div>
-        <div class="p-item"><span>🎓</span> {{ studentProfile?.academicLevel }}</div>
-      </div>
+      @if (showProfilePanel && isSidebarOpen) {
+        <div class="profile-dropdown">
+          <div class="p-item"><span>📧</span> {{ studentProfile?.email }}</div>
+          <div class="p-item"><span>🆔</span> {{ studentProfile?.studentId }}</div>
+          <div class="p-item"><span>🎓</span> {{ studentProfile?.academicLevel }}</div>
+        </div>
+      }
 
       <!-- ===== MENU ADMIN ===== -->
-      <ng-container *ngIf="userRole === 'ADMIN'">
-        <div class="history-label" *ngIf="isSidebarOpen">{{ t('chat.admin_section') }}</div>
+      @if (userRole === 'ADMIN') {
+        @if (isSidebarOpen) {
+          <div class="history-label">{{ t('chat.admin_section') }}</div>
+        }
         <div class="nav-item" (click)="goToAdmin()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.dashboard') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.dashboard') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="router.navigate(['/gestion/filieres'])">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
             <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
             <path d="M6 12v5c3 3 9 3 12 0v-5"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.faculty_mgmt') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.faculty_mgmt') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="router.navigate(['/gestion/salles'])">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
             <path d="M3 9h18M9 21V9"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.rooms_mgmt') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.rooms_mgmt') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="router.navigate(['/gestion/matieres'])">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.subjects_mgmt') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.subjects_mgmt') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="goToPlanning()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
@@ -82,19 +106,25 @@
             <line x1="8" y1="2" x2="8" y2="6"/>
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.planning') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.planning') }}</span>
+          }
         </div>
-      </ng-container>
+      }
 
       <!-- ===== MENU PROFESSEUR ===== -->
-      <ng-container *ngIf="userRole === 'PROFESSEUR'">
-        <div class="history-label" *ngIf="isSidebarOpen">{{ t('chat.prof_section') }}</div>
+      @if (userRole === 'PROFESSEUR') {
+        @if (isSidebarOpen) {
+          <div class="history-label">{{ t('chat.prof_section') }}</div>
+        }
         <div class="nav-item" (click)="router.navigate(['/professeur'])">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.dashboard') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.dashboard') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="goToPlanning()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
@@ -103,14 +133,18 @@
             <line x1="8" y1="2" x2="8" y2="6"/>
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.my_planning') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.my_planning') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="router.navigate(['/gestion/matieres'])">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.my_subjects') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.my_subjects') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="showForm = true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
@@ -118,19 +152,25 @@
             <line x1="12" y1="18" x2="12" y2="12"/>
             <line x1="9" y1="15" x2="15" y2="15"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.documents') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.documents') }}</span>
+          }
         </div>
-      </ng-container>
+      }
 
       <!-- ===== MENU ÉTUDIANT ===== -->
-      <ng-container *ngIf="userRole === 'ETUDIANT' || userRole === 'USER' || userRole === 'STUDENT'">
-        <div class="history-label" *ngIf="isSidebarOpen">{{ t('chat.student_section') }}</div>
+      @if (userRole === 'ETUDIANT' || userRole === 'USER' || userRole === 'STUDENT') {
+        @if (isSidebarOpen) {
+          <div class="history-label">{{ t('chat.student_section') }}</div>
+        }
         <div class="nav-item" (click)="router.navigate(['/etudiant'])">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.dashboard') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.dashboard') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="goToPlanning()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
@@ -139,7 +179,9 @@
             <line x1="8" y1="2" x2="8" y2="6"/>
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.timetable') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.timetable') }}</span>
+          }
         </div>
         <div class="nav-item" (click)="showForm = true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
@@ -147,30 +189,40 @@
             <line x1="12" y1="18" x2="12" y2="12"/>
             <line x1="9" y1="15" x2="15" y2="15"/>
           </svg>
-          <span *ngIf="isSidebarOpen">{{ t('chat.my_documents') }}</span>
+          @if (isSidebarOpen) {
+            <span>{{ t('chat.my_documents') }}</span>
+          }
         </div>
-      </ng-container>
+      }
 
       <!-- ===== HISTORIQUE (tous rôles) ===== -->
-      <div class="history-label" *ngIf="isSidebarOpen" style="margin-top: 16px;">{{ t('chat.recent') }}</div>
+      @if (isSidebarOpen) {
+        <div class="history-label" style="margin-top: 16px;">{{ t('chat.recent') }}</div>
+      }
       <div class="chat-history-list">
-        <div *ngFor="let chat of chats"
-             class="history-item"
-             [class.active]="chat.id === activeChatId"
-             (click)="selectChat(chat.id)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-          <div class="h-content" *ngIf="isSidebarOpen">
-            <span class="h-title">{{ chat.title }}</span>
-            <span class="h-time">{{ chat.createdAt | date:'shortTime' }}</span>
-          </div>
-          <button class="del-btn" *ngIf="isSidebarOpen" (click)="deleteChat(chat.id, $event)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
+        @for (chat of chats; track chat) {
+          <div
+            class="history-item"
+            [class.active]="chat.id === activeChatId"
+            (click)="selectChat(chat.id)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-icon">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
-          </button>
-        </div>
+            @if (isSidebarOpen) {
+              <div class="h-content">
+                <span class="h-title">{{ chat.title }}</span>
+                <span class="h-time">{{ chat.createdAt | date:'shortTime' }}</span>
+              </div>
+            }
+            @if (isSidebarOpen) {
+              <button class="del-btn" (click)="deleteChat(chat.id, $event)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            }
+          </div>
+        }
       </div>
 
     </div><!-- end sidebar-scroll -->
@@ -208,13 +260,15 @@
           <span>{{ t('chat.planning') }}</span>
         </button>
 
-        <button class="action-btn admin" *ngIf="userRole === 'ADMIN'" (click)="goToAdmin()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          <span>Admin</span>
-        </button>
+        @if (userRole === 'ADMIN') {
+          <button class="action-btn admin" (click)="goToAdmin()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <span>Admin</span>
+          </button>
+        }
 
         <button class="action-btn-danger" (click)="logout()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -227,125 +281,150 @@
     </header>
 
     <!-- Notification banners -->
-    <div class="chat-notif-stack" *ngIf="visibleChatNotifs.length > 0">
-      <div *ngFor="let n of visibleChatNotifs"
-           class="chat-notif-banner"
-           [class.chat-notif-urgent]="n.priority === 'URGENT'"
-           [class.chat-notif-warning]="n.priority === 'WARNING'"
-           [class.chat-notif-info]="n.priority === 'INFO'">
-        <span class="chat-notif-icon">
-          <svg *ngIf="n.priority==='URGENT'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          <svg *ngIf="n.priority==='WARNING'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <svg *ngIf="n.priority==='INFO'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-          </svg>
-        </span>
-        <div class="chat-notif-body">
-          <strong>{{ n.title }}</strong>
-          <span>{{ n.content }}</span>
-        </div>
-        <button class="chat-notif-close" (click)="dismissChatNotif(n.id!)" title="Fermer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
+    @if (visibleChatNotifs.length > 0) {
+      <div class="chat-notif-stack">
+        @for (n of visibleChatNotifs; track n) {
+          <div
+            class="chat-notif-banner"
+            [class.chat-notif-urgent]="n.priority === 'URGENT'"
+            [class.chat-notif-warning]="n.priority === 'WARNING'"
+            [class.chat-notif-info]="n.priority === 'INFO'">
+            <span class="chat-notif-icon">
+              @if (n.priority==='URGENT') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              }
+              @if (n.priority==='WARNING') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              }
+              @if (n.priority==='INFO') {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+              }
+            </span>
+            <div class="chat-notif-body">
+              <strong>{{ n.title }}</strong>
+              <span>{{ n.content }}</span>
+            </div>
+            <button class="chat-notif-close" (click)="dismissChatNotif(n.id!)" title="Fermer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        }
       </div>
-    </div>
+    }
 
     <!-- Messages -->
     <div class="messages-viewport" #messagesContainer>
 
       <!-- Welcome screen -->
-      <div class="welcome-center animate-fade" *ngIf="messages.length === 0">
-        <div class="w-icon">🤖</div>
-        <h2>{{ t('chat.welcome_title') }}</h2>
-        <p>{{ t('chat.welcome_desc') }}</p>
-        <div class="suggestions-grid">
-          <button *ngFor="let key of quickSuggestionKeys" class="s-chip" (click)="sendQuickSuggestion(key)">
-            {{ t(key) }}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
+      @if (messages.length === 0) {
+        <div class="welcome-center animate-fade">
+          <div class="w-icon">🤖</div>
+          <h2>{{ t('chat.welcome_title') }}</h2>
+          <p>{{ t('chat.welcome_desc') }}</p>
+          <div class="suggestions-grid">
+            @for (key of quickSuggestionKeys; track key) {
+              <button class="s-chip" (click)="sendQuickSuggestion(key)">
+                {{ t(key) }}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            }
+          </div>
         </div>
-      </div>
+      }
 
       <!-- Messages list -->
-      <div *ngFor="let message of messages"
-           class="msg-row"
-           [class.is-user]="message.isUser">
-
-        <!-- Avatar bot -->
-        <div class="msg-avatar" *ngIf="!message.isUser">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 8V4H8"/>
-            <rect x="4" y="8" width="16" height="12" rx="2"/>
-            <path d="M15 13v2"/><path d="M9 13v2"/>
-          </svg>
-        </div>
-
-        <div class="msg-bubble animate-fade" [class.user]="message.isUser">
-
-          <div class="msg-header" *ngIf="!message.isUser">
-            <span class="bot-label">{{ t('chat.fasto_ai') }}</span>
-          </div>
-
-          <div class="msg-body" [innerHTML]="formatMessage(message.text)"></div>
-
-          <div class="msg-sources" *ngIf="!message.isUser && message.sources?.length">
-            <div class="s-label">{{ t('chat.sources') }}</div>
-            <div class="s-list">
-              <span *ngFor="let src of message.sources" class="s-tag">{{ src }}</span>
+      @for (message of messages; track message) {
+        <div
+          class="msg-row"
+          [class.is-user]="message.isUser">
+          <!-- Avatar bot -->
+          @if (!message.isUser) {
+            <div class="msg-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8V4H8"/>
+                <rect x="4" y="8" width="16" height="12" rx="2"/>
+                <path d="M15 13v2"/><path d="M9 13v2"/>
+              </svg>
             </div>
-          </div>
-
-          <div class="msg-footer">
-            <span class="msg-time">{{ message.time }}</span>
-            <div class="msg-actions" *ngIf="!message.isUser">
-              <button class="m-btn" [title]="t('chat.copy')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2"/>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                </svg>
-              </button>
-              <button class="m-btn" *ngIf="message.intention === 'document_genere'"
+          }
+          <div class="msg-bubble animate-fade" [class.user]="message.isUser">
+            @if (!message.isUser) {
+              <div class="msg-header">
+                <span class="bot-label">{{ t('chat.fasto_ai') }}</span>
+              </div>
+            }
+            <div class="msg-body" [innerHTML]="formatMessage(message.text)"></div>
+            @if (!message.isUser && message.sources?.length) {
+              <div class="msg-sources">
+                <div class="s-label">{{ t('chat.sources') }}</div>
+                <div class="s-list">
+                  @for (src of message.sources; track src) {
+                    <span class="s-tag">{{ src }}</span>
+                  }
+                </div>
+              </div>
+            }
+            <div class="msg-footer">
+              <span class="msg-time">{{ message.time }}</span>
+              @if (!message.isUser) {
+                <div class="msg-actions">
+                  <button class="m-btn" [title]="t('chat.copy')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2"/>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                  </button>
+                  @if (message.intention === 'document_genere') {
+                    <button class="m-btn"
                       (click)="downloadDocument(message.docId!)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-              </button>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                    </button>
+                  }
+                </div>
+              }
             </div>
           </div>
+          <!-- Avatar user -->
+          @if (message.isUser) {
+            <div class="msg-avatar user-avatar">
+              {{ studentProfile?.firstName ? studentProfile.firstName[0] : 'U' }}
+            </div>
+          }
         </div>
-
-        <!-- Avatar user -->
-        <div class="msg-avatar user-avatar" *ngIf="message.isUser">
-          {{ studentProfile?.firstName ? studentProfile.firstName[0] : 'U' }}
-        </div>
-      </div>
+      }
 
       <!-- Typing indicator -->
-      <div class="msg-row" *ngIf="isTyping">
-        <div class="msg-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 8V4H8"/>
-            <rect x="4" y="8" width="16" height="12" rx="2"/>
-            <path d="M15 13v2"/><path d="M9 13v2"/>
-          </svg>
+      @if (isTyping) {
+        <div class="msg-row">
+          <div class="msg-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 8V4H8"/>
+              <rect x="4" y="8" width="16" height="12" rx="2"/>
+              <path d="M15 13v2"/><path d="M9 13v2"/>
+            </svg>
+          </div>
+          <div class="typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
         </div>
-        <div class="typing-indicator">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
+      }
 
     </div><!-- end messages-viewport -->
 
@@ -364,14 +443,15 @@
         <input
           type="text"
           [(ngModel)]="userMessage"
+          maxlength="1000"
           (keypress)="onKeyPress($event)"
           [placeholder]="t('chat.placeholder')"
-        >
+          >
 
         <button class="send-trigger" (click)="sendMessage()"
-                [disabled]="!userMessage || !userMessage.trim()">
+          [disabled]="!userMessage || !userMessage.trim()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-               stroke-linecap="round" stroke-linejoin="round">
+            stroke-linecap="round" stroke-linejoin="round">
             <line x1="22" y1="2" x2="11" y2="13"/>
             <polyline points="22 2 15 22 11 13 2 9 22 2"/>
           </svg>
@@ -381,282 +461,292 @@
   </main>
 
   <!-- ===== SIDE PANEL DOCUMENT ===== -->
-  <div class="side-panel-overlay" *ngIf="showForm" (click)="showForm = false"></div>
-  <aside class="side-panel animate-fade-in-right" *ngIf="showForm">
-
-    <div class="panel-header">
-      <h3>{{ t('form.title') }}</h3>
-      <button class="close-btn" (click)="showForm = false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
-
-    <div class="panel-body">
-
-      <!-- ── TYPE DE DOCUMENT (filtré par rôle) ── -->
-      <div class="form-group">
-        <label>{{ t('form.type') }}</label>
-        <select [(ngModel)]="documentType">
-
-          <!-- ÉTUDIANT : documents académiques et lettres -->
-          <ng-container *ngIf="userRole === 'ETUDIANT' || userRole === 'USER' || userRole === 'STUDENT'">
-            <optgroup label="Documents académiques">
-              <option value="certificat_scolarite">Attestation de scolarité</option>
-              <option value="attestation_presence">Attestation de présence</option>
-              <option value="attestation_stage">Attestation de stage</option>
-              <option value="demande_releve_notes">Relevé de notes</option>
-              <option value="declaration_honneur">Déclaration sur l'honneur</option>
-            </optgroup>
-            <optgroup label="Lettres et courriers">
-              <option value="lettre_motivation">Lettre de motivation</option>
-              <option value="lettre_demande">Lettre de demande</option>
-              <option value="lettre_reclamation">Lettre de réclamation</option>
-            </optgroup>
-          </ng-container>
-
-          <!-- PROFESSEUR : documents professionnels + lettres -->
-          <ng-container *ngIf="userRole === 'PROFESSEUR'">
-            <optgroup label="Documents professionnels">
-              <option value="attestation_travail">Attestation de travail</option>
-              <option value="attestation_salaire">Attestation de salaire</option>
-              <option value="demande_conge">Demande de congé</option>
-            </optgroup>
-            <optgroup label="Lettres">
-              <option value="lettre_demande">Lettre de demande</option>
-              <option value="lettre_reclamation">Lettre de réclamation</option>
-            </optgroup>
-            <optgroup label="Documents civils">
-              <option value="attestation_residence">Attestation de résidence</option>
-              <option value="declaration_honneur">Déclaration sur l'honneur</option>
-              <option value="copie_conforme">Copie conforme</option>
-            </optgroup>
-          </ng-container>
-
-          <!-- ADMIN : tous les documents institutionnels -->
-          <ng-container *ngIf="userRole === 'ADMIN'">
-            <optgroup label="Documents institutionnels">
-              <option value="attestation_travail">Attestation de travail</option>
-              <option value="attestation_salaire">Attestation de salaire</option>
-              <option value="note_service">Note de service</option>
-              <option value="contrat_travail">Contrat de travail</option>
-            </optgroup>
-            <optgroup label="Documents académiques">
-              <option value="certificat_scolarite">Attestation de scolarité</option>
-              <option value="attestation_presence">Attestation de présence</option>
-              <option value="attestation_stage">Attestation de stage</option>
-              <option value="demande_releve_notes">Relevé de notes</option>
-            </optgroup>
-            <optgroup label="CV & Lettres">
-              <option value="cv">Curriculum Vitae (CV)</option>
-              <option value="lettre_demande">Lettre de demande</option>
-              <option value="copie_conforme">Copie conforme</option>
-              <option value="declaration_honneur">Déclaration sur l'honneur</option>
-            </optgroup>
-          </ng-container>
-
-        </select>
+  @if (showForm) {
+    <div class="side-panel-overlay" (click)="showForm = false"></div>
+  }
+  @if (showForm) {
+    <aside class="side-panel animate-fade-in-right">
+      <div class="panel-header">
+        <h3>{{ t('form.title') }}</h3>
+        <button class="close-btn" (click)="showForm = false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
       </div>
-
-      <!-- ── NOM COMPLET (toujours affiché) ── -->
-      <div class="form-group">
-        <label>{{ t('form.name') }}</label>
-        <input type="text" [(ngModel)]="fullName" [placeholder]="t('form.name_placeholder')">
-      </div>
-
-      <!-- ── CHAMPS CONTEXTUELS : PROFESSIONNEL (AT / AS / NOTE / CONTRAT) ── -->
-      <ng-container *ngIf="getFormContext() === 'PRO'">
+      <div class="panel-body">
+        <!-- ── TYPE DE DOCUMENT (filtré par rôle) ── -->
         <div class="form-group">
-          <label>Département / Service</label>
-          <input type="text" [(ngModel)]="companyName" placeholder="ex: Département Informatique">
-        </div>
-        <div class="form-group">
-          <label>Poste / Fonction</label>
-          <input type="text" [(ngModel)]="jobTitle" placeholder="ex: Professeur de Génie Logiciel">
-        </div>
-        <div class="form-group">
-          <label>Date de prise de fonction</label>
-          <input type="date" [(ngModel)]="startDate">
-        </div>
-        <div class="form-group" *ngIf="documentType === 'attestation_salaire'">
-          <label>Salaire mensuel brut (DT)</label>
-          <input type="text" [(ngModel)]="salary" placeholder="ex: 2500">
-        </div>
-        <div class="form-group" *ngIf="documentType === 'demande_conge'">
-          <label>Motif de la demande</label>
-          <input type="text" [(ngModel)]="leaveReason" placeholder="ex: Raisons personnelles / Congé annuel">
-        </div>
-        <div class="form-group" *ngIf="documentType === 'demande_conge'">
-          <label>Type de congé</label>
-          <select [(ngModel)]="requestedLeaveType">
-            <option value="Congé annuel">Congé annuel</option>
-            <option value="Congé maladie">Congé maladie</option>
-            <option value="Congé exceptionnel">Congé exceptionnel</option>
-            <option value="Congé maternité/paternité">Congé maternité/paternité</option>
+          <label>{{ t('form.type') }}</label>
+          <select [(ngModel)]="documentType">
+            <!-- ÉTUDIANT : documents académiques et lettres -->
+            @if (userRole === 'ETUDIANT' || userRole === 'USER' || userRole === 'STUDENT') {
+              <optgroup label="Documents académiques">
+                <option value="certificat_scolarite">Attestation de scolarité</option>
+                <option value="attestation_presence">Attestation de présence</option>
+                <option value="attestation_stage">Attestation de stage</option>
+                <option value="demande_releve_notes">Relevé de notes</option>
+                <option value="declaration_honneur">Déclaration sur l'honneur</option>
+              </optgroup>
+              <optgroup label="Lettres et courriers">
+                <option value="lettre_motivation">Lettre de motivation</option>
+                <option value="lettre_demande">Lettre de demande</option>
+                <option value="lettre_reclamation">Lettre de réclamation</option>
+              </optgroup>
+            }
+            <!-- PROFESSEUR : documents professionnels + lettres -->
+            @if (userRole === 'PROFESSEUR') {
+              <optgroup label="Documents professionnels">
+                <option value="attestation_travail">Attestation de travail</option>
+                <option value="attestation_salaire">Attestation de salaire</option>
+                <option value="demande_conge">Demande de congé</option>
+              </optgroup>
+              <optgroup label="Lettres">
+                <option value="lettre_demande">Lettre de demande</option>
+                <option value="lettre_reclamation">Lettre de réclamation</option>
+              </optgroup>
+              <optgroup label="Documents civils">
+                <option value="attestation_residence">Attestation de résidence</option>
+                <option value="declaration_honneur">Déclaration sur l'honneur</option>
+                <option value="copie_conforme">Copie conforme</option>
+              </optgroup>
+            }
+            <!-- ADMIN : tous les documents institutionnels -->
+            @if (userRole === 'ADMIN') {
+              <optgroup label="Documents institutionnels">
+                <option value="attestation_travail">Attestation de travail</option>
+                <option value="attestation_salaire">Attestation de salaire</option>
+                <option value="note_service">Note de service</option>
+                <option value="contrat_travail">Contrat de travail</option>
+              </optgroup>
+              <optgroup label="Documents académiques">
+                <option value="certificat_scolarite">Attestation de scolarité</option>
+                <option value="attestation_presence">Attestation de présence</option>
+                <option value="attestation_stage">Attestation de stage</option>
+                <option value="demande_releve_notes">Relevé de notes</option>
+              </optgroup>
+              <optgroup label="CV & Lettres">
+                <option value="cv">Curriculum Vitae (CV)</option>
+                <option value="lettre_demande">Lettre de demande</option>
+                <option value="copie_conforme">Copie conforme</option>
+                <option value="declaration_honneur">Déclaration sur l'honneur</option>
+              </optgroup>
+            }
           </select>
         </div>
-        <div class="form-group" *ngIf="documentType === 'demande_conge'">
-          <label>Du</label>
-          <input type="date" [(ngModel)]="leaveStartDate">
+        <!-- ── NOM COMPLET (toujours affiché) ── -->
+        <div class="form-group">
+          <label>{{ t('form.name') }}</label>
+          <input type="text" [(ngModel)]="fullName" [placeholder]="t('form.name_placeholder')">
         </div>
-        <div class="form-group" *ngIf="documentType === 'demande_conge'">
-          <label>Au</label>
-          <input type="date" [(ngModel)]="leaveEndDate">
-        </div>
-      </ng-container>
+        <!-- ── CHAMPS CONTEXTUELS : PROFESSIONNEL (AT / AS / NOTE / CONTRAT) ── -->
+        @if (getFormContext() === 'PRO') {
+          <div class="form-group">
+            <label>Département / Service</label>
+            <input type="text" [(ngModel)]="companyName" placeholder="ex: Département Informatique">
+          </div>
+          <div class="form-group">
+            <label>Poste / Fonction</label>
+            <input type="text" [(ngModel)]="jobTitle" placeholder="ex: Professeur de Génie Logiciel">
+          </div>
+          <div class="form-group">
+            <label>Date de prise de fonction</label>
+            <input type="date" [(ngModel)]="startDate">
+          </div>
+          @if (documentType === 'attestation_salaire') {
+            <div class="form-group">
+              <label>Salaire mensuel brut (DT)</label>
+              <input type="text" [(ngModel)]="salary" placeholder="ex: 2500">
+            </div>
+          }
+          @if (documentType === 'demande_conge') {
+            <div class="form-group">
+              <label>Motif de la demande</label>
+              <input type="text" [(ngModel)]="leaveReason" placeholder="ex: Raisons personnelles / Congé annuel">
+            </div>
+          }
+          @if (documentType === 'demande_conge') {
+            <div class="form-group">
+              <label>Type de congé</label>
+              <select [(ngModel)]="requestedLeaveType">
+                <option value="Congé annuel">Congé annuel</option>
+                <option value="Congé maladie">Congé maladie</option>
+                <option value="Congé exceptionnel">Congé exceptionnel</option>
+                <option value="Congé maternité/paternité">Congé maternité/paternité</option>
+              </select>
+            </div>
+          }
+          @if (documentType === 'demande_conge') {
+            <div class="form-group">
+              <label>Du</label>
+              <input type="date" [(ngModel)]="leaveStartDate">
+            </div>
+          }
+          @if (documentType === 'demande_conge') {
+            <div class="form-group">
+              <label>Au</label>
+              <input type="date" [(ngModel)]="leaveEndDate">
+            </div>
+          }
+        }
+        <!-- ── CHAMPS CONTEXTUELS : SCOLAIRE ── -->
+        @if (getFormContext() === 'SCHOOL') {
+          <div class="form-group">
+            <label>Année universitaire</label>
+            <input type="text" [(ngModel)]="academicYear" placeholder="ex: 2025/2026">
+          </div>
+          @if (documentType === 'demande_conge_academique') {
+            <div class="form-group">
+              <label>Type de congé</label>
+              <select [(ngModel)]="requestedLeaveType">
+                <option value="Congé médical">Congé médical</option>
+                <option value="Congé familial">Congé familial</option>
+                <option value="Interruption temporaire d'études">Interruption temporaire d'études</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+          }
+          @if (documentType === 'demande_conge_academique') {
+            <div class="form-group">
+              <label>Du</label>
+              <input type="date" [(ngModel)]="leaveStartDate">
+            </div>
+          }
+          @if (documentType === 'demande_conge_academique') {
+            <div class="form-group">
+              <label>Au</label>
+              <input type="date" [(ngModel)]="leaveEndDate">
+            </div>
+          }
+        }
+        <!-- ── CHAMPS CONTEXTUELS : STAGE ── -->
+        @if (getFormContext() === 'STAGE') {
+          <div class="form-group">
+            <label>Entreprise d'accueil</label>
+            <input type="text" [(ngModel)]="internshipCompany" placeholder="ex: Entreprise XYZ">
+          </div>
+          <div class="form-group">
+            <label>Département / Service</label>
+            <input type="text" [(ngModel)]="jobTitle" placeholder="ex: Développement Web">
+          </div>
+          <div class="form-group">
+            <label>Durée du stage</label>
+            <input type="text" [(ngModel)]="internshipDuration" placeholder="ex: 2 mois (01/06 – 31/07/2025)">
+          </div>
+        }
+        <!-- ── CHAMPS CONTEXTUELS : CIVIL ── -->
+        @if (getFormContext() === 'CIVIL') {
+          @if (documentType === 'copie_conforme') {
+            <div class="form-group">
+              <label>Type de document original</label>
+              <input type="text" [(ngModel)]="originalDocType" placeholder="ex: Diplôme / Carte d'identité / Relevé de notes">
+            </div>
+          }
+          <div class="form-group">
+            <label>Adresse complète</label>
+            <textarea [(ngModel)]="address" rows="2" placeholder="Numéro, Rue, Ville, Code Postal"></textarea>
+          </div>
+          @if (!studentProfile?.cin) {
+            <div class="form-group">
+              <label>CIN</label>
+              <input type="text" [(ngModel)]="cin" placeholder="ex: 12345678">
+            </div>
+          }
+        }
+        <!-- ── CHAMPS CONTEXTUELS : LETTRE ── -->
+        @if (getFormContext() === 'LETTER') {
+          <div class="form-group">
+            <label>Destinataire</label>
+            <input type="text" [(ngModel)]="companyName"
+              placeholder="ex: M. le Directeur des Ressources Humaines">
+          </div>
+          <div class="form-group">
+            <label>Objet de la lettre</label>
+            <input type="text" [(ngModel)]="jobTitle"
+              placeholder="ex: Candidature pour un stage en développement">
+          </div>
+          @if (documentType === 'lettre_reclamation') {
+            <div class="form-group">
+              <label>Description du problème</label>
+              <textarea [(ngModel)]="complaintDescription" rows="3"
+              placeholder="Décrivez votre problème avec précision..."></textarea>
+            </div>
+          }
+          <div class="form-group">
+            <label>Email de contact</label>
+            <input type="email" [(ngModel)]="email" placeholder="votre@email.com">
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="text" [(ngModel)]="phoneNumber" placeholder="ex: +216 XX XXX XXX">
+          </div>
+        }
+        <!-- ── CHAMPS CONTEXTUELS : CV ── -->
+        @if (getFormContext() === 'CV') {
+          <div class="form-group">
+            <label>Poste visé</label>
+            <input type="text" [(ngModel)]="jobTitle"
+              placeholder="ex: Développeur Full-Stack / Enseignant en Informatique">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" [(ngModel)]="email" placeholder="votre@email.com">
+            </div>
+            <div class="form-group">
+              <label>Téléphone</label>
+              <input type="text" [(ngModel)]="phoneNumber" placeholder="+216 XX XXX XXX">
+            </div>
+            <div class="form-group">
+              <label>Adresse</label>
+              <input type="text" [(ngModel)]="address" placeholder="Ville, Pays">
+            </div>
+            <div class="form-group">
+              <label>Formation complémentaire</label>
+              <input type="text" [(ngModel)]="schoolName"
+                placeholder="ex: Baccalauréat Scientifique – Lycée XYZ">
+            </div>
+          }
+          <!-- ── NOTE DE SERVICE ── -->
+          @if (documentType === 'note_service') {
+            <div class="form-group">
+              <label>Destinataires</label>
+              <input type="text" [(ngModel)]="companyName"
+                placeholder="ex: Tous les professeurs / Tous les étudiants">
+              </div>
+              <div class="form-group">
+                <label>Objet de la note</label>
+                <input type="text" [(ngModel)]="jobTitle"
+                  placeholder="ex: Rappel des dates des examens S1">
+              </div>
+            }
+            <!-- ── INFORMATIONS SUPPLÉMENTAIRES (toujours visible) ── -->
+            <div class="form-group">
+              <label>{{ t('form.additional') }}</label>
+              <textarea [(ngModel)]="additionalInfo" rows="3"
+              [placeholder]="t('form.additional_placeholder')"></textarea>
+            </div>
+            <!-- ── FORMAT ── -->
+            <div class="form-group">
+              <label>{{ t('form.format') }}</label>
+              <div class="format-tabs">
+                <button [class.active]="documentFormat === 'PDF'"
+                (click)="documentFormat = 'PDF'">PDF</button>
+                <button [class.active]="documentFormat === 'WORD'"
+                (click)="documentFormat = 'WORD'">Word</button>
+              </div>
+            </div>
+          </div><!-- end panel-body -->
+          <div class="panel-footer">
+            <button class="btn-primary-full" (click)="generateDocument()" [disabled]="isGenerating">
+              @if (!isGenerating) {
+                <span>{{ t('form.generate') }}</span>
+              }
+              @if (isGenerating) {
+                <span class="loader-text">{{ t('form.generating') }}</span>
+              }
+            </button>
+          </div>
+        </aside>
+      }
 
-      <!-- ── CHAMPS CONTEXTUELS : SCOLAIRE ── -->
-      <ng-container *ngIf="getFormContext() === 'SCHOOL'">
-        <div class="form-group">
-          <label>Année universitaire</label>
-          <input type="text" [(ngModel)]="academicYear" placeholder="ex: 2025/2026">
-        </div>
-        <div class="form-group" *ngIf="documentType === 'demande_conge_academique'">
-          <label>Type de congé</label>
-          <select [(ngModel)]="requestedLeaveType">
-            <option value="Congé médical">Congé médical</option>
-            <option value="Congé familial">Congé familial</option>
-            <option value="Interruption temporaire d'études">Interruption temporaire d'études</option>
-            <option value="Autre">Autre</option>
-          </select>
-        </div>
-        <div class="form-group" *ngIf="documentType === 'demande_conge_academique'">
-          <label>Du</label>
-          <input type="date" [(ngModel)]="leaveStartDate">
-        </div>
-        <div class="form-group" *ngIf="documentType === 'demande_conge_academique'">
-          <label>Au</label>
-          <input type="date" [(ngModel)]="leaveEndDate">
-        </div>
-      </ng-container>
-
-      <!-- ── CHAMPS CONTEXTUELS : STAGE ── -->
-      <ng-container *ngIf="getFormContext() === 'STAGE'">
-        <div class="form-group">
-          <label>Entreprise d'accueil</label>
-          <input type="text" [(ngModel)]="internshipCompany" placeholder="ex: Entreprise XYZ">
-        </div>
-        <div class="form-group">
-          <label>Département / Service</label>
-          <input type="text" [(ngModel)]="jobTitle" placeholder="ex: Développement Web">
-        </div>
-        <div class="form-group">
-          <label>Durée du stage</label>
-          <input type="text" [(ngModel)]="internshipDuration" placeholder="ex: 2 mois (01/06 – 31/07/2025)">
-        </div>
-      </ng-container>
-
-      <!-- ── CHAMPS CONTEXTUELS : CIVIL ── -->
-      <ng-container *ngIf="getFormContext() === 'CIVIL'">
-        <div class="form-group" *ngIf="documentType === 'copie_conforme'">
-          <label>Type de document original</label>
-          <input type="text" [(ngModel)]="originalDocType" placeholder="ex: Diplôme / Carte d'identité / Relevé de notes">
-        </div>
-        <div class="form-group">
-          <label>Adresse complète</label>
-          <textarea [(ngModel)]="address" rows="2" placeholder="Numéro, Rue, Ville, Code Postal"></textarea>
-        </div>
-        <div class="form-group" *ngIf="!studentProfile?.cin">
-          <label>CIN</label>
-          <input type="text" [(ngModel)]="cin" placeholder="ex: 12345678">
-        </div>
-      </ng-container>
-
-      <!-- ── CHAMPS CONTEXTUELS : LETTRE ── -->
-      <ng-container *ngIf="getFormContext() === 'LETTER'">
-        <div class="form-group">
-          <label>Destinataire</label>
-          <input type="text" [(ngModel)]="companyName"
-                 placeholder="ex: M. le Directeur des Ressources Humaines">
-        </div>
-        <div class="form-group">
-          <label>Objet de la lettre</label>
-          <input type="text" [(ngModel)]="jobTitle"
-                 placeholder="ex: Candidature pour un stage en développement">
-        </div>
-        <div class="form-group" *ngIf="documentType === 'lettre_reclamation'">
-          <label>Description du problème</label>
-          <textarea [(ngModel)]="complaintDescription" rows="3"
-                    placeholder="Décrivez votre problème avec précision..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>Email de contact</label>
-          <input type="email" [(ngModel)]="email" placeholder="votre@email.com">
-        </div>
-        <div class="form-group">
-          <label>Téléphone</label>
-          <input type="text" [(ngModel)]="phoneNumber" placeholder="ex: +216 XX XXX XXX">
-        </div>
-      </ng-container>
-
-      <!-- ── CHAMPS CONTEXTUELS : CV ── -->
-      <ng-container *ngIf="getFormContext() === 'CV'">
-        <div class="form-group">
-          <label>Poste visé</label>
-          <input type="text" [(ngModel)]="jobTitle"
-                 placeholder="ex: Développeur Full-Stack / Enseignant en Informatique">
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" [(ngModel)]="email" placeholder="votre@email.com">
-        </div>
-        <div class="form-group">
-          <label>Téléphone</label>
-          <input type="text" [(ngModel)]="phoneNumber" placeholder="+216 XX XXX XXX">
-        </div>
-        <div class="form-group">
-          <label>Adresse</label>
-          <input type="text" [(ngModel)]="address" placeholder="Ville, Pays">
-        </div>
-        <div class="form-group">
-          <label>Formation complémentaire</label>
-          <input type="text" [(ngModel)]="schoolName"
-                 placeholder="ex: Baccalauréat Scientifique – Lycée XYZ">
-        </div>
-      </ng-container>
-
-      <!-- ── NOTE DE SERVICE ── -->
-      <ng-container *ngIf="documentType === 'note_service'">
-        <div class="form-group">
-          <label>Destinataires</label>
-          <input type="text" [(ngModel)]="companyName"
-                 placeholder="ex: Tous les professeurs / Tous les étudiants">
-        </div>
-        <div class="form-group">
-          <label>Objet de la note</label>
-          <input type="text" [(ngModel)]="jobTitle"
-                 placeholder="ex: Rappel des dates des examens S1">
-        </div>
-      </ng-container>
-
-      <!-- ── INFORMATIONS SUPPLÉMENTAIRES (toujours visible) ── -->
-      <div class="form-group">
-        <label>{{ t('form.additional') }}</label>
-        <textarea [(ngModel)]="additionalInfo" rows="3"
-                  [placeholder]="t('form.additional_placeholder')"></textarea>
-      </div>
-
-      <!-- ── FORMAT ── -->
-      <div class="form-group">
-        <label>{{ t('form.format') }}</label>
-        <div class="format-tabs">
-          <button [class.active]="documentFormat === 'PDF'"
-                  (click)="documentFormat = 'PDF'">PDF</button>
-          <button [class.active]="documentFormat === 'WORD'"
-                  (click)="documentFormat = 'WORD'">Word</button>
-        </div>
-      </div>
-
-    </div><!-- end panel-body -->
-
-    <div class="panel-footer">
-      <button class="btn-primary-full" (click)="generateDocument()" [disabled]="isGenerating">
-        <span *ngIf="!isGenerating">{{ t('form.generate') }}</span>
-        <span *ngIf="isGenerating" class="loader-text">{{ t('form.generating') }}</span>
-      </button>
     </div>
-
-  </aside>
-
-</div>

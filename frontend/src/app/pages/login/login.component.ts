@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -9,7 +9,7 @@ import { ThemeService } from '../../services/theme.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -62,22 +62,14 @@ export class LoginComponent {
     return translations[this.currentLang]?.[key] || translations['fr'][key] || key;
   }
 
-  private logStoredSession(): void {
-    console.log('[Login] localStorage.role =', localStorage.getItem('role'));
-    console.log('[Login] localStorage.username =', localStorage.getItem('username'));
-  }
-
   private navigateAfterLogin(targetUrl: string): void {
     this.isLoading = false;
-    this.router.navigateByUrl(targetUrl, { replaceUrl: true }).then((navigated) => {
-      console.log('[Login] Navigation success =', navigated, ', target =', targetUrl);
-      console.log('[Login] Route finale après navigation =', this.router.url);
-    });
+    this.router.navigateByUrl(targetUrl, { replaceUrl: true });
   }
 
   onLogin() {
     const username = this.username?.trim();
-    const password = this.password?.trim();
+    const password = this.password; // le mot de passe n'est jamais modifié (espaces compris)
 
     if (!username || !password) {
       this.errorMessage = this.t('login.empty_fields') || 'Veuillez remplir tous les champs';
@@ -91,77 +83,39 @@ export class LoginComponent {
 
     this.authService.login(username, password).subscribe({
       next: (response: any) => {
-        console.log('[Login] Réponse backend:', response);
         const role = this.authService.saveSession(response);
-        this.logStoredSession();
 
-        // Important: utiliser le rôle normalisé par AuthService
-        // (gère ADMIN, ROLE_ADMIN, STUDENT, etc.)
-        console.log('[Login] Rôle normalisé (via AuthService) =', role);
-
-        // Pour ADMIN et PROFESSEUR : pas de profil étudiant à charger → navigation directe
         if (role === 'ADMIN') {
-          console.log('[Login] Rôle ADMIN détecté -> navigation vers /admin');
           this.navigateAfterLogin('/admin');
           return;
+        }
+
+        if (role !== 'USER' && role !== 'PROFESSEUR') {
+          this.authService.logout();
           this.isLoading = false;
-          console.log('[Login] Rôle ADMIN → navigation vers /admin');
-          this.router.navigate(['/admin']).then(() => {
-            console.log('[Login] Route finale après navigation =', this.router.url);
-          });
+          this.errorMessage = this.t('login.error') || 'Rôle utilisateur non reconnu.';
           return;
         }
 
-        if (role === 'PROFESSEUR') {
-          console.log('[Login] Rôle PROFESSEUR détecté -> chargement profil puis navigation');
-          this.authService.getStudentProfile().subscribe({
-            next: (profile: any) => { if (profile) this.authService.saveStudentProfile(profile); },
-            error: () => {}
-          });
-          this.navigateAfterLogin('/professeur');
-          return;
-          this.isLoading = false;
-          console.log('[Login] Rôle PROFESSEUR → navigation vers /professeur');
-          this.router.navigate(['/professeur']).then(() => {
-            console.log('[Login] Route finale après navigation =', this.router.url);
-          });
-          return;
-        }
-
-        // Pour les étudiants : charger le profil avant de naviguer
-        if (role !== 'USER') {
-          console.error('[Login] Rôle inattendu reçu depuis le backend =', response?.role);
-          this.isLoading = false;
-          this.errorMessage = this.t('login.error') || 'Role utilisateur non reconnu.';
-          return;
-        }
-
+        // Étudiant et professeur : on charge le profil avant d'ouvrir leur espace
+        const target = role === 'PROFESSEUR' ? '/professeur' : '/etudiant';
         this.authService.getStudentProfile().subscribe({
           next: (profile: any) => {
-            this.authService.saveStudentProfile(profile);
-            console.log('[Login] Rôle étudiant détecté -> navigation vers /etudiant');
-            this.navigateAfterLogin('/etudiant');
-            return;
-            this.isLoading = false;
-            console.log('[Login] Rôle étudiant → navigation vers /etudiant');
-            this.router.navigate(['/etudiant']).then(() => {
-              console.log('[Login] Route finale après navigation =', this.router.url);
-            });
+            if (profile) this.authService.saveStudentProfile(profile);
+            this.navigateAfterLogin(target);
           },
-          error: (errProfile: any) => {
-            console.error('[Login] Profile fetch failed, navigating anyway', errProfile);
-            this.navigateAfterLogin('/etudiant');
-            return;
-            this.isLoading = false;
-            this.router.navigate(['/etudiant']).then(() => {
-              console.log('[Login] Route finale après navigation =', this.router.url);
-            });
-          }
+          error: () => this.navigateAfterLogin(target)
         });
       },
       error: (err: any) => {
-        console.error('Login Error: ', err);
         this.isLoading = false;
+        if (err?.status === 429 || err?.status === 0) {
+          // Compte temporairement bloqué ou serveur injoignable : message explicite
+          this.errorMessage = err?.status === 0
+            ? 'Serveur injoignable. Vérifiez que le backend est démarré.'
+            : (err.error?.message || 'Trop de tentatives. Réessayez plus tard.');
+          return;
+        }
         this.errorMessage = this.t('login.error') || "Nom d'utilisateur ou mot de passe incorrect. Vérifiez vos informations.";
       }
     });

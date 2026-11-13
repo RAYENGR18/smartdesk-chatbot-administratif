@@ -89,10 +89,6 @@ export class AuthService {
       localStorage.setItem('userId', String(userId));
     }
 
-    console.log('[AuthService] saveSession() -> response =', response);
-    console.log('[AuthService] saveSession() -> localStorage.role =', localStorage.getItem('role'));
-    console.log('[AuthService] saveSession() -> localStorage.username =', localStorage.getItem('username'));
-
     return normalizedRole;
   }
 
@@ -125,8 +121,27 @@ export class AuthService {
     return id ? Number(id) : null;
   }
 
+  /** Connecté = token présent ET non expiré (la signature est vérifiée par le backend). */
   isLoggedIn(): boolean {
-    return this.getToken() !== null;
+    const token = this.getToken();
+    if (!token) return false;
+    const exp = this.getTokenExpiry(token);
+    if (exp !== null && exp * 1000 <= Date.now()) {
+      this.logout();
+      return false;
+    }
+    return true;
+  }
+
+  private getTokenExpiry(token: string): number | null {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const exp = JSON.parse(json)?.exp;
+      return typeof exp === 'number' ? exp : null;
+    } catch {
+      return null;
+    }
   }
 
   logout(): void {
@@ -154,8 +169,6 @@ export class AuthService {
     } else {
       localStorage.removeItem('role');
     }
-
-    console.log('[AuthService] saveUserInfo() → username =', normalizedUsername, ', role =', normalizedRole);
   }
 
   saveStudentProfile(profile: any): void {
@@ -190,7 +203,6 @@ export class AuthService {
     if (!role && rawRole) {
       localStorage.removeItem('role');
     }
-    console.log('[AuthService] getRole() → localStorage.role (raw) =', rawRole, ', normalized =', role);
 
     return role;
   }

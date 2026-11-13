@@ -81,3 +81,7 @@ backend/documents/
 documents/
 backend/documents/
 nlp/chroma_db_prof/
+
+# Tests / caches
+.pytest_cache/
+nlp/tests/__pycache__/

@@ -36,15 +36,19 @@
   <!-- ─── RIGHT PANEL ─── -->
   <div class="register-right">
     <button class="register-theme-toggle" (click)="toggleTheme()" title="Changer le thème">
-      <svg *ngIf="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
-        <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-      </svg>
-      <svg *ngIf="!isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
+      @if (isDark) {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        </svg>
+      }
+      @if (!isDark) {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      }
     </button>
 
     <div class="register-card animate-fade">
@@ -68,21 +72,25 @@
       <div class="form-scroll-area">
 
         <!-- Messages -->
-        <div class="error-msg" *ngIf="errorMessage">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          {{ errorMessage }}
-        </div>
-        <div class="success-msg" *ngIf="successMessage">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          {{ successMessage }}
-        </div>
+        @if (errorMessage) {
+          <div class="error-msg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            {{ errorMessage }}
+          </div>
+        }
+        @if (successMessage) {
+          <div class="success-msg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            {{ successMessage }}
+          </div>
+        }
 
         <!-- ══════════════════════════════════════
-             ÉTAPE 1 — CHOIX DU RÔLE
+        ÉTAPE 1 — CHOIX DU RÔLE
         ══════════════════════════════════════ -->
         <div class="form-section">
           <div class="section-header">
@@ -101,7 +109,9 @@
                 <div class="role-title">Étudiant</div>
                 <div class="role-desc">Inscription académique</div>
               </div>
-              <div class="check-mark" *ngIf="selectedRole === 'USER'">✓</div>
+              @if (selectedRole === 'USER') {
+                <div class="check-mark">✓</div>
+              }
             </div>
             <div class="role-option" [class.active]="selectedRole === 'PROFESSEUR'" (click)="selectRole('PROFESSEUR')">
               <div class="role-icon">
@@ -116,16 +126,17 @@
                 <div class="role-title">Professeur</div>
                 <div class="role-desc">Corps enseignant</div>
               </div>
-              <div class="check-mark" *ngIf="selectedRole === 'PROFESSEUR'">✓</div>
+              @if (selectedRole === 'PROFESSEUR') {
+                <div class="check-mark">✓</div>
+              }
             </div>
           </div>
         </div>
 
         <!-- ══════════════════════════════════════
-             FORMULAIRE ÉTUDIANT
+        FORMULAIRE ÉTUDIANT
         ══════════════════════════════════════ -->
-        <ng-container *ngIf="selectedRole === 'USER'">
-
+        @if (selectedRole === 'USER') {
           <!-- Section : Identifiant -->
           <div class="form-section">
             <div class="section-header">
@@ -137,7 +148,6 @@
               <input type="text" [(ngModel)]="studentUniqueId" placeholder="Identifiant unique étudiant fourni par l'administration">
             </div>
           </div>
-
           <!-- Section : Informations personnelles -->
           <div class="form-section">
             <div class="section-header">
@@ -182,7 +192,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Coordonnées -->
           <div class="form-section">
             <div class="section-header">
@@ -222,7 +231,6 @@
               <input type="text" [(ngModel)]="cin" placeholder="Numéro CIN / Passeport *">
             </div>
           </div>
-
           <!-- Section : Informations académiques antérieures -->
           <div class="form-section">
             <div class="section-header">
@@ -272,7 +280,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Choix de formation -->
           <div class="form-section">
             <div class="section-header">
@@ -309,7 +316,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Informations financières -->
           <div class="form-section">
             <div class="section-header">
@@ -339,7 +345,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Compte -->
           <div class="form-section">
             <div class="section-header">
@@ -361,7 +366,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Validation -->
           <div class="form-section">
             <div class="section-header">
@@ -381,23 +385,25 @@
               </label>
             </div>
             <button class="btn-submit" (click)="onRegister()" [disabled]="isLoading">
-              <span *ngIf="!isLoading" class="btn-content">
-                Créer mon compte étudiant
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </span>
-              <span *ngIf="isLoading" class="loader"></span>
+              @if (!isLoading) {
+                <span class="btn-content">
+                  Créer mon compte étudiant
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
+              }
+              @if (isLoading) {
+                <span class="loader"></span>
+              }
             </button>
           </div>
-
-        </ng-container>
+        }
 
         <!-- ══════════════════════════════════════
-             FORMULAIRE PROFESSEUR
+        FORMULAIRE PROFESSEUR
         ══════════════════════════════════════ -->
-        <ng-container *ngIf="selectedRole === 'PROFESSEUR'">
-
+        @if (selectedRole === 'PROFESSEUR') {
           <!-- Section : Identifiant -->
           <div class="form-section">
             <div class="section-header">
@@ -409,7 +415,6 @@
               <input type="text" [(ngModel)]="profUniqueId" placeholder="Identifiant unique professeur fourni par l'administration">
             </div>
           </div>
-
           <!-- Section : Informations personnelles -->
           <div class="form-section">
             <div class="section-header">
@@ -454,7 +459,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Coordonnées -->
           <div class="form-section">
             <div class="section-header">
@@ -490,7 +494,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Informations d'enseignement -->
           <div class="form-section">
             <div class="section-header">
@@ -519,7 +522,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Compte -->
           <div class="form-section">
             <div class="section-header">
@@ -541,7 +543,6 @@
               </div>
             </div>
           </div>
-
           <!-- Section : Validation -->
           <div class="form-section">
             <div class="section-header">
@@ -561,17 +562,20 @@
               </label>
             </div>
             <button class="btn-submit btn-prof" (click)="onRegister()" [disabled]="isLoading">
-              <span *ngIf="!isLoading" class="btn-content">
-                Créer mon compte professeur
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </span>
-              <span *ngIf="isLoading" class="loader"></span>
+              @if (!isLoading) {
+                <span class="btn-content">
+                  Créer mon compte professeur
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
+              }
+              @if (isLoading) {
+                <span class="loader"></span>
+              }
             </button>
           </div>
-
-        </ng-container>
+        }
 
         <!-- Lien vers login -->
         <div class="login-cta">

@@ -56,16 +56,20 @@
   <div class="login-right">
     <!-- Theme toggle -->
     <button class="login-theme-toggle" (click)="toggleTheme()" title="Changer le thème">
-      <svg *ngIf="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
-        <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-      </svg>
-      <svg *ngIf="!isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-      </svg>
+      @if (isDark) {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      }
+      @if (!isDark) {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      }
     </button>
 
     <div class="login-card animate-fade">
@@ -91,7 +95,7 @@
               [placeholder]="t('login.username_placeholder')"
               (keyup.enter)="onLogin()"
               autocomplete="username"
-            >
+              >
           </div>
         </div>
 
@@ -114,7 +118,7 @@
               [placeholder]="text('password_placeholder')"
               (keyup.enter)="onLogin()"
               autocomplete="current-password"
-            >
+              >
           </div>
         </div>
 
@@ -128,22 +132,28 @@
         </div>
 
         <!-- Error -->
-        <div class="error-msg" *ngIf="errorMessage">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          {{ errorMessage }}
-        </div>
+        @if (errorMessage) {
+          <div class="error-msg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            {{ errorMessage }}
+          </div>
+        }
 
         <!-- Submit -->
         <button class="btn-submit" (click)="onLogin()" [disabled]="isLoading">
-          <span *ngIf="!isLoading" class="btn-content">
-            {{ t('login.btn') }}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </span>
-          <span *ngIf="isLoading" class="loader"></span>
+          @if (!isLoading) {
+            <span class="btn-content">
+              {{ t('login.btn') }}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </span>
+          }
+          @if (isLoading) {
+            <span class="loader"></span>
+          }
         </button>
 
         <div class="divider"><span>{{ t('login.or') }}</span></div>

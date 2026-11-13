@@ -62,13 +62,17 @@
 
     <div class="sidebar-footer">
       <button class="theme-btn-side" (click)="toggleTheme()">
-        <svg *ngIf="isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-        </svg>
-        <svg *ngIf="!isDark" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
+        @if (isDark) {
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          </svg>
+        }
+        @if (!isDark) {
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        }
         {{ isDark ? 'Mode Clair' : 'Mode Sombre' }}
       </button>
       <button class="logout-btn" (click)="logout()">
@@ -89,250 +93,277 @@
       </svg>
       Retour
     </button>
-    <div class="tab-content" *ngIf="activeTab === 'accueil'">
-      <div class="welcome-banner">
-        <div class="welcome-content">
-          <div class="welcome-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-            </svg>
-            FPST · {{ text('student_space') }}
+    @if (activeTab === 'accueil') {
+      <div class="tab-content">
+        <div class="welcome-banner">
+          <div class="welcome-content">
+            <div class="welcome-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+              FPST · {{ text('student_space') }}
+            </div>
+            <h1>{{ text('welcome') }}, {{ profile?.firstName }} !</h1>
+            <p>{{ text('welcome_desc') }}</p>
           </div>
-          <h1>{{ text('welcome') }}, {{ profile?.firstName }} !</h1>
-          <p>{{ text('welcome_desc') }}</p>
-        </div>
-        <div class="welcome-deco" aria-hidden="true">
-          <svg viewBox="0 0 80 80" fill="none" width="120" height="120" opacity="0.12">
-            <path d="M40 8L72 24V40C72 56 56 69 40 72C24 69 8 56 8 40V24L40 8Z" fill="white"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="stats-grid">
-        <div class="stat-card card-indigo">
-          <div class="stat-icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          <div class="welcome-deco" aria-hidden="true">
+            <svg viewBox="0 0 80 80" fill="none" width="120" height="120" opacity="0.12">
+              <path d="M40 8L72 24V40C72 56 56 69 40 72C24 69 8 56 8 40V24L40 8Z" fill="white"/>
             </svg>
           </div>
-          <div class="stat-body">
-            <div class="stat-label">{{ text('field') }}</div>
-            <div class="stat-value">{{ profile?.fieldOfStudy || text('undefined') }}</div>
-          </div>
         </div>
-        <div class="stat-card card-cyan">
-          <div class="stat-icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-            </svg>
+        <div class="stats-grid">
+          <div class="stat-card card-indigo">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-label">{{ text('field') }}</div>
+              <div class="stat-value">{{ profile?.fieldOfStudy || text('undefined') }}</div>
+            </div>
           </div>
-          <div class="stat-body">
-            <div class="stat-label">{{ text('level') }}</div>
-            <div class="stat-value">{{ profile?.academicLevel || text('undefined') }}</div>
+          <div class="stat-card card-cyan">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-label">{{ text('level') }}</div>
+              <div class="stat-value">{{ profile?.academicLevel || text('undefined') }}</div>
+            </div>
           </div>
-        </div>
-        <div class="stat-card card-amber">
-          <div class="stat-icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-          </div>
-          <div class="stat-body">
-            <div class="stat-label">{{ text('academic_year') }}</div>
-            <div class="stat-value">{{ profile?.academicYear || '2024-2025' }}</div>
+          <div class="stat-card card-amber">
+            <div class="stat-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <div class="stat-body">
+              <div class="stat-label">{{ text('academic_year') }}</div>
+              <div class="stat-value">{{ profile?.academicYear || '2024-2025' }}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    }
 
-    <div class="tab-content no-padding" *ngIf="activeTab === 'chat'">
-      <app-chat></app-chat>
-    </div>
-
-    <div class="tab-content" *ngIf="activeTab === 'planning'">
-      <app-planning></app-planning>
-    </div>
-
-    <div class="tab-content" *ngIf="activeTab === 'notes'">
-      <div class="notes-page-header">
-        <div>
-          <h2 class="notes-page-title">{{ text('notes_title') }}</h2>
-          <p class="notes-page-desc">{{ text('notes_desc') }}</p>
-        </div>
+    @if (activeTab === 'chat') {
+      <div class="tab-content no-padding">
+        <app-chat></app-chat>
       </div>
+    }
 
-      <!-- Stats -->
-      <div class="notes-stats-grid" *ngIf="!isLoadingNotes && mesNotes.length > 0">
-        <div class="nstat-card nstat-blue">
-          <div class="nstat-val">{{ totalNotes }}</div>
-          <div class="nstat-lbl">{{ text('total') }}</div>
-        </div>
-        <div class="nstat-card nstat-green">
-          <div class="nstat-val">{{ nbPass }}</div>
-          <div class="nstat-lbl">{{ text('nb_pass') }}</div>
-        </div>
-        <div class="nstat-card nstat-red">
-          <div class="nstat-val">{{ nbFail }}</div>
-          <div class="nstat-lbl">{{ text('nb_fail') }}</div>
-        </div>
-        <div class="nstat-card nstat-purple">
-          <div class="nstat-val">{{ moyenne | number:'1.2-2' }}<span class="nstat-unit">/20</span></div>
-          <div class="nstat-lbl">{{ text('moyenne') }}</div>
-        </div>
+    @if (activeTab === 'planning') {
+      <div class="tab-content">
+        <app-planning></app-planning>
       </div>
+    }
 
-      <!-- Loading -->
-      <div *ngIf="isLoadingNotes" class="notes-loading">
-        <div class="n-spinner"></div>
-        <span>{{ text('loading') }}</span>
-      </div>
-
-      <!-- Table -->
-      <div class="notes-table-card" *ngIf="!isLoadingNotes">
-        <div class="ntable-wrap">
-          <table class="notes-table">
-            <thead>
-              <tr>
-                <th>{{ text('subject') }}</th>
-                <th>{{ text('type') }}</th>
-                <th>{{ text('date') }}</th>
-                <th class="th-center">{{ text('grade') }}</th>
-                <th class="th-center">Moyenne</th>
-                <th class="th-center">{{ text('status') }}</th>
-                <th>{{ text('comment') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngIf="mesNotes.length === 0">
-                <td colspan="7">
-                  <div class="n-empty">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="38" height="38">
-                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                    </svg>
-                    <span>{{ text('no_grades') }}</span>
-                  </div>
-                </td>
-              </tr>
-              <tr *ngFor="let n of mesNotes" class="ntable-row">
-                <td class="ntd-subject">{{ n.nomMatiere || n.matiere?.nom || '—' }}</td>
-                <td>
+    @if (activeTab === 'notes') {
+      <div class="tab-content">
+        <div class="notes-page-header">
+          <div>
+            <h2 class="notes-page-title">{{ text('notes_title') }}</h2>
+            <p class="notes-page-desc">{{ text('notes_desc') }}</p>
+          </div>
+        </div>
+        <!-- Stats -->
+        @if (!isLoadingNotes && mesNotes.length > 0) {
+          <div class="notes-stats-grid">
+            <div class="nstat-card nstat-blue">
+              <div class="nstat-val">{{ totalNotes }}</div>
+              <div class="nstat-lbl">{{ text('total') }}</div>
+            </div>
+            <div class="nstat-card nstat-green">
+              <div class="nstat-val">{{ nbPass }}</div>
+              <div class="nstat-lbl">{{ text('nb_pass') }}</div>
+            </div>
+            <div class="nstat-card nstat-red">
+              <div class="nstat-val">{{ nbFail }}</div>
+              <div class="nstat-lbl">{{ text('nb_fail') }}</div>
+            </div>
+            <div class="nstat-card nstat-purple">
+              <div class="nstat-val">{{ moyenne | number:'1.2-2' }}<span class="nstat-unit">/20</span></div>
+              <div class="nstat-lbl">{{ text('moyenne') }}</div>
+            </div>
+          </div>
+        }
+        <!-- Loading -->
+        @if (isLoadingNotes) {
+          <div class="notes-loading">
+            <div class="n-spinner"></div>
+            <span>{{ text('loading') }}</span>
+          </div>
+        }
+        <!-- Table -->
+        @if (!isLoadingNotes) {
+          <div class="notes-table-card">
+            <div class="ntable-wrap">
+              <table class="notes-table">
+                <thead>
+                  <tr>
+                    <th>{{ text('subject') }}</th>
+                    <th>{{ text('type') }}</th>
+                    <th>{{ text('date') }}</th>
+                    <th class="th-center">{{ text('grade') }}</th>
+                    <th class="th-center">Moyenne</th>
+                    <th class="th-center">{{ text('status') }}</th>
+                    <th>{{ text('comment') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @if (mesNotes.length === 0) {
+                    <tr>
+                      <td colspan="7">
+                        <div class="n-empty">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="38" height="38">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                          </svg>
+                          <span>{{ text('no_grades') }}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                  @for (n of mesNotes; track n) {
+                    <tr class="ntable-row">
+                      <td class="ntd-subject">{{ n.nomMatiere || n.matiere?.nom || '—' }}</td>
+                      <td>
                   <span class="n-type-badge" [ngClass]="{
                     'nbadge-ds':     n.typeEvaluation === 'DS',
                     'nbadge-exam':   n.typeEvaluation === 'Examen',
                     'nbadge-tp':     n.typeEvaluation === 'TP',
                     'nbadge-projet': n.typeEvaluation === 'Projet'
                   }">{{ typeLabel(n.typeEvaluation) }}</span>
-                </td>
-                <td class="ntd-muted ntd-date">{{ formatDate(n.dateSaisie) }}</td>
-                <td class="th-center">
-                  <span class="n-grade" [class.n-pass]="n.valeur >= 10" [class.n-fail]="n.valeur < 10">
-                    {{ n.valeur | number:'1.2-2' }}<span class="n-denom">/20</span>
-                  </span>
-                </td>
-                <td class="th-center">
-                  <span class="n-grade" *ngIf="n.moyenne !== null && n.moyenne !== undefined" [class.n-pass]="n.moyenne >= 10" [class.n-fail]="n.moyenne < 10">
-                    {{ n.moyenne | number:'1.2-2' }}<span class="n-denom">/20</span>
-                  </span>
-                  <span *ngIf="n.moyenne === null || n.moyenne === undefined" class="ntd-muted">—</span>
-                </td>
-                <td class="th-center">
-                  <span class="n-status-badge" [class.n-validated]="n.valeur >= 10" [class.n-retake]="n.valeur < 10">
-                    {{ n.valeur >= 10 ? text('validated') : text('retake') }}
-                  </span>
-                </td>
-                <td class="ntd-comment">{{ n.commentaire || '—' }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td class="ntd-muted ntd-date">{{ formatDate(n.dateSaisie) }}</td>
+                      <td class="th-center">
+                        <span class="n-grade" [class.n-pass]="n.valeur >= 10" [class.n-fail]="n.valeur < 10">
+                          {{ n.valeur | number:'1.2-2' }}<span class="n-denom">/20</span>
+                        </span>
+                      </td>
+                      <td class="th-center">
+                        @if (n.moyenne !== null && n.moyenne !== undefined) {
+                          <span class="n-grade" [class.n-pass]="n.moyenne >= 10" [class.n-fail]="n.moyenne < 10">
+                            {{ n.moyenne | number:'1.2-2' }}<span class="n-denom">/20</span>
+                          </span>
+                        }
+                        @if (n.moyenne === null || n.moyenne === undefined) {
+                          <span class="ntd-muted">—</span>
+                        }
+                      </td>
+                      <td class="th-center">
+                        <span class="n-status-badge" [class.n-validated]="n.valeur >= 10" [class.n-retake]="n.valeur < 10">
+                          {{ n.valeur >= 10 ? text('validated') : text('retake') }}
+                        </span>
+                      </td>
+                      <td class="ntd-comment">{{ n.commentaire || '—' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
       </div>
-    </div>
+    }
 
-    <div class="tab-content" *ngIf="activeTab === 'profil'">
-      <div class="profile-header">
-        <h2>{{ text('info_title') }}</h2>
-        <button *ngIf="!isEditingProfile"
-                (click)="startEditProfile()"
-                class="profile-edit-button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-          {{ currentLang === 'ar' ? 'تعديل' : currentLang === 'en' ? 'Edit' : 'Modifier' }}
-        </button>
-      </div>
-
-      <!-- Success / Error messages -->
-      <div *ngIf="profileSaveMsg" class="profile-alert profile-alert-success">
-        {{ profileSaveMsg }}
-      </div>
-      <div *ngIf="profileSaveError" class="profile-alert profile-alert-error">
-        {{ profileSaveError }}
-      </div>
-
-      <!-- View mode -->
-      <div class="profile-card" *ngIf="!isEditingProfile">
-        <div class="profile-row">
-          <span class="label">{{ text('full_name') }}</span>
-          <span class="value">{{ profile?.firstName }} {{ profile?.lastName }}</span>
+    @if (activeTab === 'profil') {
+      <div class="tab-content">
+        <div class="profile-header">
+          <h2>{{ text('info_title') }}</h2>
+          @if (!isEditingProfile) {
+            <button
+              (click)="startEditProfile()"
+              class="profile-edit-button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              {{ currentLang === 'ar' ? 'تعديل' : currentLang === 'en' ? 'Edit' : 'Modifier' }}
+            </button>
+          }
         </div>
-        <div class="profile-row">
-          <span class="label">{{ text('student_id') }}</span>
-          <span class="value">{{ profile?.studentId || text('undefined') }}</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">{{ text('email') }}</span>
-          <span class="value">{{ profile?.email }}</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">{{ text('phone') }}</span>
-          <span class="value">{{ profile?.phone || text('undefined') }}</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">{{ text('cin') }}</span>
-          <span class="value">{{ profile?.cin }}</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">{{ text('field_level') }}</span>
-          <span class="value">{{ profile?.fieldOfStudy }} - {{ profile?.academicLevel }}</span>
-        </div>
-      </div>
-
-      <!-- Edit mode -->
-      <div class="profile-edit-card" *ngIf="isEditingProfile">
-        <div class="profile-edit-grid">
-          <div class="profile-edit-field">
-            <label class="profile-edit-label">{{ text('full_name') }} ({{ currentLang === 'ar' ? 'الاسم' : 'Prenom' }})</label>
-            <input type="text" [(ngModel)]="editProfile.firstName" class="profile-edit-input">
+        <!-- Success / Error messages -->
+        @if (profileSaveMsg) {
+          <div class="profile-alert profile-alert-success">
+            {{ profileSaveMsg }}
           </div>
-          <div class="profile-edit-field">
-            <label class="profile-edit-label">{{ currentLang === 'ar' ? 'اللقب' : currentLang === 'en' ? 'Last name' : 'Nom' }}</label>
-            <input type="text" [(ngModel)]="editProfile.lastName" class="profile-edit-input">
+        }
+        @if (profileSaveError) {
+          <div class="profile-alert profile-alert-error">
+            {{ profileSaveError }}
           </div>
-          <div class="profile-edit-field">
-            <label class="profile-edit-label">{{ text('email') }}</label>
-            <input type="email" [(ngModel)]="editProfile.email" class="profile-edit-input">
+        }
+        <!-- View mode -->
+        @if (!isEditingProfile) {
+          <div class="profile-card">
+            <div class="profile-row">
+              <span class="label">{{ text('full_name') }}</span>
+              <span class="value">{{ profile?.firstName }} {{ profile?.lastName }}</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">{{ text('student_id') }}</span>
+              <span class="value">{{ profile?.studentId || text('undefined') }}</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">{{ text('email') }}</span>
+              <span class="value">{{ profile?.email }}</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">{{ text('phone') }}</span>
+              <span class="value">{{ profile?.phone || text('undefined') }}</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">{{ text('cin') }}</span>
+              <span class="value">{{ profile?.cin }}</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">{{ text('field_level') }}</span>
+              <span class="value">{{ profile?.fieldOfStudy }} - {{ profile?.academicLevel }}</span>
+            </div>
           </div>
-          <div class="profile-edit-field">
-            <label class="profile-edit-label">{{ text('phone') }}</label>
-            <input type="tel" [(ngModel)]="editProfile.phone" class="profile-edit-input">
+        }
+        <!-- Edit mode -->
+        @if (isEditingProfile) {
+          <div class="profile-edit-card">
+            <div class="profile-edit-grid">
+              <div class="profile-edit-field">
+                <label class="profile-edit-label">{{ text('full_name') }} ({{ currentLang === 'ar' ? 'الاسم' : 'Prenom' }})</label>
+                <input type="text" [(ngModel)]="editProfile.firstName" class="profile-edit-input" readonly title="Défini par l\'administration">
+              </div>
+              <div class="profile-edit-field">
+                <label class="profile-edit-label">{{ currentLang === 'ar' ? 'اللقب' : currentLang === 'en' ? 'Last name' : 'Nom' }}</label>
+                <input type="text" [(ngModel)]="editProfile.lastName" class="profile-edit-input" readonly title="Défini par l\'administration">
+              </div>
+              <div class="profile-edit-field">
+                <label class="profile-edit-label">{{ text('email') }}</label>
+                <input type="email" [(ngModel)]="editProfile.email" class="profile-edit-input">
+              </div>
+              <div class="profile-edit-field">
+                <label class="profile-edit-label">{{ text('phone') }}</label>
+                <input type="tel" [(ngModel)]="editProfile.phone" class="profile-edit-input">
+              </div>
+              <div class="profile-edit-field full-width">
+                <label class="profile-edit-label">{{ currentLang === 'ar' ? 'العنوان' : currentLang === 'en' ? 'Address' : 'Adresse' }}</label>
+                <input type="text" [(ngModel)]="editProfile.address" class="profile-edit-input">
+              </div>
+            </div>
+            <div class="profile-edit-actions">
+              <button (click)="cancelEditProfile()" class="btn-cancel">
+                {{ currentLang === 'ar' ? 'إلغاء' : currentLang === 'en' ? 'Cancel' : 'Annuler' }}
+              </button>
+              <button (click)="saveProfile()" class="btn-save">
+                {{ currentLang === 'ar' ? 'حفظ' : currentLang === 'en' ? 'Save' : 'Enregistrer' }}
+              </button>
+            </div>
           </div>
-          <div class="profile-edit-field full-width">
-            <label class="profile-edit-label">{{ currentLang === 'ar' ? 'العنوان' : currentLang === 'en' ? 'Address' : 'Adresse' }}</label>
-            <input type="text" [(ngModel)]="editProfile.address" class="profile-edit-input">
-          </div>
-        </div>
-        <div class="profile-edit-actions">
-          <button (click)="cancelEditProfile()" class="btn-cancel">
-            {{ currentLang === 'ar' ? 'إلغاء' : currentLang === 'en' ? 'Cancel' : 'Annuler' }}
-          </button>
-          <button (click)="saveProfile()" class="btn-save">
-            {{ currentLang === 'ar' ? 'حفظ' : currentLang === 'en' ? 'Save' : 'Enregistrer' }}
-          </button>
-        </div>
+        }
       </div>
-    </div>
+    }
   </main>
 </div>

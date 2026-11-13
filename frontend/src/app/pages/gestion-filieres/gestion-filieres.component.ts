@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -10,7 +10,7 @@ import { LanguageService } from '../../services/language.service';
 @Component({
   selector: 'app-gestion-filieres',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './gestion-filieres.component.html',
   styleUrl: './gestion-filieres.component.css'
 })

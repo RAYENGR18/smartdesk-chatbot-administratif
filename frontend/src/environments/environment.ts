@@ -1,7 +1,7 @@
+// Développement local :
+//   Angular (frontend)      : http://localhost:61748
+//   Spring Boot (API)       : http://localhost:8080
+//   FastAPI (NLP, interne)  : http://127.0.0.1:8000 - appelé uniquement par le backend
 export const environment = {
-  // Backend Spring Boot (API exposée au frontend Angular)
-  // Angular (frontend) : localhost:61748
-  // Spring Boot (backend API) : localhost:8080
-  // FastAPI (appelé par Spring en interne) : localhost:8000
   apiBaseUrl: 'http://localhost:8080'
 };
