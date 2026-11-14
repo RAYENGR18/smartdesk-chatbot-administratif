@@ -164,6 +164,8 @@ public class PlanningService {
     private static final int MAX_CRENEAUX_PAR_PROF_PAR_JOUR = 2;
     // Maximum de créneaux par semaine par professeur
     private static final int MAX_CRENEAUX_PAR_PROF_PAR_SEMAINE = 8;
+    /** Nombre maximal de cours par jour pour un même groupe (filière + niveau). */
+    private static final int MAX_COURS_PAR_JOUR_GROUPE = 3;
 
     @Transactional
     public List<EmploiDuTemps> genererPlanningAutomatique(Long filiereId, String niveau, String semestre) {
@@ -225,45 +227,60 @@ public class PlanningService {
             for (int i = 0; i < nbCreneaux; i++) slots.add(m);
         }
 
-        // slotsParJour[j] = nombre de cours déjà placés pour le jour j
-        int[] slotsParJour = new int[jours.length];
+        // Pour chaque cours : on essaie chaque jour (en tournant pour équilibrer la semaine),
+        // puis chaque horaire du jour, et on ne crée le créneau que si le groupe, le
+        // professeur et une salle sont libres (vérifié en base, donc aussi vis-à-vis des
+        // emplois du temps des autres filières et niveaux).
+        int[] coursParJour = new int[jours.length];
+        boolean[][] horaireOccupe = new boolean[jours.length][heuresDebut.length];
         int salleIdx = 0;
-        int jourDepart = 0; // jour de départ pour le prochain slot (tourne pour équilibrer)
+        int jourDepart = 0;
 
         for (Matiere matiere : slots) {
             boolean placed = false;
 
-            // Essayer chaque jour en commençant par jourDepart (round-robin sur les jours)
             for (int tentJour = 0; tentJour < jours.length && !placed; tentJour++) {
                 int dayIdx = (jourDepart + tentJour) % jours.length;
                 EmploiDuTemps.Jour jour = jours[dayIdx];
-
-                if (slotsParJour[dayIdx] >= heuresDebut.length) continue; // jour plein
-
-                LocalTime debut = heuresDebut[slotsParJour[dayIdx]];
-                LocalTime fin = debut.plusMinutes(90);
-                Salle salle = sallesDisponibles.get(salleIdx % sallesDisponibles.size());
+                if (coursParJour[dayIdx] >= MAX_COURS_PAR_JOUR_GROUPE) continue;
 
                 User profChoisi = trouverProfDisponible(matiere, professeurs, chargeProf, chargeJour, jour);
                 if (profChoisi == null) continue; // aucun prof dispo ce jour
 
-                try {
-                    EmploiDuTemps creneau = creerCreneau(
-                            jour, debut, fin,
-                            matiere.getId(), salle.getId(), filiereId, niveau,
-                            profChoisi.getId(), "Groupe A", semestre
-                    );
-                    planning.add(creneau);
-                    placed = true;
+                for (int h = 0; h < heuresDebut.length && !placed; h++) {
+                    if (horaireOccupe[dayIdx][h]) continue;
+                    LocalTime debut = heuresDebut[h];
+                    LocalTime fin = debut.plusMinutes(90);
+                    if (!emploiDuTempsRepository.findConflitsProfesseur(profChoisi.getId(), jour, debut, fin).isEmpty()) {
+                        continue; // le professeur enseigne déjà ailleurs à cette heure
+                    }
+                    Salle salle = null;
+                    for (int k = 0; k < sallesDisponibles.size() && salle == null; k++) {
+                        Salle candidate = sallesDisponibles.get((salleIdx + k) % sallesDisponibles.size());
+                        if (emploiDuTempsRepository.findConflitsSalle(candidate.getId(), jour, debut, fin).isEmpty()) {
+                            salle = candidate;
+                        }
+                    }
+                    if (salle == null) continue; // toutes les salles sont prises à cette heure
 
-                    chargeProf.merge(profChoisi.getId(), 1, Integer::sum);
-                    chargeJour.get(profChoisi.getId()).merge(jour, 1, Integer::sum);
-                    slotsParJour[dayIdx]++;
-                    salleIdx++;
-                    // Le prochain slot commencera sur le jour suivant (distribution équilibrée)
-                    jourDepart = (dayIdx + 1) % jours.length;
-                } catch (RuntimeException e) {
-                    salleIdx++; // conflit salle → essayer autre salle au prochain tour
+                    try {
+                        EmploiDuTemps creneau = creerCreneau(
+                                jour, debut, fin,
+                                matiere.getId(), salle.getId(), filiereId, niveau,
+                                profChoisi.getId(), "Groupe A", semestre
+                        );
+                        planning.add(creneau);
+                        placed = true;
+
+                        chargeProf.merge(profChoisi.getId(), 1, Integer::sum);
+                        chargeJour.get(profChoisi.getId()).merge(jour, 1, Integer::sum);
+                        coursParJour[dayIdx]++;
+                        horaireOccupe[dayIdx][h] = true;
+                        salleIdx++;
+                        jourDepart = (dayIdx + 1) % jours.length;
+                    } catch (RuntimeException e) {
+                        // conflit détecté au dernier moment : on essaie l'horaire suivant
+                    }
                 }
             }
         }

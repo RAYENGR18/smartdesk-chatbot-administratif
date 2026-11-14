@@ -1,5 +1,7 @@
 # Installation locale sous Windows
 
+> macOS / Linux : `./scripts/installer.sh` puis `./scripts/demarrer.sh` — voir [DEMARRAGE.md](DEMARRAGE.md).
+
 ## 1. Prérequis
 
 | Outil | Version | Téléchargement |
@@ -67,6 +69,8 @@ npm start
 ## 5. Premiers pas
 
 1. Connectez-vous avec `admin` et le mot de passe `ADMIN_PASSWORD` du fichier `.env`.
+   Avec `DEMO_DATA=true` (par défaut), la base est déjà remplie de données fictives :
+   comptes de démo `prenom.nom` / `Demo2026` (voir [DEMARRAGE.md](DEMARRAGE.md)).
 2. **Registre (CIN)** : importez la liste officielle de l'établissement (Excel/CSV),
    ou cliquez **Charger les données de démonstration**.
 3. Les étudiants et professeurs s'inscrivent eux-mêmes : leurs nom, prénom, CIN

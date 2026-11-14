@@ -37,30 +37,28 @@ Navigateur ──► Frontend Angular 21  (http://localhost:61748)
 | Base     | PostgreSQL 15 à 18 |
 | NLP      | Python 3.11–3.13, FastAPI, LangChain, ChromaDB, sentence-transformers, spaCy, Groq |
 
-## Démarrage rapide (Windows)
+## Démarrage rapide (Windows, macOS, Linux)
 
-Prérequis : **Java 17+**, **Node.js 22 LTS**, **Python 3.12**, **PostgreSQL 18** —
-détails dans [INSTALL.md](INSTALL.md).
+👉 **Guide pas à pas : [DEMARRAGE.md](DEMARRAGE.md)**
 
-1. **Première fois** : double-cliquer sur `scripts\installer.cmd`
-   (crée `.env`, la base de données, installe les dépendances puis lance l'application).
-2. **Les fois suivantes** : double-cliquer sur `scripts\demarrer.cmd`.
+Prérequis : **Java 17+**, **Node.js 22 LTS**, **Python 3.12**, **PostgreSQL 15 à 18**.
 
-Équivalent en ligne de commande :
+| | Windows | macOS / Linux |
+|---|---------|---------------|
+| Première fois (installe puis lance) | double-clic sur `scripts\installer.cmd` | `./scripts/installer.sh` |
+| Les fois suivantes | double-clic sur `scripts\demarrer.cmd` | `./scripts/demarrer.sh` |
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\setup.ps1
-powershell -ExecutionPolicy Bypass -File scripts\start.ps1
-```
+Puis ouvrir http://localhost:61748.
 
-Puis ouvrir http://localhost:61748 et se connecter avec le compte `admin`
-(mot de passe : `ADMIN_PASSWORD` dans le fichier `.env`).
+**Données de démonstration** : avec `DEMO_DATA=true` (valeur par défaut du `.env` créé par l'installation),
+la base se remplit toute seule au démarrage avec des données fictives : filières, matières, salles,
+registre (CIN `99xxxxxx`), 15 comptes étudiants et 8 comptes professeurs (`prenom.nom` /
+`Demo2026`, ex. `yasmine.trabelsi`, `karim.haddad`), emplois du temps, notes, présences RFID et
+notifications. Rien n'est dupliqué d'un démarrage à l'autre ; mettez `DEMO_DATA=false` pour une
+vraie utilisation. Le même chargement est disponible dans *Admin → Registre (CIN)*.
 
-**Démonstration** : *Admin → Registre (CIN) → Charger les données de démonstration* crée 4 filières,
-des matières, des salles et un registre fictif (CIN `99000101` à `99000116` pour les étudiants,
-`99000201` à `99000206` pour les professeurs). Exemple : s'inscrire comme étudiant avec
-*Ben Salah / Amine / 99000101 / Informatique / Licence 1*. Des fichiers de notes et de registre
-d'exemple sont dans [docs/exemples](docs/exemples).
+Compte administrateur : `admin`, mot de passe `ADMIN_PASSWORD` du fichier `.env`.
+Des fichiers de notes et de registre d'exemple sont dans [docs/exemples](docs/exemples).
 
 ## Rôles
 
@@ -130,5 +128,6 @@ frontend/   Application Angular (pages, services, core = intercepteur + guards)
 nlp/        Service FastAPI + base de connaissances (knowledge_base/)
 iot/        Lecteur RFID : programme Arduino + pont Python (pont_rfid.py)
 docs/       Fichiers d'exemple (registre, notes)
-scripts/    installer.cmd, demarrer.cmd, pointage.cmd (+ setup.ps1, start.ps1)
+scripts/    Windows : installer.cmd, demarrer.cmd, pointage.cmd (+ setup.ps1, start.ps1)
+            macOS / Linux : installer.sh, demarrer.sh
 ```

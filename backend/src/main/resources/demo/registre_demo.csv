@@ -21,3 +21,6 @@ cin;nom;prenom;type;filiere;niveau;email;matricule;departement
 99000204;Chebbi;Hela;professeur;;;hela.chebbi@demo.fpst.tn;;Mathématiques
 99000205;Toumi;Walid;professeur;;;walid.toumi@demo.fpst.tn;;Gestion
 99000206;Kammoun;Asma;professeur;;;asma.kammoun@demo.fpst.tn;;Informatique
+99000207;Ben Amor;Mariem;professeur;;;mariem.benamor@demo.fpst.tn;;Chimie
+99000208;Jlassi;Nizar;professeur;;;nizar.jlassi@demo.fpst.tn;;Mathématiques
+99000209;Saidi;Mounir;professeur;;;mounir.saidi@demo.fpst.tn;;Physique

@@ -58,6 +58,11 @@ app:
     login-lock-minutes: ${LOGIN_LOCK_MINUTES:15}
   # Fuseau horaire de l'établissement (pointage des présences)
   timezone: ${APP_TIMEZONE:Africa/Tunis}
+  demo:
+    # true : charge les données FICTIVES de démonstration au démarrage (jamais en production)
+    au-demarrage: ${DEMO_DATA:false}
+    # mot de passe commun des comptes de démonstration (CIN 99xxxxxx)
+    mot-de-passe: ${DEMO_PASSWORD:Demo2026}
   registre:
     # local   = registre importé (Excel/CSV) ou données de démonstration
     # externe = base de données de la faculté, en lecture seule (voir README)

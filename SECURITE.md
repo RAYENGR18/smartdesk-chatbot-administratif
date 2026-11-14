@@ -69,6 +69,12 @@ et corrections apportées dans cette version.
   pas par un compte ; chaque passage est journalisé ; un badge ne peut appartenir qu'à un professeur.
 - **Export CSV** des présences protégé contre l'injection de formules Excel.
 
+## Données de démonstration
+
+`DEMO_DATA=true` crée des comptes fictifs (CIN `99xxxxxx`) partageant le mot de passe
+`DEMO_PASSWORD` : pratique pour tester, **à désactiver (`DEMO_DATA=false`) sur un serveur réel**.
+La valeur par défaut côté serveur (sans `.env`) est `false`.
+
 ## Tests automatisés
 
 - Backend : 22 tests (MockMvc + H2) couvrant l'inscription par CIN, l'import des notes (CSV/Excel),

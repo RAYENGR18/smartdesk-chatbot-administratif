@@ -51,6 +51,7 @@ class FeaturesIntegrationTest {
     @Autowired private FiliereRepository filieres;
     @Autowired private MatiereRepository matieres;
     @Autowired private SalleRepository salles;
+    @Autowired private com.chatbot.backend.repository.UserRepository users;
 
     private String admin;
 
@@ -215,10 +216,35 @@ class FeaturesIntegrationTest {
                 .andExpect(status().isOk());
         assertThat(registre.findByCin("99000101")).isPresent();
         assertThat(filieres.findByCode("INFO")).isPresent();
+
+        // Comptes de démo utilisables avec leurs données
+        String etu = login("yasmine.trabelsi", "Demo2026");
+        mvc.perform(get("/api/notes/me").header("Authorization", b(etu)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(org.hamcrest.Matchers.greaterThan(0)));
+        mvc.perform(get("/api/planning/me").header("Authorization", b(etu)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.filiere.code").value("INFO"))
+                .andExpect(jsonPath("$.niveau").value("L1"))
+                .andExpect(jsonPath("$.creneaux.length()").value(org.hamcrest.Matchers.greaterThan(0)))
+                .andExpect(jsonPath("$.creneaux[?(@.niveau != 'L1')]").isEmpty());
+        String prof = login("karim.haddad", "Demo2026");
+        mvc.perform(get("/api/planning/me").header("Authorization", b(prof)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.creneaux.length()").value(org.hamcrest.Matchers.greaterThan(0)));
+        mvc.perform(get("/api/admin/presences").header("Authorization", b(admin)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(org.hamcrest.Matchers.greaterThan(0)));
+        // Une personne du registre reste sans compte pour essayer l'inscription
+        assertThat(users.findByCinIgnoreCase("99000101")).isEmpty();
+
         // Rechargement : rien n'est dupliqué
         mvc.perform(post("/api/admin/registre/demo").header("Authorization", b(admin)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.filieresCreees").value(0));
+                .andExpect(jsonPath("$.filieresCreees").value(0))
+                .andExpect(jsonPath("$.comptesEtudiantsCrees").value(0))
+                .andExpect(jsonPath("$.notesCreees").value(0))
+                .andExpect(jsonPath("$.creneauxCrees").value(0));
     }
 
     // ── Modification 2 : import des notes ─────────────────────────────

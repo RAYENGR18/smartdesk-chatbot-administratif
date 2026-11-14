@@ -91,7 +91,8 @@ export class RegistreComponent implements OnInit {
   }
 
   chargerDemo(): void {
-    if (!confirm('Charger les données FICTIVES de démonstration (4 filières, 16 étudiants, 6 professeurs, matières et salles) ? Rien n\'est supprimé.')) {
+    if (!confirm('Charger les données FICTIVES de démonstration (filières, matières, salles, registre, comptes '
+      + 'étudiants et professeurs, emplois du temps, notes, présences, notifications) ? Rien n\'est supprimé.')) {
       return;
     }
     this.chargement = true;
@@ -101,7 +102,10 @@ export class RegistreComponent implements OnInit {
         this.chargement = false;
         this.resultat = r.registre;
         this.message = `Démonstration chargée : ${r.filieresCreees} filière(s), ${r.matieresCreees} matière(s), `
-          + `${r.sallesCreees} salle(s) créées ; registre : ${r.registre.ajoutes} ajout(s), ${r.registre.misAJour} mise(s) à jour.`;
+          + `${r.sallesCreees} salle(s), ${r.comptesEtudiantsCrees ?? 0} compte(s) étudiant, `
+          + `${r.comptesProfesseursCrees ?? 0} compte(s) professeur, ${r.creneauxCrees ?? 0} créneau(x), `
+          + `${r.notesCreees ?? 0} note(s), ${r.presencesCreees ?? 0} présence(s) créés. `
+          + `Comptes de démo : identifiant prenom.nom (ex. yasmine.trabelsi), mot de passe « ${r.motDePasseComptesDemo} ».`;
         this.chargerStats();
         this.charger(0);
       },
