@@ -41,14 +41,19 @@ Navigateur ──► Frontend Angular 21  (http://localhost:61748)
 
 👉 **Guide pas à pas : [DEMARRAGE.md](DEMARRAGE.md)**
 
-Prérequis : **Java 17+**, **Node.js 22 LTS**, **Python 3.12**, **PostgreSQL 15 à 18**.
+**Avec Docker** (seul prérequis : Docker Desktop) — site sur http://localhost:8090 :
+
+| | Windows | macOS / Linux |
+|---|---------|---------------|
+| Lancer (la 1re fois : construit les images) | double-clic sur `scripts\docker-demarrer.cmd` | `./scripts/docker-demarrer.sh` |
+| Arrêter (données conservées) | double-clic sur `scripts\docker-arreter.cmd` | `./scripts/docker-arreter.sh` |
+
+**Sans Docker** (Java, Node.js, Python, PostgreSQL installés) — site sur http://localhost:61748 :
 
 | | Windows | macOS / Linux |
 |---|---------|---------------|
 | Première fois (installe puis lance) | double-clic sur `scripts\installer.cmd` | `./scripts/installer.sh` |
 | Les fois suivantes | double-clic sur `scripts\demarrer.cmd` | `./scripts/demarrer.sh` |
-
-Puis ouvrir http://localhost:61748.
 
 **Données de démonstration** : avec `DEMO_DATA=true` (valeur par défaut du `.env` créé par l'installation),
 la base se remplit toute seule au démarrage avec des données fictives : filières, matières, salles,
@@ -128,6 +133,8 @@ frontend/   Application Angular (pages, services, core = intercepteur + guards)
 nlp/        Service FastAPI + base de connaissances (knowledge_base/)
 iot/        Lecteur RFID : programme Arduino + pont Python (pont_rfid.py)
 docs/       Fichiers d'exemple (registre, notes)
-scripts/    Windows : installer.cmd, demarrer.cmd, pointage.cmd (+ setup.ps1, start.ps1)
+scripts/    Docker : docker-demarrer.cmd/.sh, docker-arreter.cmd/.sh
+            Windows : installer.cmd, demarrer.cmd, pointage.cmd (+ setup.ps1, start.ps1)
             macOS / Linux : installer.sh, demarrer.sh
+docker-compose.yml   PostgreSQL + NLP + backend + frontend (nginx) ; Dockerfile dans chaque dossier
 ```

@@ -98,3 +98,9 @@ start.log
 pip-install.log
 npm-install.log
 backend-build.log
+
+# Docker
+docker.log
+docker-build.log
+docker-debug.txt
+logs/

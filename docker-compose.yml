@@ -1,0 +1,88 @@
+# =====================================================================
+# SmartDesk dans Docker : base PostgreSQL + service NLP + backend + frontend
+#
+#   Windows : double-clic sur scripts\docker-demarrer.cmd
+#   macOS / Linux : ./scripts/docker-demarrer.sh
+#   (ou : docker compose up -d --build, avec un fichier .env)
+#
+# Site : http://localhost:8090 (APP_PORT dans .env)
+# Seul le frontend est publié sur la machine : la base, le backend et le
+# service NLP ne sont joignables qu'à l'intérieur du réseau Docker.
+# Les secrets viennent du fichier .env (créé par le script de démarrage).
+# =====================================================================
+name: smartdesk
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: chatbot_db
+      POSTGRES_USER: ${DB_USERNAME:-smartdesk}
+      POSTGRES_PASSWORD: "${DB_PASSWORD:?DB_PASSWORD absent du fichier .env - lancez scripts/docker-demarrer}"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d chatbot_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  nlp:
+    build: ./nlp
+    image: smartdesk/nlp
+    restart: unless-stopped
+    environment:
+      NLP_API_KEY: "${NLP_API_KEY:?NLP_API_KEY absent du fichier .env - lancez scripts/docker-demarrer}"
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    volumes:
+      - nlp-data:/data                      # index de recherche + modèle d'embeddings
+      - nlp-kb:/app/knowledge_base          # documents de la base de connaissances
+
+  backend:
+    build: ./backend
+    image: smartdesk/backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      nlp:
+        condition: service_started
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/chatbot_db
+      DB_USERNAME: ${DB_USERNAME:-smartdesk}
+      DB_PASSWORD: "${DB_PASSWORD:?DB_PASSWORD absent du fichier .env - lancez scripts/docker-demarrer}"
+      JWT_SECRET: "${JWT_SECRET:?JWT_SECRET absent du fichier .env - lancez scripts/docker-demarrer}"
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      NLP_URL: http://nlp:8000
+      NLP_API_KEY: "${NLP_API_KEY:?NLP_API_KEY absent du fichier .env - lancez scripts/docker-demarrer}"
+      CORS_ALLOWED_ORIGINS: http://localhost:${APP_PORT:-8090},http://127.0.0.1:${APP_PORT:-8090}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@fpst.tn}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      DEMO_DATA: ${DEMO_DATA:-true}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-Demo2026}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Africa/Tunis}
+      RFID_DEVICE_KEY: ${RFID_DEVICE_KEY:-}
+      REGISTRE_MODE: ${REGISTRE_MODE:-local}
+      REGISTRE_DB_URL: ${REGISTRE_DB_URL:-}
+      REGISTRE_DB_USERNAME: ${REGISTRE_DB_USERNAME:-}
+      REGISTRE_DB_PASSWORD: ${REGISTRE_DB_PASSWORD:-}
+      REGISTRE_DB_REQUETE: ${REGISTRE_DB_REQUETE:-}
+    volumes:
+      - backend-data:/data                  # documents générés
+
+  frontend:
+    build: ./frontend
+    image: smartdesk/frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${APP_PORT:-8090}:80"
+
+volumes:
+  db-data:
+  nlp-data:
+  nlp-kb:
+  backend-data:

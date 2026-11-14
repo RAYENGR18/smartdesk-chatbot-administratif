@@ -1,12 +1,50 @@
 # Ouvrir SmartDesk sur n'importe quel PC
 
-Guide rapide. Le détail et les problèmes fréquents sont dans [INSTALL.md](INSTALL.md).
+Deux façons de faire :
 
-Au premier démarrage, la base se **remplit toute seule avec des données fictives**
-(`DEMO_DATA=true` dans `.env`). Vous pouvez donc tester tout de suite les trois espaces
-(administrateur, étudiant, professeur), sans rien saisir.
+- **Avec Docker (le plus simple)** : un seul logiciel à installer, tout le reste tourne dans des conteneurs ;
+- **Installation classique** : Java, Node.js, Python et PostgreSQL installés sur la machine (sections 1 à 7).
+
+Dans les deux cas, au premier démarrage la base se **remplit toute seule avec des données fictives**
+(`DEMO_DATA=true` dans `.env`) pour tester tout de suite les trois espaces (administrateur, étudiant, professeur).
 
 ---
+
+## Avec Docker (recommandé)
+
+1. Installez **Docker Desktop** : https://www.docker.com/products/docker-desktop/
+   (Windows / macOS ; sous Linux : Docker Engine + le plugin Compose). Lancez-le une fois.
+2. Récupérez le projet :
+   ```bash
+   git clone https://github.com/RAYENGR18/smartdesk-chatbot-administratif.git
+   ```
+   (ou **Code → Download ZIP** sur GitHub, puis décompresser)
+3. Lancez SmartDesk :
+   - **Windows** : double-clic sur **`scripts\docker-demarrer.cmd`**
+   - **macOS / Linux** : `./scripts/docker-demarrer.sh`
+
+   Le script démarre Docker Desktop si besoin, crée le fichier `.env` avec des secrets aléatoires,
+   construit et démarre les conteneurs, puis ouvre **http://localhost:8090**.
+   La première fois : 10 à 20 minutes (téléchargements) ; ensuite : quelques secondes.
+4. Arrêt : `scripts\docker-arreter.cmd` (Windows) ou `./scripts/docker-arreter.sh`.
+   Les données (base, documents, index du chatbot) sont conservées d'un démarrage à l'autre.
+
+| | |
+|---|---|
+| Site | http://localhost:8090 (changer : `APP_PORT` dans `.env`) |
+| Administrateur | `admin`, mot de passe affiché à la fin du premier lancement (et ligne `ADMIN_PASSWORD` de `.env`) |
+| Comptes de démo | `prenom.nom` / `Demo2026` (voir la section 5) |
+| Chatbot (IA) | renseignez `GROQ_API_KEY` dans `.env`, puis relancez le script ; le modèle de recherche se télécharge au premier démarrage (quelques minutes) |
+| Journaux | `docker compose logs -f backend` (ou `nlp`, `frontend`, `db`) |
+| Tout effacer et repartir de zéro | `docker compose down -v` |
+| Lecteur RFID | `scripts\pointage.cmd` avec `BACKEND_URL=http://localhost:8090` dans `.env` |
+
+Seul le site (port 8090) est ouvert sur la machine : la base PostgreSQL, le backend et le service NLP
+ne sont accessibles qu'à l'intérieur du réseau Docker.
+
+---
+
+## Installation classique (sans Docker)
 
 ## 1. Installer les prérequis (une seule fois par PC)
 

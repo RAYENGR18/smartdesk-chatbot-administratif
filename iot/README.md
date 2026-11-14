@@ -39,6 +39,7 @@ LED verte → D5, LED rouge → D6, buzzer → D7 (chacun avec sa masse sur GND)
    Dans le moniteur série (9600 bauds), un badge présenté affiche `UID:04A13B2C`.
    *Fermez le moniteur série ensuite : un seul programme peut utiliser le port.*
 3. Sur le PC de l'accueil, la plateforme étant lancée, double-cliquer sur **`scripts\pointage.cmd`**.
+   *(SmartDesk lancé avec Docker : mettre `BACKEND_URL=http://localhost:8090` dans `.env` ; le pont passe par le site.)*
    L'Arduino est détecté automatiquement (sinon : `scripts\pointage.cmd --port COM3`,
    ou `RFID_PORT=COM3` dans `.env`).
 

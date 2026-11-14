@@ -74,6 +74,15 @@ et corrections apportées dans cette version.
 `/api/admin/fiches` est réservé à l'administrateur (règle d'URL + `@PreAuthorize`). La fiche n'expose
 ni le mot de passe ni le contenu des conversations avec le chatbot (seulement leur nombre et leur date).
 
+## Docker
+
+- Seul le frontend (nginx) est publié sur la machine ; PostgreSQL, le backend et le service NLP
+  restent sur le réseau interne de Docker.
+- Les secrets viennent du fichier `.env` (généré aléatoirement par `docker-demarrer`) ;
+  `docker compose` refuse de démarrer si `DB_PASSWORD`, `JWT_SECRET` ou `NLP_API_KEY` manquent.
+- Backend et service NLP tournent avec un utilisateur non root ; images d'exécution minimales
+  (JRE, nginx alpine, python slim).
+
 ## Données de démonstration
 
 `DEMO_DATA=true` crée des comptes fictifs (CIN `99xxxxxx`) partageant le mot de passe
