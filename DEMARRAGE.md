@@ -44,6 +44,30 @@ Dans les deux cas, au premier démarrage la base se **remplit toute seule avec d
 Seul le site (port 8090) est ouvert sur la machine : la base PostgreSQL, le backend et le service NLP
 ne sont accessibles qu'à l'intérieur du réseau Docker.
 
+### Transférer ses données vers un nouveau PC (Docker)
+
+**Sur l'ancien PC** (SmartDesk Docker lancé), dans un terminal ouvert dans le dossier du projet :
+```powershell
+docker compose exec db pg_dump -U smartdesk -d chatbot_db -Fc -f /tmp/smartdesk.dump
+docker compose cp db:/tmp/smartdesk.dump ./smartdesk.dump
+```
+Copiez `smartdesk.dump` sur le nouveau PC (clé USB…). Ce fichier contient des données personnelles :
+ne l'envoyez pas sur GitHub (il est ignoré par Git).
+
+**Sur le nouveau PC** :
+1. Installer Git et Docker Desktop (lancé, « Engine running »).
+2. `git clone https://github.com/RAYENGR18/smartdesk-chatbot-administratif.git` puis `cd smartdesk-chatbot-administratif`.
+3. Copier `smartdesk.dump` dans ce dossier.
+4. `.\scripts\docker-demarrer.cmd` (première fois : 10 à 20 min) ; noter le mot de passe admin affiché.
+5. Restaurer les données :
+   ```powershell
+   docker compose cp ./smartdesk.dump db:/tmp/smartdesk.dump
+   docker compose exec db pg_restore --clean --if-exists --no-owner -U smartdesk -d chatbot_db /tmp/smartdesk.dump
+   ```
+6. `notepad .env` : `DEMO_DATA=false` (vraies données) et `GROQ_API_KEY=` (votre clé), puis enregistrer.
+7. `docker compose up -d` pour appliquer le `.env` (le backend redémarre ; le mot de passe admin
+   devient celui du nouveau `.env`), puis ouvrir http://localhost:8090.
+
 ---
 
 ## Installation classique (sans Docker)

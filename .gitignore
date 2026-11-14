@@ -104,3 +104,8 @@ docker.log
 docker-build.log
 docker-debug.txt
 logs/
+
+# Sauvegardes de la base (donnees personnelles : ne jamais commiter)
+*.dump
+*.backup
+sauvegarde*.sql
