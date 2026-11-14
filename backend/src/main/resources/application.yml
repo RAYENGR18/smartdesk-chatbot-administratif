@@ -5,7 +5,8 @@
 # =====================================================================
 
 server:
-  port: ${SERVER_PORT:8080}
+  # 8095 et non 8080 : le port 8080 est souvent pris (Oracle XE, Tomcat, Jenkins...)
+  port: ${SERVER_PORT:8095}
   error:
     include-message: never
     include-stacktrace: never

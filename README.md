@@ -22,7 +22,7 @@ filières, salles et matières, inscription vérifiée par le CIN et pointage RF
 Navigateur ──► Frontend Angular 21  (http://localhost:61748)
                    │  token JWT dans l'en-tête Authorization
                    ▼
-               Backend Spring Boot 3.5 (http://localhost:8080) ──► PostgreSQL 18
+               Backend Spring Boot 3.5 (http://localhost:8095) ──► PostgreSQL 18
                    │  clé X-API-Key
                    ▼
                Service NLP FastAPI (http://127.0.0.1:8000, local uniquement)

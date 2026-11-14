@@ -84,7 +84,7 @@ npm start
 | `password authentication failed for user "smartdesk"` | Relancez `scripts\setup.ps1` : il resynchronise le mot de passe de la base avec `.env` |
 | Le chatbot répond toujours avec le même message générique | `GROQ_API_KEY` est vide ou invalide dans `.env` ; testez-la avec `cd nlp; .\.venv\Scripts\python verifier_groq.py` |
 | `Cle API invalide` dans la fenêtre NLP | `NLP_API_KEY` doit être identique pour le backend et le NLP (même fichier `.env`) : redémarrez les deux |
-| Le port 8080, 8000 ou 61748 est déjà utilisé | Fermez l'ancienne fenêtre du service. Pour changer de port : `SERVER_PORT` (backend) ou `NLP_PORT` + `NLP_URL` (NLP) dans `.env` |
+| « Le port 8095 (ou 8000, 61748) est déjà utilisé » | `demarrer.cmd` affiche le programme qui l'occupe. Fermez l'ancienne fenêtre du service, ou changez de port dans `.env` : `SERVER_PORT` (backend) ou `NLP_PORT` + `NLP_URL` (NLP) |
 | « Ce numéro de CIN ne figure pas dans la base de l'établissement » | Le CIN n'est pas dans le registre : importez-le (Admin → Registre) ou chargez la démo |
 | L'import des notes ignore des lignes « aucun compte étudiant » | L'étudiant de ce CIN n'a pas encore créé son compte : il faut qu'il s'inscrive d'abord |
 | `pointage.cmd` : « Aucun port série détecté » | Branchez l'Arduino, fermez le moniteur série de l'IDE Arduino, ou indiquez le port : `pointage.cmd --port COM3` |

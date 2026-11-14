@@ -14,7 +14,7 @@ Utilisation (depuis le dossier du projet) :
     scripts\\pointage.cmd --test 04A13B2C       envoie un seul passage (test sans matériel)
 
 Configuration lue dans le fichier .env à la racine :
-    RFID_DEVICE_KEY  (obligatoire)   BACKEND_URL (défaut http://localhost:8080)
+    RFID_DEVICE_KEY  (obligatoire)   BACKEND_URL (défaut http://localhost:8095)
     RFID_PORT        (ex : COM3)     RFID_LECTEUR (défaut ENTREE)
 """
 
@@ -156,7 +156,7 @@ def main():
     p.add_argument("--vitesse", type=int, default=9600, help="Vitesse série (défaut 9600)")
     p.add_argument("--clavier", action="store_true", help="Lecteur USB de type clavier")
     p.add_argument("--test", metavar="UID", help="Envoie un seul passage puis s'arrête")
-    p.add_argument("--url", default=env.get("BACKEND_URL") or "http://localhost:8080")
+    p.add_argument("--url", default=env.get("BACKEND_URL") or "http://localhost:8095")
     p.add_argument("--lecteur", default=env.get("RFID_LECTEUR") or "ENTREE")
     args = p.parse_args()
 

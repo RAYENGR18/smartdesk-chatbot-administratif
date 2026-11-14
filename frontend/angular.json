@@ -79,7 +79,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "port": 61748
+            "port": 61748,
+            "proxyConfig": "proxy.conf.mjs"
           },
           "configurations": {
             "production": {
