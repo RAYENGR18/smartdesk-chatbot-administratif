@@ -5,6 +5,8 @@ Deux façons de faire :
 - **Avec Docker (le plus simple)** : un seul logiciel à installer, tout le reste tourne dans des conteneurs ;
 - **Installation classique** : Java, Node.js, Python et PostgreSQL installés sur la machine (sections 1 à 7).
 
+La configuration (clé Groq, ports, mode démo…) est dans le fichier `.env` : voir **[ENV.md](ENV.md)**.
+
 Dans les deux cas, au premier démarrage la base se **remplit toute seule avec des données fictives**
 (`DEMO_DATA=true` dans `.env`) pour tester tout de suite les trois espaces (administrateur, étudiant, professeur).
 

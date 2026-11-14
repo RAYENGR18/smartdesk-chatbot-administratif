@@ -39,7 +39,7 @@ Navigateur ──► Frontend Angular 21  (http://localhost:61748)
 
 ## Démarrage rapide (Windows, macOS, Linux)
 
-👉 **Guide pas à pas : [DEMARRAGE.md](DEMARRAGE.md)**
+👉 **Guide pas à pas : [DEMARRAGE.md](DEMARRAGE.md)**  ·  Variables du fichier `.env` : **[ENV.md](ENV.md)**
 
 **Avec Docker** (seul prérequis : Docker Desktop) — site sur http://localhost:8090 :
 
