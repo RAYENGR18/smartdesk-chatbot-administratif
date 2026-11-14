@@ -1,0 +1,137 @@
+<div class="page">
+  <header class="page-header">
+    <button class="btn-back" (click)="retour()">← Retour</button>
+    <div>
+      <h1>Présence des professeurs</h1>
+      <p class="subtitle">Pointage automatique par badge RFID : 1er passage = arrivée, 2e passage = départ.
+        Actualisation toutes les 15 secondes.</p>
+    </div>
+  </header>
+
+  <section class="cards">
+    <div class="card-stat"><span class="val">{{ resume.professeurs ?? 0 }}</span><span class="lbl">Professeurs</span></div>
+    <div class="card-stat ok"><span class="val">{{ resume.presentsMaintenant ?? 0 }}</span><span class="lbl">Présents maintenant</span></div>
+    <div class="card-stat"><span class="val">{{ resume.partis ?? 0 }}</span><span class="lbl">Partis aujourd'hui</span></div>
+    <div class="card-stat warn"><span class="val">{{ resume.absents ?? 0 }}</span><span class="lbl">Pas encore pointé</span></div>
+  </section>
+
+  @if (erreur) { <div class="alert alert-err">{{ erreur }}</div> }
+  @if (message) { <div class="alert alert-ok">{{ message }}</div> }
+
+  <!-- Tableau récapitulatif -->
+  <div class="panel">
+    <div class="row between">
+      <h2>Récapitulatif des présences</h2>
+      <div class="row">
+        <label>Du <input type="date" [(ngModel)]="debut"></label>
+        <label>au <input type="date" [(ngModel)]="fin"></label>
+        <select [(ngModel)]="professeurId">
+          <option [ngValue]="null">Tous les professeurs</option>
+          @for (b of badges; track b.id) { <option [ngValue]="b.id">{{ b.nom }} {{ b.prenom }}</option> }
+        </select>
+        <button class="btn primary" (click)="rechercher()">Afficher</button>
+        <button class="btn" (click)="periodeAujourdhui()">Aujourd'hui</button>
+        <button class="btn" (click)="periodeSemaine()">Cette semaine</button>
+        <button class="btn" (click)="exporter()">Exporter (Excel/CSV)</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nom et prénom</th><th>Date</th><th>Arrivée</th><th>Départ</th><th>Durée de présence</th><th>Statut</th></tr></thead>
+        <tbody>
+          @for (p of presences; track p.id) {
+            <tr>
+              <td><b>{{ p.nom }}</b> {{ p.prenom }}</td>
+              <td>{{ p.date | date:'dd/MM/yyyy' }}</td>
+              <td class="mono">{{ p.heureArrivee }}</td>
+              <td class="mono">{{ p.heureDepart || '—' }}</td>
+              <td class="mono">{{ p.duree || '—' }}</td>
+              <td><span class="tag" [class.ok]="p.statut === 'PRESENT'" [class.warn]="p.statut === 'DEPART_NON_POINTE'">{{ libelleStatut(p.statut) }}</span>
+                @if (p.lecteur === 'SIMULATION') { <span class="muted"> (simulation)</span> }</td>
+            </tr>
+          }
+          @if (presences.length === 0) {
+            <tr><td colspan="6" class="empty">Aucun pointage sur cette période.</td></tr>
+          }
+        </tbody>
+        @if (presences.length > 0) {
+          <tfoot><tr><td colspan="4">{{ presences.length }} présence(s)</td><td class="mono">{{ formatMinutes(totalMinutes) }}</td><td></td></tr></tfoot>
+        }
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Badges des professeurs -->
+    <div class="panel">
+      <h2>Badges RFID des professeurs</h2>
+      <p class="hint">Passez un nouveau badge devant le lecteur : il apparaît dans « Badges inconnus » ci-contre et peut être attribué en un clic.
+        Vous pouvez aussi saisir son identifiant (UID) à la main.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Professeur</th><th>Aujourd'hui</th><th>Badge (UID)</th><th></th></tr></thead>
+          <tbody>
+            @for (b of badges; track b.id) {
+              <tr>
+                <td><b>{{ b.nom }}</b> {{ b.prenom }}</td>
+                <td><span class="tag" [class.ok]="b.statutJour === 'PRESENT'" [class.muted-tag]="b.statutJour === 'ABSENT'">{{ libelleStatut(b.statutJour) }}</span></td>
+                <td><input class="uid" type="text" [(ngModel)]="saisieBadge[b.id]" placeholder="ex : 04A13B2C"></td>
+                <td class="nowrap">
+                  <button class="btn small primary" (click)="enregistrerBadge(b)">Enregistrer</button>
+                  @if (b.badge) { <button class="btn small" (click)="enregistrerBadge(b, true)">Retirer</button> }
+                </td>
+              </tr>
+            }
+            @if (badges.length === 0) {
+              <tr><td colspan="4" class="empty">Aucun professeur inscrit pour le moment.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <!-- Badges inconnus -->
+      <div class="panel">
+        <h2>Badges inconnus (7 derniers jours)</h2>
+        @for (i of inconnus; track i.uid) {
+          <div class="row inconnu">
+            <span class="mono">{{ i.uid }}</span>
+            <span class="muted">{{ i.dernierPassage | date:'dd/MM HH:mm' }}</span>
+            <select [(ngModel)]="attributionInconnu[i.uid]">
+              <option [ngValue]="null">Attribuer à…</option>
+              @for (b of badges; track b.id) { <option [ngValue]="b.id">{{ b.nom }} {{ b.prenom }}</option> }
+            </select>
+            <button class="btn small primary" [disabled]="!attributionInconnu[i.uid]" (click)="attribuerInconnu(i.uid)">OK</button>
+          </div>
+        }
+        @if (inconnus.length === 0) { <p class="muted">Aucun badge inconnu.</p> }
+      </div>
+
+      <!-- Simulation -->
+      <div class="panel">
+        <h2>Simulation (démonstration)</h2>
+        <p class="hint">Simule un passage de badge sans lecteur RFID : arrivée au 1er clic, départ au 2e.</p>
+        <div class="row">
+          <select [(ngModel)]="simulationProf">
+            @for (b of badges; track b.id) { <option [ngValue]="b.id">{{ b.nom }} {{ b.prenom }}</option> }
+          </select>
+          <button class="btn primary" [disabled]="!simulationProf" (click)="simuler()">Simuler un passage</button>
+        </div>
+      </div>
+
+      <!-- Journal -->
+      <div class="panel">
+        <h2>Derniers passages</h2>
+        <ul class="journal">
+          @for (p of passages; track $index) {
+            <li><span class="mono">{{ p.horodatage | date:'dd/MM HH:mm:ss' }}</span>
+              <span class="tag" [class.ok]="p.resultat === 'ARRIVEE'" [class.warn]="p.resultat === 'INCONNU'">{{ libelleResultat(p.resultat) }}</span>
+              {{ p.professeur || p.uid }}</li>
+          }
+          @if (passages.length === 0) { <li class="muted">Aucun passage enregistré.</li> }
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

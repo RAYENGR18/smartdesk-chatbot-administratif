@@ -1,0 +1,23 @@
+cin;nom;prenom;type;filiere;niveau;email;matricule;departement
+99000101;Ben Salah;Amine;etudiant;INFO;L1;amine.bensalah@demo.fpst.tn;E2026001;
+99000102;Trabelsi;Yasmine;etudiant;INFO;L1;yasmine.trabelsi@demo.fpst.tn;E2026002;
+99000103;Gharbi;Mehdi;etudiant;INFO;L2;mehdi.gharbi@demo.fpst.tn;E2026003;
+99000104;Jaziri;Nour;etudiant;INFO;L3;nour.jaziri@demo.fpst.tn;E2026004;
+99000105;Mansouri;Skander;etudiant;INFO;M1;skander.mansouri@demo.fpst.tn;E2026005;
+99000106;Hammami;Ines;etudiant;CHIM;L1;ines.hammami@demo.fpst.tn;E2026006;
+99000107;Khelifi;Omar;etudiant;CHIM;L1;omar.khelifi@demo.fpst.tn;E2026007;
+99000108;Dridi;Sarra;etudiant;CHIM;L2;sarra.dridi@demo.fpst.tn;E2026008;
+99000109;Ayari;Hamza;etudiant;CHIM;L3;hamza.ayari@demo.fpst.tn;E2026009;
+99000110;Bouazizi;Rim;etudiant;MATH;L1;rim.bouazizi@demo.fpst.tn;E2026010;
+99000111;Chaabane;Youssef;etudiant;MATH;L2;youssef.chaabane@demo.fpst.tn;E2026011;
+99000112;Ferchichi;Malek;etudiant;MATH;M1;malek.ferchichi@demo.fpst.tn;E2026012;
+99000113;Sassi;Ons;etudiant;GEST;L1;ons.sassi@demo.fpst.tn;E2026013;
+99000114;Mejri;Aziz;etudiant;GEST;L2;aziz.mejri@demo.fpst.tn;E2026014;
+99000115;Zouari;Lina;etudiant;GEST;L3;lina.zouari@demo.fpst.tn;E2026015;
+99000116;Riahi;Firas;etudiant;INFO;L2;firas.riahi@demo.fpst.tn;E2026016;
+99000201;Haddad;Karim;professeur;;;karim.haddad@demo.fpst.tn;;Informatique
+99000202;Masmoudi;Leila;professeur;;;leila.masmoudi@demo.fpst.tn;;Informatique
+99000203;Belhadj;Sami;professeur;;;sami.belhadj@demo.fpst.tn;;Chimie
+99000204;Chebbi;Hela;professeur;;;hela.chebbi@demo.fpst.tn;;Mathématiques
+99000205;Toumi;Walid;professeur;;;walid.toumi@demo.fpst.tn;;Gestion
+99000206;Kammoun;Asma;professeur;;;asma.kammoun@demo.fpst.tn;;Informatique

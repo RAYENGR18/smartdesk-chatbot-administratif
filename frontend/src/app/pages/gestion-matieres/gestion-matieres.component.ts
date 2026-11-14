@@ -28,6 +28,8 @@ export class GestionMatieresComponent implements OnInit {
   coefficient: number | null = null;
   volumeHoraire: number | null = null;
   type = 'CM';
+  niveau = '';
+  niveaux: Array<{ code: string; libelle: string }> = [];
   filiereId: number | null = null;
   selectedFiliereIds: number[] = [];
 
@@ -158,6 +160,7 @@ export class GestionMatieresComponent implements OnInit {
     this.filiereService.getAll().subscribe({
       next: (data) => this.filieres = data
     });
+    this.authService.getNiveaux().subscribe({ next: (n) => this.niveaux = n });
   }
 
   openAdd() {
@@ -172,6 +175,7 @@ export class GestionMatieresComponent implements OnInit {
     this.coefficient = m.coefficient;
     this.volumeHoraire = m.volumeHoraire;
     this.type = m.type || 'CM';
+    this.niveau = m.niveau || '';
     this.filiereId = m.filiere?.id || null;
     // Populate multi-select from filieres array
     this.selectedFiliereIds = (m.filieres || []).map((f: any) => f.id);
@@ -189,7 +193,7 @@ export class GestionMatieresComponent implements OnInit {
 
     const data: any = {
       nom: this.nom, code: this.code, coefficient: this.coefficient,
-      volumeHoraire: this.volumeHoraire, type: this.type,
+      volumeHoraire: this.volumeHoraire, type: this.type, niveau: this.niveau || null,
       filiereIds: this.selectedFiliereIds.length > 0 ? this.selectedFiliereIds : (this.filiereId ? [this.filiereId] : []),
       filiereId: this.selectedFiliereIds.length > 0 ? this.selectedFiliereIds[0] : this.filiereId
     };
@@ -226,6 +230,7 @@ export class GestionMatieresComponent implements OnInit {
   }
 
   resetForm() {
+    this.niveau = '';
     this.nom = ''; this.code = ''; this.coefficient = null;
     this.volumeHoraire = null; this.type = 'CM'; this.filiereId = null;
     this.selectedFiliereIds = [];

@@ -12,6 +12,11 @@ export class NoteService {
 
   constructor(private http: HttpClient) {}
 
+  /** Notes de l'étudiant connecté (identifié par son token) */
+  getMesNotes(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/me`);
+  }
+
   /** Récupère les notes d'un étudiant (espace étudiant) */
   getNotesByEtudiant(etudiantId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/etudiant/${etudiantId}`);

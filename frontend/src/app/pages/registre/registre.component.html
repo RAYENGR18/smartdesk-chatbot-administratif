@@ -1,0 +1,110 @@
+<div class="page">
+  <header class="page-header">
+    <button class="btn-back" (click)="retour()">← Retour</button>
+    <div>
+      <h1>Registre de l'établissement</h1>
+      <p class="subtitle">
+        Liste officielle des étudiants et professeurs. Une inscription n'est acceptée que si le CIN,
+        le nom, le prénom (et pour un étudiant la filière et le niveau) correspondent à ce registre.
+      </p>
+    </div>
+    <span class="mode" [class.externe]="modeExterne">
+      Source : {{ modeExterne ? 'base de la faculté (externe)' : 'registre importé (local)' }}
+    </span>
+  </header>
+
+  <section class="cards">
+    <div class="card-stat"><span class="val">{{ stats.total ?? 0 }}</span><span class="lbl">Personnes au registre</span></div>
+    <div class="card-stat"><span class="val">{{ stats.etudiants ?? 0 }}</span><span class="lbl">Étudiants</span></div>
+    <div class="card-stat"><span class="val">{{ stats.professeurs ?? 0 }}</span><span class="lbl">Professeurs</span></div>
+    <div class="card-stat"><span class="val">{{ (stats.comptesEtudiants ?? 0) + (stats.comptesProfesseurs ?? 0) }}</span><span class="lbl">Comptes créés</span></div>
+  </section>
+
+  @if (erreur) { <div class="alert alert-err">{{ erreur }}</div> }
+  @if (message) { <div class="alert alert-ok">{{ message }}</div> }
+
+  @if (modeExterne) {
+    <div class="panel">
+      <h2>Vérification par la base de la faculté</h2>
+      <p>Les inscriptions sont vérifiées directement dans la base de données de l'établissement
+        (configuration <code>REGISTRE_MODE=externe</code> dans le fichier <code>.env</code>).
+        L'import ci-dessous n'est pas utilisé dans ce mode.</p>
+    </div>
+  } @else {
+    <div class="panel">
+      <h2>Importer le registre (Excel ou CSV)</h2>
+      <p class="hint">
+        Colonnes : <b>cin</b>, <b>nom</b>, <b>prenom</b>, <b>type</b> (etudiant / professeur), filiere (code),
+        niveau (L1, L2, L3, M1, M2…), email, matricule, departement. Une personne déjà présente (même CIN) est mise à jour.
+      </p>
+      <div class="row">
+        <input type="file" accept=".xlsx,.csv" (change)="choisirFichier($event)">
+        <button class="btn primary" [disabled]="chargement || !fichier" (click)="importer()">
+          {{ chargement ? 'Import en cours…' : 'Importer' }}
+        </button>
+        <button class="btn" (click)="telechargerModele()">Télécharger un modèle</button>
+        <button class="btn demo" [disabled]="chargement" (click)="chargerDemo()">Charger les données de démonstration</button>
+      </div>
+      @if (resultat && resultat.erreurs.length > 0) {
+        <details class="erreurs" open>
+          <summary>{{ resultat.erreurs.length }} ligne(s) à corriger</summary>
+          <ul>
+            @for (e of resultat.erreurs; track $index) { <li>{{ e }}</li> }
+          </ul>
+        </details>
+      }
+    </div>
+  }
+
+  <div class="panel">
+    <div class="row between">
+      <h2>Personnes ({{ total }})</h2>
+      <div class="row">
+        <input class="search" type="text" [(ngModel)]="recherche" (keyup.enter)="charger(0)"
+               placeholder="Rechercher : CIN, nom, prénom, filière…">
+        <select [(ngModel)]="type" (change)="charger(0)">
+          <option value="">Tous</option>
+          <option value="ETUDIANT">Étudiants</option>
+          <option value="PROFESSEUR">Professeurs</option>
+        </select>
+        <button class="btn" (click)="charger(0)">Rechercher</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>CIN</th><th>Nom</th><th>Prénom</th><th>Type</th><th>Filière</th><th>Niveau</th>
+            <th>Email</th><th>Compte</th><th>Origine</th><th></th></tr>
+        </thead>
+        <tbody>
+          @for (p of personnes; track p.id) {
+            <tr>
+              <td class="mono">{{ p.cin }}</td>
+              <td>{{ p.nom }}</td>
+              <td>{{ p.prenom }}</td>
+              <td><span class="tag" [class.prof]="p.type === 'PROFESSEUR'">{{ p.type === 'PROFESSEUR' ? 'Professeur' : 'Étudiant' }}</span></td>
+              <td>{{ p.filiere || '—' }}</td>
+              <td>{{ p.niveau || '—' }}</td>
+              <td class="muted">{{ p.email || '—' }}</td>
+              <td>@if (p.compteCree) { <span class="tag ok">Créé</span> } @else { <span class="muted">—</span> }</td>
+              <td class="muted">{{ p.origine === 'DEMO' ? 'Démo' : 'Import' }}</td>
+              <td><button class="btn-icon" title="Retirer du registre" (click)="supprimer(p)">✕</button></td>
+            </tr>
+          }
+          @if (personnes.length === 0) {
+            <tr><td colspan="10" class="empty">Registre vide : importez un fichier ou chargez les données de démonstration.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (pages > 1) {
+      <div class="pager">
+        <button class="btn" [disabled]="page === 0" (click)="charger(page - 1)">‹ Précédent</button>
+        <span>Page {{ page + 1 }} / {{ pages }}</span>
+        <button class="btn" [disabled]="page >= pages - 1" (click)="charger(page + 1)">Suivant ›</button>
+      </div>
+    }
+  </div>
+</div>

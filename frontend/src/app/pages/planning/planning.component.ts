@@ -26,6 +26,11 @@ export class PlanningComponent implements OnInit {
   salles: any[] = [];
   
   selectedFiliereId: number | null = null;
+  selectedNiveau = '';
+  niveaux: Array<{ code: string; libelle: string }> = [];
+  // Étudiant : filière et niveau renvoyés par le serveur (jamais choisis par l'étudiant)
+  monPlanningFiliere = '';
+  monPlanningMessage = '';
   selectedProfesseurId: number | null = null;
   viewMode: 'FILIERE' | 'PROFESSEUR' = 'FILIERE';
   
@@ -43,6 +48,7 @@ export class PlanningComponent implements OnInit {
     matiereId: '',
     salleId: '',
     filiereId: '',
+    niveau: '',
     professeurId: '',
     groupe: 'Groupe A',
     semestre: 'S1'
@@ -241,8 +247,11 @@ export class PlanningComponent implements OnInit {
 
     if (this.role === 'PROFESSEUR') {
       this.loadProfesseurPlanning();
+    } else if (this.role === 'USER') {
+      this.loadMonPlanning();
     } else {
       this.loadFilieres();
+      this.authService.getNiveaux().subscribe({ next: (n) => this.niveaux = n });
       if (this.role === 'ADMIN') {
         this.loadProfesseurs();
         this.loadMatieres();
@@ -313,22 +322,35 @@ export class PlanningComponent implements OnInit {
     });
   }
 
+  /**
+   * Étudiant : le serveur renvoie l'emploi du temps de SA filière et de SON niveau
+   * (lus dans son compte). L'étudiant ne choisit rien et ne peut pas voir une autre filière.
+   */
+  loadMonPlanning() {
+    this.isLoading = true;
+    this.planningService.getMonPlanning().subscribe({
+      next: (res: any) => {
+        this.creneaux = res?.creneaux || [];
+        this.monPlanningFiliere = res?.filiere
+          ? `${res.filiere.nom} — ${res.niveauLibelle || res.niveau}`
+          : '';
+        this.monPlanningMessage = res?.message || '';
+        this.isLoading = false;
+      },
+      error: () => {
+        this.creneaux = [];
+        this.monPlanningMessage = 'Emploi du temps indisponible pour le moment.';
+        this.isLoading = false;
+      }
+    });
+  }
+
   loadFilieres() {
     this.filiereService.getAll().subscribe({
       next: (data) => {
         this.filieres = data;
         if (this.filieres.length > 0) {
-          if (this.role === 'USER') {
-            const profile = this.authService.getStoredProfile();
-            const field = (profile?.fieldOfStudy || '').trim().toLowerCase();
-            // Comparaison insensible à la casse et aux espaces
-            const maFiliere = this.filieres.find(
-              (f: any) => (f.nom || '').trim().toLowerCase() === field
-            );
-            this.selectedFiliereId = maFiliere ? maFiliere.id : this.filieres[0].id;
-          } else {
-            this.selectedFiliereId = this.filieres[0].id;
-          }
+          this.selectedFiliereId = this.filieres[0].id;
           this.loadPlanning();
         }
       },
@@ -338,9 +360,13 @@ export class PlanningComponent implements OnInit {
 
   genererPlanningAuto() {
     if (!this.selectedFiliereId || this.role !== 'ADMIN') return;
+    if (!this.selectedNiveau) {
+      alert('Choisissez d\'abord le niveau à générer (L1, L2, M1...).');
+      return;
+    }
     if (confirm(this.text('confirm_generate'))) {
       this.isGenerating = true;
-      this.planningService.genererPlanning(this.selectedFiliereId, 'S1').subscribe({
+      this.planningService.genererPlanning(this.selectedFiliereId, this.selectedNiveau, 'S1').subscribe({
         next: () => {
           this.isGenerating = false;
           alert(this.text('success_generated'));
@@ -357,7 +383,7 @@ export class PlanningComponent implements OnInit {
   loadPlanning() {
     if (!this.selectedFiliereId) return;
     this.isLoading = true;
-    this.planningService.getPlanningByFiliere(this.selectedFiliereId).subscribe({
+    this.planningService.getPlanningByFiliere(this.selectedFiliereId, this.selectedNiveau || null).subscribe({
       next: (data) => {
         this.creneaux = data;
         this.isLoading = false;
@@ -395,7 +421,7 @@ export class PlanningComponent implements OnInit {
   logout() { this.authService.logout(); this.router.navigate(['/login']); }
 
   ajouterCreneauManuel() {
-    if (!this.newSlot.matiereId || !this.newSlot.salleId || !this.newSlot.filiereId) {
+    if (!this.newSlot.matiereId || !this.newSlot.salleId || !this.newSlot.filiereId || !this.newSlot.niveau) {
       alert(this.text('missing_required'));
       return;
     }
@@ -416,6 +442,7 @@ export class PlanningComponent implements OnInit {
   }
 
   getFiliereNom(): string {
+    if (this.role === 'USER') return this.monPlanningFiliere;
     const f = this.filieres.find(f => f.id === this.selectedFiliereId);
     return f ? f.nom : (this.viewMode === 'PROFESSEUR' && this.selectedProfesseurId ? this.text('teacher_view') : '');
   }

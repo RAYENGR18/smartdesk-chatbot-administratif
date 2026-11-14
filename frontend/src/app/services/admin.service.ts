@@ -56,9 +56,4 @@ export class AdminService {
   getDocuments(): Observable<any> {
     return this.http.get(`${this.apiUrl}/documents`);
   }
-
-  // générer un identifiant
-  generateIdentity(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/identities/generate`, data);
-  }
 }

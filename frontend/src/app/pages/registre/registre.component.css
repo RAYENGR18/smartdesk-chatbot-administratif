@@ -1,0 +1,42 @@
+:host { display: block; min-height: 100vh; background: var(--bg-body, #f0f2f9); color: var(--text-primary, #0f1523); }
+.page { max-width: 1300px; margin: 0 auto; padding: 28px; }
+.page-header { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 22px; flex-wrap: wrap; }
+.page-header h1 { margin: 0 0 6px; font-size: 1.6rem; }
+.page-header > div { flex: 1; min-width: 280px; }
+.subtitle { margin: 0; color: var(--text-secondary, #475569); max-width: 760px; line-height: 1.5; }
+.mode { padding: 6px 12px; border-radius: 999px; background: var(--primary-soft, rgba(79,110,247,.1)); color: var(--primary, #4f6ef7); font-size: .85rem; font-weight: 600; white-space: nowrap; }
+.mode.externe { background: var(--warning-soft, #fffbeb); color: var(--warning-text, #92400e); }
+.btn-back { border: 1px solid var(--border, #e2e8f4); background: var(--bg-card, #fff); color: var(--text-primary, #0f1523); border-radius: 10px; padding: 8px 14px; cursor: pointer; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.card-stat { background: var(--bg-card, #fff); border: 1px solid var(--border-light, #edf0f8); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; box-shadow: var(--shadow-xs, none); }
+.card-stat .val { font-size: 1.7rem; font-weight: 700; color: var(--primary, #4f6ef7); }
+.card-stat .lbl { color: var(--text-secondary, #475569); font-size: .9rem; }
+.panel { background: var(--bg-card, #fff); border: 1px solid var(--border-light, #edf0f8); border-radius: 14px; padding: 18px 20px; margin-bottom: 18px; box-shadow: var(--shadow-xs, none); }
+.panel h2 { margin: 0 0 10px; font-size: 1.15rem; }
+.hint { color: var(--text-secondary, #475569); margin: 0 0 12px; line-height: 1.5; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.row.between { justify-content: space-between; margin-bottom: 12px; }
+.btn { border: 1px solid var(--border, #e2e8f4); background: var(--bg-surface, #f5f7fc); color: var(--text-primary, #0f1523); border-radius: 10px; padding: 8px 14px; cursor: pointer; font-weight: 500; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn.primary { background: var(--primary, #4f6ef7); border-color: var(--primary, #4f6ef7); color: #fff; }
+.btn.demo { border-style: dashed; }
+input[type="text"], select { border: 1px solid var(--border, #e2e8f4); background: var(--bg-input, #f5f7fc); color: var(--text-primary, #0f1523); border-radius: 10px; padding: 8px 12px; }
+.search { min-width: 280px; }
+.alert { border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
+.alert-err { background: var(--danger-soft, #fef2f2); color: var(--danger-text, #b91c1c); }
+.alert-ok { background: var(--success-soft, #ecfdf5); color: var(--success-text, #065f46); }
+.erreurs { margin-top: 12px; color: var(--danger-text, #b91c1c); }
+.erreurs ul { margin: 8px 0 0; padding-left: 20px; max-height: 220px; overflow: auto; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { padding: 9px 10px; border-bottom: 1px solid var(--border-light, #edf0f8); text-align: left; }
+th { color: var(--text-secondary, #475569); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .02em; }
+.mono { font-family: ui-monospace, Consolas, monospace; }
+.muted { color: var(--text-muted, #94a3b8); }
+.tag { padding: 3px 9px; border-radius: 999px; background: var(--info-soft, #eff6ff); color: var(--info-text, #1d4ed8); font-size: .8rem; font-weight: 600; }
+.tag.prof { background: var(--accent-soft, rgba(6,182,212,.1)); color: var(--accent, #06b6d4); }
+.tag.ok { background: var(--success-soft, #ecfdf5); color: var(--success-text, #065f46); }
+.btn-icon { border: none; background: transparent; color: var(--danger, #ef4444); cursor: pointer; font-size: 1rem; }
+.empty { text-align: center; color: var(--text-muted, #94a3b8); padding: 26px; }
+.pager { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 14px; }
+code { background: var(--bg-surface, #f5f7fc); padding: 1px 6px; border-radius: 6px; }

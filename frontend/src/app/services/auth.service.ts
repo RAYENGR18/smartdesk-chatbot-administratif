@@ -68,6 +68,16 @@ export class AuthService {
     return raw;
   }
 
+  /** Filières proposées à l'inscription (route publique). */
+  getFilieresInscription(): Observable<Array<{ id: number; code: string; nom: string }>> {
+    return this.http.get<Array<{ id: number; code: string; nom: string }>>(`${this.apiUrl}/filieres`);
+  }
+
+  /** Niveaux d'études proposés à l'inscription (route publique). */
+  getNiveaux(): Observable<Array<{ code: string; libelle: string }>> {
+    return this.http.get<Array<{ code: string; libelle: string }>>(`${this.apiUrl}/niveaux`);
+  }
+
   register(studentData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, studentData);
   }

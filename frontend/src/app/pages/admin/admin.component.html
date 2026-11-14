@@ -27,14 +27,22 @@
         <span>{{ text('dashboard') }}</span>
       </button>
 
-      <button class="nav-item" [class.active]="activeTab === 'identities'" (click)="setTab('identities')">
+      <button class="nav-item" (click)="goToRegistre()">
         <span class="nav-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+            <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/>
           </svg>
         </span>
-        <span>{{ text('identities') }}</span>
-        <span class="nav-badge">{{ text('key_badge') }}</span>
+        <span>Registre (CIN)</span>
+      </button>
+
+      <button class="nav-item" (click)="goToPresences()">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </span>
+        <span>Présences profs</span>
       </button>
 
       <button class="nav-item" [class.active]="activeTab === 'users'" (click)="setTab('users')">
@@ -157,9 +165,6 @@
       <div class="topbar-title">
         @if (activeTab === 'stats') {
           <span>{{ text('dashboard') }}</span>
-        }
-        @if (activeTab === 'identities') {
-          <span>{{ text('identity_title') }}</span>
         }
         @if (activeTab === 'users') {
           <span>{{ text('users') }}</span>
@@ -307,91 +312,6 @@
       }
 
       <!-- ======= IDENTIFIANTS ======= -->
-      @if (activeTab === 'identities') {
-        <div class="section-fade">
-          <div class="identity-layout">
-            <div class="identity-info-card">
-              <div class="icard-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="1.5" width="36" height="36"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              </div>
-              <h3>{{ text('identity_how') }}</h3>
-              <ol class="icard-steps">
-                <li>{{ text('identity_step1') }}</li>
-                <li>{{ text('identity_step2') }}</li>
-                <li>{{ text('identity_step3') }}</li>
-                <li>{{ text('identity_step4') }}</li>
-                <li>{{ text('identity_step5') }}</li>
-              </ol>
-              <div class="icard-note">
-                {{ text('identity_note') }}
-              </div>
-            </div>
-            <div class="identity-form-panel">
-              <h2 class="panel-title">{{ text('identity_generate_title') }}</h2>
-              <div class="form-field">
-                <label class="field-label">{{ text('identity_role') }}</label>
-                <select [(ngModel)]="identityData.role" class="field-select">
-                  <option value="USER">{{ text('students') }} (12)</option>
-                  <option value="PROFESSEUR">{{ text('professors') }} (8)</option>
-                </select>
-              </div>
-              <div class="form-row">
-                <div class="form-field">
-                  <label class="field-label">{{ t('register.first_name') }}</label>
-                  <input type="text" [(ngModel)]="identityData.firstName" class="field-input" placeholder="..." />
-                </div>
-                <div class="form-field">
-                  <label class="field-label">{{ t('register.last_name') }}</label>
-                  <input type="text" [(ngModel)]="identityData.lastName" class="field-input" placeholder="..." />
-                </div>
-              </div>
-              <div class="form-field">
-                <label class="field-label">{{ t('register.cin') }}</label>
-                <input type="text" [(ngModel)]="identityData.cin" class="field-input" placeholder="..." />
-              </div>
-              <button class="generate-btn" [disabled]="isLoading" (click)="generateIdentity()">
-                @if (!isLoading) {
-                  <span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    {{ text('identity_generate_btn') }}
-                  </span>
-                }
-                @if (isLoading) {
-                  <span class="loader-text">
-                    <span class="spinner"></span> ...
-                  </span>
-                }
-              </button>
-              @if (identityError) {
-                <div class="id-error">{{ identityError }}</div>
-              }
-              @if (generatedId) {
-                <div class="id-result">
-                  <div class="result-header">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    {{ text('identity_success') }}
-                  </div>
-                  <div class="id-display-wrap">
-                    <div class="id-display-number">{{ generatedId }}</div>
-                    <button class="copy-btn" (click)="copyId()">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                      </svg>
-                      {{ text('copy') }}
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
-        </div>
-      }
-
       <!-- ======= USERS ======= -->
       @if (activeTab === 'users') {
         <div class="section-fade">
@@ -535,6 +455,20 @@
               <p>{{ text('manage_subjects_desc') }}</p>
               <div class="gc-count">{{ stats.totalMatieres || 0 }}</div>
             </div>
+            <div class="gestion-card gc-indigo" (click)="goToRegistre()">
+              <div class="gc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 15h4"/></svg>
+              </div>
+              <h3>Registre de l'établissement</h3>
+              <p>Liste officielle (CIN) utilisée pour vérifier les inscriptions : import Excel/CSV ou démo.</p>
+            </div>
+            <div class="gestion-card gc-cyan" (click)="goToPresences()">
+              <div class="gc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3>Présence des professeurs</h3>
+              <p>Pointage par badge RFID : arrivées, départs, durées, badges.</p>
+            </div>
             <div class="gestion-card gc-rose" (click)="goToPlanning()">
               <div class="gc-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="14" x2="8.01" y2="14"/><line x1="12" y1="14" x2="12.01" y2="14"/><line x1="16" y1="14" x2="16.01" y2="14"/></svg>
@@ -672,10 +606,10 @@
               <div class="ni-example-label">Exemple :</div>
               <div class="ni-example-table">
                 <table>
-                  <thead><tr><th>cin</th><th>nomMatiere</th><th>typeEvaluation</th><th>note</th><th>moyenne</th><th>commentaire</th></tr></thead>
+                  <thead><tr><th>CIN</th><th>Matière</th><th>Type</th><th>Note</th><th>Moyenne</th><th>Commentaire</th></tr></thead>
                   <tbody>
-                    <tr><td>12345678</td><td>Algorithmique</td><td>Examen</td><td>15.5</td><td>14</td><td>Très bien</td></tr>
-                    <tr><td>12345678</td><td>Bases de données</td><td>DS</td><td>12</td><td>13.5</td><td></td></tr>
+                    <tr><td>01234567</td><td>Algorithmique</td><td>Examen</td><td>15.5</td><td>14</td><td>Très bien</td></tr>
+                    <tr><td>01234567</td><td>Bases de données</td><td>DS</td><td>12</td><td>13.5</td><td></td></tr>
                     <tr><td>87654321</td><td>Algorithmique</td><td>Examen</td><td>8.5</td><td>9</td><td></td></tr>
                   </tbody>
                 </table>

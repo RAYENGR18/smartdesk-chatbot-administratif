@@ -39,7 +39,7 @@ public class StudentController {
     @PutMapping("/profile/{username}")
     public ResponseEntity<Map<String, String>> updateProfile(@PathVariable String username,
                                                              @RequestBody Map<String, String> updates) {
-        CurrentUser.requireSelfOrAdmin(username);
+        AuthenticatedUser me = CurrentUser.requireSelfOrAdmin(username);
         User user = findByUsername(username);
 
         for (Map.Entry<String, String> e : updates.entrySet()) {
@@ -51,8 +51,9 @@ public class StudentController {
         // Nom et prénom viennent de l'identité administrative : non modifiables ici
         if (updates.containsKey("phone")) user.setPhone(updates.get("phone"));
         if (updates.containsKey("address")) user.setAddress(updates.get("address"));
-        if (updates.containsKey("fieldOfStudy")) user.setFieldOfStudy(updates.get("fieldOfStudy"));
-        if (updates.containsKey("academicLevel")) user.setAcademicLevel(updates.get("academicLevel"));
+        // Filière et niveau : données officielles (registre), modifiables par l'administration seulement
+        if (me.isAdmin() && updates.containsKey("fieldOfStudy")) user.setFieldOfStudy(updates.get("fieldOfStudy"));
+        if (me.isAdmin() && updates.containsKey("academicLevel")) user.setAcademicLevel(updates.get("academicLevel"));
         if (updates.containsKey("email")) {
             String email = updates.get("email") == null ? "" : updates.get("email").trim().toLowerCase(Locale.ROOT);
             if (!email.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
@@ -135,6 +136,9 @@ public class StudentController {
         profile.put("studentId", user.getStudentId());
         profile.put("fieldOfStudy", user.getFieldOfStudy());
         profile.put("academicLevel", user.getAcademicLevel());
+        profile.put("niveau", user.getNiveau());
+        profile.put("filiereId", user.getFiliere() != null ? user.getFiliere().getId() : null);
+        profile.put("filiereCode", user.getFiliere() != null ? user.getFiliere().getCode() : null);
         profile.put("academicYear", user.getAcademicYear());
         profile.put("institution", user.getInstitution());
         profile.put("faculty", user.getFaculty());

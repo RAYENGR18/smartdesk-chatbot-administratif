@@ -63,6 +63,15 @@ export class EtudiantComponent implements OnInit {
     }
 
     this.profile = this.authService.getStoredProfile();
+    this.authService.getStudentProfile().subscribe({
+      next: (p: any) => {
+        if (p) {
+          this.profile = p;
+          this.authService.saveStudentProfile(p);
+          if (!this.notifications.length) this.loadNotifications();
+        }
+      }
+    });
     this.loadNotes();
     this.loadNotifications();
   }
@@ -225,12 +234,8 @@ export class EtudiantComponent implements OnInit {
 
   loadNotes() {
     this.isLoadingNotes = true;
-    const userId = this.profile?.id || Number(localStorage.getItem('userId')) || 0;
-    if (!userId) {
-      this.isLoadingNotes = false;
-      return;
-    }
-    this.noteService.getNotesByEtudiant(userId).subscribe({
+    // L'étudiant est identifié par son token : il ne peut recevoir que SES notes
+    this.noteService.getMesNotes().subscribe({
       next: (data) => {
         this.mesNotes = data;
         this.isLoadingNotes = false;

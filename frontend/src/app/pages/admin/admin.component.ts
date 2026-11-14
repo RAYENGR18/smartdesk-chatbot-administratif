@@ -50,14 +50,6 @@ export class AdminComponent implements OnInit {
   importError = '';
   importSuccess = '';
 
-  identityData = {
-    role: 'USER',
-    firstName: '',
-    lastName: '',
-    cin: ''
-  };
-  generatedId = '';
-  identityError = '';
   currentLang = 'fr';
 
   constructor(
@@ -127,10 +119,10 @@ export class AdminComponent implements OnInit {
         import_errors: 'Erreurs d\'import',
         file_format_title: 'Format attendu du fichier',
         file_format_desc: 'Votre fichier doit contenir une ligne d\'en-tête avec les colonnes suivantes :', 
-        col_cin: 'cin — CIN de l\'étudiant (obligatoire)',
-        col_matiere: 'nomMatiere — Nom de la matière',
-        col_type: 'typeEvaluation — Type : Examen, DS, TP, Projet',
-        col_note: 'note — Note sur 20 (obligatoire)',
+        col_cin: 'CIN — CIN de l\'étudiant, 8 chiffres (obligatoire)',
+        col_matiere: 'Matière — nom ou code de la matière',
+        col_type: 'Type — Examen (par défaut), DS, TP, Projet',
+        col_note: 'Note — sur 20, virgule ou point (obligatoire)',
         col_moyenne: 'moyenne — Moyenne (optionnel)',
         col_commentaire: 'commentaire — Commentaire (optionnel)',
 
@@ -211,7 +203,7 @@ export class AdminComponent implements OnInit {
         file_format_title: 'Expected file format',
         file_format_desc: 'Your file must contain a header row with the following columns:',
         col_cin: 'cin — Student CIN (required)',
-        col_matiere: 'nomMatiere — Subject name',
+        col_matiere: 'Matière — subject name or code',
         col_type: 'typeEvaluation — Type: Examen, DS, TP, Projet',
         col_note: 'note — Grade out of 20 (required)',
         col_moyenne: 'moyenne — Average (optional)',
@@ -294,7 +286,7 @@ export class AdminComponent implements OnInit {
         file_format_title: 'تنسيق الملف المتوقع',
         file_format_desc: 'يجب أن يحتوي ملفك على سطر عناوين بالأعمدة التالية:',
         col_cin: 'cin — رقم بطاقة الطالب (إلزامي)',
-        col_matiere: 'nomMatiere — اسم المادة',
+        col_matiere: 'Matière — اسم المادة',
         col_type: 'typeEvaluation — النوع: Examen, DS, TP, Projet',
         col_note: 'note — العدد من 20 (إلزامي)',
         col_moyenne: 'moyenne — المعدل (اختياري)',
@@ -440,7 +432,7 @@ export class AdminComponent implements OnInit {
       },
       error: (err: any) => {
         this.isImporting = false;
-        this.importError = err.error?.error || 'Erreur lors de l\'import.';
+        this.importError = err.error?.message || err.error?.error || 'Erreur lors de l\'import.';
       }
     });
   }
@@ -596,36 +588,7 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  generateIdentity() {
-    this.identityError = '';
-    this.generatedId = '';
 
-    if (!this.identityData.firstName || !this.identityData.lastName || !this.identityData.cin) {
-      this.identityError = this.text('identity_error_empty');
-      return;
-    }
-
-    this.identityData.role = this.identityData.role.toUpperCase();
-
-    this.isLoading = true;
-    this.adminService.generateIdentity(this.identityData).subscribe({
-      next: (res: any) => {
-        this.isLoading = false;
-        this.generatedId = res.identifier;
-      },
-      error: (err: any) => {
-        this.isLoading = false;
-        this.identityError = err.error?.error || err.error?.message || this.text('identity_error_gen');
-      }
-    });
-  }
-
-  copyId() {
-    if (this.generatedId) {
-      navigator.clipboard.writeText(this.generatedId);
-      alert(this.text('copied'));
-    }
-  }
 
   goBack() { this.location.back(); }
   setTab(tab: string) { this.activeTab = tab; }
@@ -636,5 +599,7 @@ export class AdminComponent implements OnInit {
   goToSalles() { this.router.navigate(['/gestion/salles']); }
   goToMatieres() { this.router.navigate(['/gestion/matieres']); }
   goToKnowledgeBase() { this.router.navigate(['/gestion/knowledge-base']); }
+  goToRegistre() { this.router.navigate(['/gestion/registre']); }
+  goToPresences() { this.router.navigate(['/gestion/presences']); }
 }
 

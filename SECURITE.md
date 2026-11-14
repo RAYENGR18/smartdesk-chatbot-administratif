@@ -53,9 +53,26 @@ et corrections apportées dans cette version.
 - `faq.txt` et `assistant_info.txt` de la base de connaissances avaient été écrasés par des
   contenus de test (« test », « Test contenu simple 123 ») : contenu d'origine restauré.
 
+## Sécurité des évolutions (inscription CIN, notes, emplois du temps, RFID)
+
+- **Inscription** : identité vérifiée côté serveur auprès du registre (jamais côté navigateur) ;
+  nom, prénom, filière et niveau officiels recopiés depuis le registre ; un seul compte par CIN ;
+  blocage après 10 vérifications refusées depuis la même adresse IP (anti-énumération des CIN).
+- **Base externe de la faculté** : connexion en lecture seule, requête paramétrée (`?`), délai maximal,
+  le backend démarre même si la base de la faculté est injoignable.
+- **Notes** : `GET /api/notes/me` identifie l'étudiant par son token ; la réponse ne contient
+  aucune donnée sur d'autres personnes.
+- **Emplois du temps** : la filière et le niveau de l'étudiant sont lus en base par le serveur
+  (`GET /api/planning/me`) ; la lecture d'une autre filière est réservée à l'admin et aux professeurs ;
+  les créneaux n'exposent plus le CIN, le téléphone ni l'email des professeurs.
+- **Lecteur RFID** : authentifié par une clé d'appareil (`RFID_DEVICE_KEY`, comparaison à temps constant),
+  pas par un compte ; chaque passage est journalisé ; un badge ne peut appartenir qu'à un professeur.
+- **Export CSV** des présences protégé contre l'injection de formules Excel.
+
 ## Tests automatisés
 
-- Backend : 15 tests (MockMvc + H2) couvrant l'accès anonyme, les tokens falsifiés,
+- Backend : 21 tests (MockMvc + H2) couvrant l'inscription par CIN, l'import des notes (CSV/Excel),
+  les emplois du temps par filière/niveau, le pointage RFID, et l'accès anonyme, les tokens falsifiés,
   les droits par rôle, l'accès aux données d'autrui, l'usurpation dans le chat,
   le brute-force, la traversée de répertoire, les documents, les notifications.
 - Service NLP : 10 tests pytest (clé d'API, absence de CORS, chemins de fichiers,

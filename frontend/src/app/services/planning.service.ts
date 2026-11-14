@@ -12,9 +12,15 @@ export class PlanningService {
 
   constructor(private http: HttpClient) {}
 
-  // Planning par filière
-  getPlanningByFiliere(filiereId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/filiere/${filiereId}`);
+  /** Mon emploi du temps : filière + niveau de l'étudiant (ou créneaux du professeur), calculé par le serveur. */
+  getMonPlanning(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/me`);
+  }
+
+  // Planning par filière (admin / professeur), éventuellement limité à un niveau
+  getPlanningByFiliere(filiereId: number, niveau?: string | null): Observable<any> {
+    const options = niveau ? { params: { niveau } } : {};
+    return this.http.get(`${this.apiUrl}/filiere/${filiereId}`, options);
   }
 
   // Planning par professeur
@@ -43,8 +49,8 @@ export class PlanningService {
   }
 
   // Générer planning automatique
-  genererPlanning(filiereId: number, semestre: string = 'S1'): Observable<any> {
-    return this.http.post(`${this.apiUrl}/generer`, { filiereId, semestre });
+  genererPlanning(filiereId: number, niveau: string, semestre: string = 'S1'): Observable<any> {
+    return this.http.post(`${this.apiUrl}/generer`, { filiereId, niveau, semestre });
   }
 
   // Salles disponibles

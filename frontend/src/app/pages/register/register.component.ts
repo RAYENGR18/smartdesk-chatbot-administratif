@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,13 +13,15 @@ import { ThemeService } from '../../services/theme.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
   selectedRole = '';
 
-  // ── Identifiants admin ──
-  studentUniqueId = '';
-  profUniqueId    = '';
+  // ── Filière et niveau (étudiant) : vérifiés auprès du registre de l'établissement ──
+  filieres: Array<{ id: number; code: string; nom: string }> = [];
+  niveaux: Array<{ code: string; libelle: string }> = [];
+  filiereId: number | null = null;
+  niveau = '';
 
   // ── Informations personnelles communes ──
   firstName   = '';
@@ -47,8 +49,6 @@ export class RegisterComponent {
   mention            = '';
 
   // ── Choix de formation (étudiant) ──
-  cycleChoisi       = '';
-  specialiteChoisie = '';
   modeEtude         = '';
 
   // ── Financier (étudiant) ──
@@ -85,6 +85,17 @@ export class RegisterComponent {
     this.languageService.currentLang$.subscribe(lang => { this.currentLang = lang; });
   }
 
+  ngOnInit(): void {
+    this.authService.getFilieresInscription().subscribe({
+      next: (list) => this.filieres = list,
+      error: () => this.filieres = []
+    });
+    this.authService.getNiveaux().subscribe({
+      next: (list) => this.niveaux = list,
+      error: () => this.niveaux = []
+    });
+  }
+
   get isDark(): boolean { return this.themeService.isDark; }
   toggleTheme(): void   { this.themeService.toggleTheme(); }
   t(key: string): string { return this.languageService.t(key); }
@@ -119,9 +130,16 @@ export class RegisterComponent {
       return;
     }
 
-    const id = this.selectedRole === 'USER' ? this.studentUniqueId.trim() : this.profUniqueId.trim();
-    if (!id) {
-      this.errorMessage = this.L('L\'identifiant administratif est obligatoire.', 'Admin ID is required.', 'المعرف الإداري إجباري.');
+    if (!this.lastName.trim() || !this.firstName.trim()) {
+      this.errorMessage = this.L('Le nom et le prénom sont obligatoires.', 'Last and first name are required.', 'الاسم واللقب إجباريان.');
+      return;
+    }
+    if (!this.cin.trim()) {
+      this.errorMessage = this.L('Le numéro de CIN est obligatoire.', 'National ID number is required.', 'رقم بطاقة التعريف إجباري.');
+      return;
+    }
+    if (this.selectedRole === 'USER' && (!this.filiereId || !this.niveau)) {
+      this.errorMessage = this.L('Veuillez choisir votre filière et votre niveau.', 'Please choose your program and level.', 'يرجى اختيار الشعبة والمستوى.');
       return;
     }
 
@@ -131,10 +149,6 @@ export class RegisterComponent {
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
       this.errorMessage = this.L('Email invalide.', 'Invalid email.', 'بريد إلكتروني غير صحيح.');
-      return;
-    }
-    if (!this.cin.trim()) {
-      this.errorMessage = this.L('Le CIN / Passeport est obligatoire.', 'CIN / Passport is required.', 'رقم البطاقة إجباري.');
       return;
     }
     if (!this.username.trim() || this.username.trim().length < 3) {
@@ -167,8 +181,6 @@ export class RegisterComponent {
           anneeObtention:      this.anneeObtention,
           moyenneGenerale:     this.moyenneGenerale,
           mention:             this.mention,
-          cycleChoisi:         this.cycleChoisi,
-          specialiteChoisie:   this.specialiteChoisie,
           modeEtude:           this.modeEtude,
           modePaiement:        this.modePaiement,
           demandeB:            this.demandeB,
@@ -189,7 +201,8 @@ export class RegisterComponent {
       email:         this.email.trim(),
       password:      this.password,
       cin:           this.cin.trim(),
-      studentId:     id,
+      filiereId:     this.selectedRole === 'USER' ? this.filiereId : null,
+      niveau:        this.selectedRole === 'USER' ? this.niveau : null,
       role:          this.selectedRole === 'USER' ? 'USER' : 'PROFESSEUR',
       firstName:     this.firstName.trim(),
       lastName:      this.lastName.trim(),
@@ -200,9 +213,7 @@ export class RegisterComponent {
       phone:         this.phone.trim(),
       address:       this.address.trim(),
       department:    this.selectedRole === 'USER' ? '' : this.matieresProfesseur.trim(),
-      academicLevel: this.selectedRole === 'USER' ? this.cycleChoisi : '',
       institution:   this.selectedRole === 'USER' ? this.etablissementOrigine.trim() : '',
-      fieldOfStudy:  this.selectedRole === 'USER' ? this.diplomeSpecialite.trim() : '',
       scholarship:   this.selectedRole === 'USER' ? this.demandeB : '',
       additionalInfo
     };
@@ -213,9 +224,15 @@ export class RegisterComponent {
         this.isLoading = false;
         this.successMessage = this.L('Compte créé avec succès !', 'Account created successfully!', 'تم إنشاء الحساب بنجاح!');
         this.authService.saveSession(res);
-        setTimeout(() => {
-          this.router.navigate([this.selectedRole === 'PROFESSEUR' ? '/professeur' : '/etudiant']);
-        }, 1600);
+        const cible = this.selectedRole === 'PROFESSEUR' ? '/professeur' : '/etudiant';
+        // Le profil (filière, niveau...) est chargé avant d'ouvrir l'espace personnel
+        this.authService.getStudentProfile().subscribe({
+          next: (profile: any) => {
+            if (profile) this.authService.saveStudentProfile(profile);
+            setTimeout(() => this.router.navigate([cible]), 1200);
+          },
+          error: () => setTimeout(() => this.router.navigate([cible]), 1200)
+        });
       },
       error: (err) => {
         this.isLoading = false;
