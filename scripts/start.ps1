@@ -53,7 +53,7 @@ Start-Process powershell -WorkingDirectory (Join-Path $Root "backend") -Argument
 
 Write-Host "==> Demarrage du frontend Angular" -ForegroundColor Cyan
 Start-Process powershell -WorkingDirectory (Join-Path $Root "frontend") -ArgumentList @(
-    "-NoExit", "-Command", "`$Host.UI.RawUI.WindowTitle = 'SmartDesk - Frontend'; `$env:NG_CLI_ANALYTICS = 'false'; npm start")
+    "-NoExit", "-Command", "`$Host.UI.RawUI.WindowTitle = 'SmartDesk - Frontend'; `$env:NG_CLI_ANALYTICS = 'false'; npm.cmd start")
 
 Write-Host ""
 Write-Host "==> Attente des services..." -ForegroundColor Cyan

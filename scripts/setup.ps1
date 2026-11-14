@@ -297,10 +297,11 @@ if (-not $SkipDependencies) {
     try {
         $npmLog = Join-Path $Root "npm-install.log"
         Write-Host "    (journal : npm-install.log)" -ForegroundColor Gray
-        & npm ci --no-audit --no-fund *> $npmLog
+        # npm.cmd et non npm : le lanceur npm.ps1 (npm 10) coupe la commande quand il est appele avec '&'
+        & npm.cmd ci --no-audit --no-fund *> $npmLog
         if ($LASTEXITCODE -ne 0) {
             Write-Warn "npm ci a echoue, nouvel essai avec npm install..."
-            & npm install --no-audit --no-fund *>> $npmLog
+            & npm.cmd install --no-audit --no-fund *>> $npmLog
             if ($LASTEXITCODE -ne 0) { Get-Content $npmLog -Tail 30; Fail "Installation npm impossible (detail : npm-install.log)." }
         }
     } finally { Pop-Location }
