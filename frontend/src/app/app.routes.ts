@@ -12,6 +12,7 @@ import { EtudiantComponent } from './pages/etudiant/etudiant.component';
 import { ProfesseurComponent } from './pages/professeur/professeur.component';
 import { RegistreComponent } from './pages/registre/registre.component';
 import { PresencesComponent } from './pages/presences/presences.component';
+import { FichesComponent } from './pages/fiches/fiches.component';
 import { guestGuard, roleGuard } from './core/auth.guard';
 
 export const routes: Routes = [
@@ -31,6 +32,8 @@ export const routes: Routes = [
   { path: 'gestion/knowledge-base', component: KnowledgeBaseComponent, canActivate: [roleGuard('ADMIN')] },
   { path: 'gestion/registre', component: RegistreComponent, canActivate: [roleGuard('ADMIN')] },
   { path: 'gestion/presences', component: PresencesComponent, canActivate: [roleGuard('ADMIN')] },
+  { path: 'gestion/fiches', component: FichesComponent, canActivate: [roleGuard('ADMIN')] },
+  { path: 'gestion/fiches/:id', component: FichesComponent, canActivate: [roleGuard('ADMIN')] },
 
   { path: '**', redirectTo: '/login' }
 ];

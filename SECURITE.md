@@ -69,6 +69,11 @@ et corrections apportées dans cette version.
   pas par un compte ; chaque passage est journalisé ; un badge ne peut appartenir qu'à un professeur.
 - **Export CSV** des présences protégé contre l'injection de formules Excel.
 
+## Fiches étudiants / professeurs
+
+`/api/admin/fiches` est réservé à l'administrateur (règle d'URL + `@PreAuthorize`). La fiche n'expose
+ni le mot de passe ni le contenu des conversations avec le chatbot (seulement leur nombre et leur date).
+
 ## Données de démonstration
 
 `DEMO_DATA=true` crée des comptes fictifs (CIN `99xxxxxx`) partageant le mot de passe
@@ -77,7 +82,7 @@ La valeur par défaut côté serveur (sans `.env`) est `false`.
 
 ## Tests automatisés
 
-- Backend : 22 tests (MockMvc + H2) couvrant l'inscription par CIN, l'import des notes (CSV/Excel),
+- Backend : 23 tests (MockMvc + H2) couvrant l'inscription par CIN, l'import des notes (CSV/Excel),
   les emplois du temps par filière/niveau, le pointage RFID, et l'accès anonyme, les tokens falsifiés,
   les droits par rôle, l'accès aux données d'autrui, l'usurpation dans le chat,
   le brute-force, la traversée de répertoire, les documents, les notifications.

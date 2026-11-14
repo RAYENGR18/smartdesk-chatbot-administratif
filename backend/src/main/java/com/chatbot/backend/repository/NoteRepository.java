@@ -23,4 +23,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     @Modifying
     @Query("UPDATE Note n SET n.professeur = null WHERE n.professeur.id = :userId")
     int detachProfesseur(@Param("userId") Long userId);
+
+    long countByProfesseurId(Long professeurId);
 }

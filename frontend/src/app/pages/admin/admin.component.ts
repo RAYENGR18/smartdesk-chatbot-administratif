@@ -601,5 +601,6 @@ export class AdminComponent implements OnInit {
   goToKnowledgeBase() { this.router.navigate(['/gestion/knowledge-base']); }
   goToRegistre() { this.router.navigate(['/gestion/registre']); }
   goToPresences() { this.router.navigate(['/gestion/presences']); }
+  goToFiches(id?: number) { this.router.navigate(id ? ['/gestion/fiches', id] : ['/gestion/fiches']); }
 }
 

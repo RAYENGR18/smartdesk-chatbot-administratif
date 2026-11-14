@@ -1,0 +1,348 @@
+<div class="page">
+  <header class="page-header no-print">
+    <button class="btn-back" (click)="retour()">← Retour</button>
+    <div>
+      <h1>Fiches étudiants et professeurs</h1>
+      <p class="subtitle">Toutes les informations d'une personne au même endroit : identité et CIN, registre,
+        scolarité, notes et moyennes, emploi du temps, documents ; pour un professeur, ses matières, son badge et ses présences.</p>
+    </div>
+  </header>
+
+  @if (erreur) { <div class="alert alert-err no-print">{{ erreur }}</div> }
+
+  <div class="layout">
+    <!-- ── Liste ─────────────────────────────────────────── -->
+    <aside class="liste no-print">
+      <div class="onglets">
+        <button [class.actif]="type === 'ETUDIANT'" (click)="changerType('ETUDIANT')">Étudiants</button>
+        <button [class.actif]="type === 'PROFESSEUR'" (click)="changerType('PROFESSEUR')">Professeurs</button>
+      </div>
+
+      <div class="filtres">
+        <input type="text" [(ngModel)]="recherche" (keyup.enter)="charger(0)"
+               placeholder="Nom, prénom, CIN, matricule…">
+        @if (type === 'ETUDIANT') {
+          <div class="row">
+            <select [(ngModel)]="filiereId" (change)="charger(0)">
+              <option [ngValue]="null">Toutes les filières</option>
+              @for (f of filieres; track f.id) { <option [ngValue]="f.id">{{ f.code }} — {{ f.nom }}</option> }
+            </select>
+            <select [(ngModel)]="niveau" (change)="charger(0)">
+              <option value="">Tous niveaux</option>
+              @for (n of niveaux; track n) { <option [value]="n">{{ n }}</option> }
+            </select>
+          </div>
+        }
+        <button class="btn primary" (click)="charger(0)">Rechercher</button>
+      </div>
+
+      <p class="compte">{{ total }} {{ type === 'ETUDIANT' ? 'étudiant(s)' : 'professeur(s)' }}</p>
+
+      <ul class="personnes">
+        @for (l of liste; track l.id) {
+          <li [class.selection]="selection === l.id" (click)="ouvrir(l.id)">
+            <span class="avatar" [class.prof]="type === 'PROFESSEUR'">{{ initiales(l) }}</span>
+            <span class="infos">
+              <strong>{{ l.prenom }} {{ l.nom }}</strong>
+              <span class="mono">{{ l.cin || 'CIN non renseigné' }}</span>
+              <span class="muted">
+                @if (type === 'ETUDIANT') { {{ l.filiere || '—' }} {{ l.niveau || '' }} }
+                @else { {{ l.departement || '—' }} · {{ l.nbMatieres }} matière(s) }
+              </span>
+            </span>
+            @if (type === 'ETUDIANT') {
+              <span class="pastille" [ngClass]="classeNote(l.moyenneGenerale)">
+                {{ l.moyenneGenerale !== null && l.moyenneGenerale !== undefined ? (l.moyenneGenerale | number:'1.2-2') : '—' }}
+              </span>
+            } @else {
+              <span class="pastille" [class.ok]="l.badge" title="Badge RFID">{{ l.badge ? 'Badge' : '—' }}</span>
+            }
+          </li>
+        }
+        @if (!chargementListe && liste.length === 0) {
+          <li class="vide">Aucun résultat.</li>
+        }
+      </ul>
+
+      @if (pages > 1) {
+        <div class="pager">
+          <button class="btn" [disabled]="page === 0" (click)="charger(page - 1)">‹</button>
+          <span>{{ page + 1 }} / {{ pages }}</span>
+          <button class="btn" [disabled]="page >= pages - 1" (click)="charger(page + 1)">›</button>
+        </div>
+      }
+    </aside>
+
+    <!-- ── Fiche ─────────────────────────────────────────── -->
+    <main class="fiche">
+      @if (!fiche && !chargementFiche) {
+        <div class="panel vide-fiche">Choisissez un étudiant ou un professeur dans la liste pour afficher sa fiche.</div>
+      }
+      @if (chargementFiche) { <div class="panel vide-fiche">Chargement de la fiche…</div> }
+
+      @if (fiche && !chargementFiche) {
+        @let id = fiche.identite;
+        <section class="panel entete">
+          <span class="avatar grand" [class.prof]="fiche.type === 'PROFESSEUR'">{{ initiales(id) }}</span>
+          <div class="titre">
+            <h2>{{ id.prenom }} {{ id.nom }}</h2>
+            <div class="row">
+              <span class="tag" [class.prof]="fiche.type === 'PROFESSEUR'">
+                {{ fiche.type === 'PROFESSEUR' ? 'Professeur' : fiche.type === 'ETUDIANT' ? 'Étudiant' : 'Administrateur' }}
+              </span>
+              @if (fiche.type === 'ETUDIANT' && fiche.scolarite?.filiere) {
+                <span class="tag neutre">{{ fiche.scolarite.filiere.nom }} · {{ fiche.scolarite.niveauLibelle || fiche.scolarite.niveau }}</span>
+              }
+              <span class="muted">{{ id.username }} · {{ id.email }}</span>
+            </div>
+          </div>
+          <div class="cin">
+            <span class="lbl">CIN</span>
+            <span class="val mono">{{ id.cin || '—' }}</span>
+          </div>
+          <button class="btn no-print" (click)="imprimer()">Imprimer</button>
+        </section>
+
+        <!-- Chiffres clés -->
+        @if (fiche.type === 'ETUDIANT') {
+          <section class="kpis">
+            <div class="kpi"><span class="val" [ngClass]="classeNote(fiche.moyenneGenerale)">{{ fiche.moyenneGenerale !== null ? (fiche.moyenneGenerale | number:'1.2-2') : '—' }}</span><span class="lbl">Moyenne générale</span></div>
+            <div class="kpi"><span class="val">{{ fiche.modulesValides }} / {{ fiche.modules }}</span><span class="lbl">Modules validés</span></div>
+            <div class="kpi"><span class="val">{{ fiche.notes.length }}</span><span class="lbl">Notes</span></div>
+            <div class="kpi"><span class="val">{{ fiche.emploiDuTemps.length }}</span><span class="lbl">Cours / semaine</span></div>
+          </section>
+        }
+        @if (fiche.type === 'PROFESSEUR') {
+          <section class="kpis">
+            <div class="kpi"><span class="val">{{ fiche.enseignement.matieres.length }}</span><span class="lbl">Matières</span></div>
+            <div class="kpi"><span class="val">{{ fiche.emploiDuTemps.length }}</span><span class="lbl">Cours / semaine</span></div>
+            <div class="kpi"><span class="val">{{ fiche.presence.joursPresents }}</span><span class="lbl">Jours présents (30 j)</span></div>
+            <div class="kpi"><span class="val">{{ fiche.presence.heuresTotales }}</span><span class="lbl">Heures pointées (30 j)</span></div>
+          </section>
+        }
+
+        <div class="deux-colonnes">
+          <!-- Identité -->
+          <section class="panel">
+            <h3>Identité</h3>
+            <dl class="grille">
+              <dt>CIN</dt><dd class="mono">{{ valeur(id.cin) }}</dd>
+              <dt>Nom</dt><dd>{{ valeur(id.nom) }}</dd>
+              <dt>Prénom</dt><dd>{{ valeur(id.prenom) }}</dd>
+              <dt>Naissance</dt><dd>{{ valeur(id.dateNaissance) }}{{ id.lieuNaissance ? ' à ' + id.lieuNaissance : '' }}</dd>
+              <dt>Genre</dt><dd>{{ valeur(id.genre) }}</dd>
+              <dt>Nationalité</dt><dd>{{ valeur(id.nationalite) }}</dd>
+              <dt>Téléphone</dt><dd>{{ valeur(id.telephone) }}</dd>
+              <dt>Adresse</dt><dd>{{ valeur(id.adresse) }}</dd>
+              <dt>Email</dt><dd>{{ valeur(id.email) }}</dd>
+              <dt>Identifiant</dt><dd class="mono">{{ id.username }}</dd>
+              @if (fiche.type === 'ETUDIANT') {
+                <dt>Père</dt><dd>{{ valeur(id.pere) }}</dd>
+                <dt>Mère</dt><dd>{{ valeur(id.mere) }}</dd>
+                <dt>Bac</dt><dd>{{ valeur(id.bac) }}</dd>
+                <dt>Bourse</dt><dd>{{ valeur(id.bourse) }}</dd>
+              } @else {
+                <dt>Département</dt><dd>{{ valeur(id.departement) }}</dd>
+                <dt>Spécialité</dt><dd>{{ valeur(id.specialite) }}</dd>
+              }
+              <dt>Compte créé le</dt><dd>{{ id.compteCreeLe ? (id.compteCreeLe | date:'dd/MM/yyyy HH:mm') : '—' }}</dd>
+            </dl>
+          </section>
+
+          <div class="colonne">
+            <!-- Registre -->
+            <section class="panel">
+              <h3>Registre de l'établissement</h3>
+              @if (fiche.registre.present === true) {
+                <div class="row">
+                  <span class="tag ok">CIN trouvé au registre</span>
+                  @if (fiche.registre.coherent) { <span class="tag ok">Informations concordantes</span> }
+                  @else { <span class="tag ko">Différences avec le registre</span> }
+                </div>
+                <dl class="grille petite">
+                  <dt>Nom au registre</dt><dd>{{ fiche.registre.prenom }} {{ fiche.registre.nom }}</dd>
+                  @if (fiche.type === 'ETUDIANT') {
+                    <dt>Filière / niveau</dt><dd>{{ valeur(fiche.registre.filiere) }} {{ fiche.registre.niveau || '' }}</dd>
+                    <dt>Matricule</dt><dd class="mono">{{ valeur(fiche.registre.matricule) }}</dd>
+                  } @else {
+                    <dt>Département</dt><dd>{{ valeur(fiche.registre.departement) }}</dd>
+                  }
+                  <dt>Source</dt><dd>{{ fiche.registre.mode === 'externe' ? 'Base de la faculté' : (fiche.registre.origine === 'DEMO' ? 'Démonstration' : 'Import') }}</dd>
+                </dl>
+              } @else if (fiche.registre.present === false) {
+                <span class="tag ko">CIN absent du registre</span>
+              } @else {
+                <span class="muted">{{ fiche.registre.erreur || 'Registre indisponible.' }}</span>
+              }
+            </section>
+
+            @if (fiche.type === 'ETUDIANT') {
+              <section class="panel">
+                <h3>Scolarité</h3>
+                <dl class="grille petite">
+                  <dt>Filière</dt><dd>{{ fiche.scolarite.filiere ? fiche.scolarite.filiere.code + ' — ' + fiche.scolarite.filiere.nom : '—' }}</dd>
+                  <dt>Niveau</dt><dd>{{ valeur(fiche.scolarite.niveauLibelle) }}</dd>
+                  <dt>Matricule</dt><dd class="mono">{{ valeur(fiche.scolarite.matricule) }}</dd>
+                  <dt>Année</dt><dd>{{ valeur(fiche.scolarite.anneeUniversitaire) }}</dd>
+                </dl>
+              </section>
+            }
+            @if (fiche.type === 'PROFESSEUR') {
+              <section class="panel">
+                <h3>Badge RFID</h3>
+                @if (fiche.presence.badge) {
+                  <span class="tag ok">Badge attribué</span> <span class="mono">{{ fiche.presence.badge }}</span>
+                } @else {
+                  <span class="tag ko">Aucun badge</span> <span class="muted">(à attribuer dans « Présences profs »)</span>
+                }
+              </section>
+            }
+
+            <section class="panel">
+              <h3>Activité</h3>
+              <dl class="grille petite">
+                <dt>Messages au chatbot</dt><dd>{{ fiche.chatbot.nbMessages }}</dd>
+                <dt>Dernier message</dt><dd>{{ fiche.chatbot.dernierMessage ? (fiche.chatbot.dernierMessage | date:'dd/MM/yyyy HH:mm') : '—' }}</dd>
+                <dt>Documents demandés</dt><dd>{{ fiche.documents.length }}</dd>
+              </dl>
+            </section>
+          </div>
+        </div>
+
+        <!-- Notes (étudiant) -->
+        @if (fiche.type === 'ETUDIANT') {
+          <section class="panel">
+            <h3>Notes et moyennes</h3>
+            @if (fiche.resultats.length === 0) {
+              <p class="muted">Aucune note pour le moment.</p>
+            } @else {
+              @let typesNotes = types(fiche.resultats);
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Matière</th><th>Coef.</th>
+                      @for (t of typesNotes; track t) { <th class="num">{{ t }}</th> }
+                      <th class="num">Moyenne</th><th>Résultat</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (r of fiche.resultats; track r.matiere) {
+                      <tr>
+                        <td>{{ r.matiere }} @if (r.code) { <span class="muted mono">{{ r.code }}</span> }</td>
+                        <td>{{ r.coefficient }}</td>
+                        @for (t of typesNotes; track t) {
+                          <td class="num">{{ r.notes[t] !== undefined && r.notes[t] !== null ? (r.notes[t] | number:'1.2-2') : '—' }}</td>
+                        }
+                        <td class="num"><strong [ngClass]="classeNote(r.moyenne)">{{ r.moyenne !== null ? (r.moyenne | number:'1.2-2') : '—' }}</strong></td>
+                        <td>@if (r.valide) { <span class="tag ok">Validé</span> } @else { <span class="tag ko">Non validé</span> }</td>
+                      </tr>
+                    }
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td [attr.colspan]="2 + typesNotes.length"><strong>Moyenne générale (pondérée par les coefficients)</strong></td>
+                      <td class="num"><strong [ngClass]="classeNote(fiche.moyenneGenerale)">{{ fiche.moyenneGenerale !== null ? (fiche.moyenneGenerale | number:'1.2-2') : '—' }}</strong></td>
+                      <td>{{ fiche.modulesValides }} / {{ fiche.modules }} validé(s)</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            }
+          </section>
+        }
+
+        <!-- Enseignement (professeur) -->
+        @if (fiche.type === 'PROFESSEUR') {
+          <section class="panel">
+            <h3>Enseignement</h3>
+            <p class="muted">Filières : {{ fiche.enseignement.filieres.length ? fiche.enseignement.filieres.join(', ') : '—' }}
+              · Notes saisies : {{ fiche.enseignement.notesSaisies }}</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Code</th><th>Matière</th><th>Filière</th><th>Niveau</th><th class="num">Volume horaire</th></tr></thead>
+                <tbody>
+                  @for (m of fiche.enseignement.matieres; track m.id) {
+                    <tr><td class="mono">{{ m.code }}</td><td>{{ m.nom }}</td><td>{{ valeur(m.filiere) }}</td>
+                      <td>{{ valeur(m.niveau) }}</td><td class="num">{{ m.volumeHoraire ? m.volumeHoraire + ' h' : '—' }}</td></tr>
+                  }
+                  @if (fiche.enseignement.matieres.length === 0) { <tr><td colspan="5" class="vide">Aucune matière affectée.</td></tr> }
+                </tbody>
+              </table>
+            </div>
+          </section>
+        }
+
+        <!-- Emploi du temps -->
+        <section class="panel">
+          <h3>Emploi du temps</h3>
+          @if (fiche.emploiDuTemps.length === 0) {
+            <p class="muted">Aucun cours planifié.</p>
+          } @else {
+            <div class="semaine">
+              @for (j of joursAvecCours(); track j) {
+                <div class="jour">
+                  <h4>{{ j.charAt(0) + j.slice(1).toLowerCase() }}</h4>
+                  @for (c of creneauxDu(j); track $index) {
+                    <div class="cours">
+                      <span class="heure">{{ c.heureDebut }} – {{ c.heureFin }}</span>
+                      <strong>{{ c.matiere }}</strong>
+                      <span class="muted">{{ c.salle }}@if (fiche.type === 'PROFESSEUR') { · {{ c.groupe }} } @else { · {{ c.professeur || 'Professeur à définir' }} }</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </section>
+
+        <!-- Présences (professeur) -->
+        @if (fiche.type === 'PROFESSEUR') {
+          <section class="panel">
+            <h3>Présences des 30 derniers jours</h3>
+            <p class="muted">{{ fiche.presence.joursPresents }} jour(s) · {{ fiche.presence.heuresTotales }} pointées
+              @if (fiche.presence.departsNonPointes > 0) { · {{ fiche.presence.departsNonPointes }} départ(s) non pointé(s) }</p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Date</th><th>Arrivée</th><th>Départ</th><th>Durée</th><th>Statut</th></tr></thead>
+                <tbody>
+                  @for (p of fiche.presence.historique; track p.id) {
+                    <tr>
+                      <td>{{ jourSemaine(p.date) }} {{ p.date | date:'dd/MM/yyyy' }}</td>
+                      <td class="mono">{{ p.heureArrivee }}</td>
+                      <td class="mono">{{ p.heureDepart || '—' }}</td>
+                      <td>{{ p.duree || '—' }}</td>
+                      <td><span class="tag" [class.ok]="p.statut === 'TERMINE'" [class.ko]="p.statut === 'DEPART_NON_POINTE'">{{ libelleStatut(p.statut) }}</span></td>
+                    </tr>
+                  }
+                  @if (fiche.presence.historique.length === 0) { <tr><td colspan="5" class="vide">Aucun passage de badge sur la période.</td></tr> }
+                </tbody>
+              </table>
+            </div>
+          </section>
+        }
+
+        <!-- Documents -->
+        <section class="panel">
+          <h3>Documents demandés</h3>
+          @if (fiche.documents.length === 0) {
+            <p class="muted">Aucun document demandé.</p>
+          } @else {
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Date</th><th>Document</th><th>Format</th><th>Statut</th></tr></thead>
+                <tbody>
+                  @for (d of fiche.documents; track d.id) {
+                    <tr><td>{{ d.date | date:'dd/MM/yyyy HH:mm' }}</td><td>{{ d.type }}</td><td>{{ valeur(d.format) }}</td><td>{{ valeur(d.statut) }}</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </section>
+
+        <p class="pied muted">Fiche éditée le {{ aujourdhui | date:'dd/MM/yyyy HH:mm' }} — SmartDesk</p>
+      }
+    </main>
+  </div>
+</div>

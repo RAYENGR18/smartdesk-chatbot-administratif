@@ -20,4 +20,9 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
 
     @Query("SELECT m FROM ChatMessage m WHERE m.user.id = :userId ORDER BY m.createdAt DESC")
     List<ChatMessage> findRecentByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    long countByUserId(Long userId);
+
+    @org.springframework.data.jpa.repository.Query("SELECT MAX(c.createdAt) FROM ChatMessage c WHERE c.user.id = :userId")
+    java.time.LocalDateTime findDernierMessage(@org.springframework.data.repository.query.Param("userId") Long userId);
 }

@@ -993,3 +993,15 @@ tr:hover td { background: var(--bg-surface); }
 .ni-example-table tr:last-child td { border-bottom: none; }
 [data-theme="light"] .ni-example-table th { background: #eef2ff; color: #4338ca; }
 [data-theme="light"] .ni-example-table td { background: #fff; }
+.btn-fiche-sm {
+  padding: 6px 12px;
+  margin-right: 6px;
+  background: var(--primary-soft, rgba(79,110,247,0.10));
+  border: 1px solid rgba(79,110,247,0.22);
+  color: var(--primary, #4f6ef7);
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-fiche-sm:hover { background: rgba(79,110,247,0.18); }

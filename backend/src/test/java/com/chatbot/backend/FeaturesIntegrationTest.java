@@ -247,6 +247,53 @@ class FeaturesIntegrationTest {
                 .andExpect(jsonPath("$.creneauxCrees").value(0));
     }
 
+    @Test
+    void fichesEtudiantEtProfesseur() throws Exception {
+        mvc.perform(post("/api/admin/registre/demo").header("Authorization", b(admin))).andExpect(status().isOk());
+
+        // Recherche par CIN
+        MvcResult r = mvc.perform(get("/api/admin/fiches").param("type", "ETUDIANT").param("q", "99000102")
+                        .header("Authorization", b(admin)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value(1))
+                .andExpect(jsonPath("$.contenu[0].nom").value("Trabelsi"))
+                .andExpect(jsonPath("$.contenu[0].moyenneGenerale").isNumber())
+                .andReturn();
+        long etuId = json.readTree(r.getResponse().getContentAsString()).get("contenu").get(0).get("id").asLong();
+
+        mvc.perform(get("/api/admin/fiches/" + etuId).header("Authorization", b(admin)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.type").value("ETUDIANT"))
+                .andExpect(jsonPath("$.identite.cin").value("99000102"))
+                .andExpect(jsonPath("$.registre.present").value(true))
+                .andExpect(jsonPath("$.registre.coherent").value(true))
+                .andExpect(jsonPath("$.scolarite.filiere.code").value("INFO"))
+                .andExpect(jsonPath("$.notes.length()").value(org.hamcrest.Matchers.greaterThan(0)))
+                .andExpect(jsonPath("$.resultats.length()").value(org.hamcrest.Matchers.greaterThan(0)))
+                .andExpect(jsonPath("$.moyenneGenerale").isNumber())
+                .andExpect(jsonPath("$.emploiDuTemps.length()").value(org.hamcrest.Matchers.greaterThan(0)))
+                .andExpect(jsonPath("$.identite.password").doesNotExist());
+
+        // Fiche professeur : matières, emploi du temps, badge et présences
+        r = mvc.perform(get("/api/admin/fiches").param("type", "PROFESSEUR").param("q", "haddad")
+                        .header("Authorization", b(admin)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.total").value(1)).andReturn();
+        long profId = json.readTree(r.getResponse().getContentAsString()).get("contenu").get(0).get("id").asLong();
+        mvc.perform(get("/api/admin/fiches/" + profId).header("Authorization", b(admin)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.type").value("PROFESSEUR"))
+                .andExpect(jsonPath("$.enseignement.matieres.length()").value(org.hamcrest.Matchers.greaterThan(0)))
+                .andExpect(jsonPath("$.emploiDuTemps.length()").value(org.hamcrest.Matchers.greaterThan(0)))
+                .andExpect(jsonPath("$.presence.badge").isNotEmpty())
+                .andExpect(jsonPath("$.presence.historique.length()").value(org.hamcrest.Matchers.greaterThan(0)));
+
+        // Réservé à l'administration
+        String etu = login("yasmine.trabelsi", "Demo2026");
+        mvc.perform(get("/api/admin/fiches").header("Authorization", b(etu))).andExpect(status().isForbidden());
+        mvc.perform(get("/api/admin/fiches/" + etuId).header("Authorization", b(etu))).andExpect(status().isForbidden());
+        mvc.perform(get("/api/admin/fiches/999999").header("Authorization", b(admin))).andExpect(status().isNotFound());
+    }
+
     // ── Modification 2 : import des notes ─────────────────────────────
 
     @Test

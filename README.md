@@ -10,7 +10,7 @@ filières, salles et matières, inscription vérifiée par le CIN et pointage RF
 |--------|-----------------|
 | Étudiant | Inscription vérifiée par CIN, profil, **emploi du temps de sa filière et de son niveau**, **ses notes**, notifications, chatbot (RAG), génération de documents |
 | Professeur | Inscription vérifiée par CIN, profil, son emploi du temps, notifications, chatbot, documents |
-| Administrateur | Tableau de bord, **registre de l'établissement** (import Excel/CSV ou démo), utilisateurs, filières, matières (par niveau), salles, emplois du temps (génération par filière et niveau), **import des notes**, base de connaissances du chatbot, notifications, **présence des professeurs (RFID)** |
+| Administrateur | Tableau de bord, **fiches complètes des étudiants et des professeurs** (CIN, identité, notes et moyennes, emploi du temps, présences, documents — imprimables), **registre de l'établissement** (import Excel/CSV ou démo), utilisateurs, filières, matières (par niveau), salles, emplois du temps (génération par filière et niveau), **import des notes**, base de connaissances du chatbot, notifications, **présence des professeurs (RFID)** |
 
 > Projet de fin d'études 2025/2026 de **Rania Gregba** et **Asma Mbarek**
 > ([dépôt d'origine](https://github.com/rania-gregba/projet-pfe-rania)).
@@ -113,7 +113,7 @@ Il contient les secrets (mot de passe de la base, clé JWT, clé Groq…) et **n
 ## Tests
 
 ```powershell
-# Backend : 22 tests (sécurité, compte admin, inscription par CIN, notes, emplois du temps, RFID — base H2 en mémoire)
+# Backend : 23 tests (sécurité, compte admin, fiches, inscription par CIN, notes, emplois du temps, RFID — base H2 en mémoire)
 cd backend; .\mvnw.cmd test
 
 # Service NLP : 10 tests (clé d'API, chemins de fichiers, base de connaissances)

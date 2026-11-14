@@ -69,6 +69,10 @@ Tous les comptes de démonstration suivent le modèle `prenom.nom`, avec le mot 
 *Ben Salah / Amine / CIN 99000101 / Informatique / Licence 1* (accepté), puis le même
 avec une autre filière ou un CIN inventé (refusé). Pour un professeur : *Saidi / Mounir / 99000209*.
 
+**Fiches** : en administrateur, menu *Fiches étudiants / profs* (ou bouton « Fiche » dans la liste
+des utilisateurs) : CIN, identité, registre, notes et moyennes, emploi du temps, documents ; pour un
+professeur, ses matières, son badge et ses présences. Bouton « Imprimer » pour une version papier.
+
 ## 6. Ce que contient la démonstration
 
 - 4 filières (Informatique, Chimie, Mathématiques appliquées, Gestion), 22 matières, 8 salles
