@@ -69,7 +69,7 @@ td.vide { text-align: center; color: var(--text-muted, #94a3b8); }
 .ok { color: var(--success-text, #065f46); }
 .ko { color: var(--danger-text, #b91c1c); }
 
-.semaine { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.semaine { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
 .jour { background: var(--bg-surface, #f5f7fc); border-radius: 12px; padding: 10px; }
 .jour h4 { margin: 0 0 8px; font-size: .9rem; color: var(--text-secondary, #475569); }
 .cours { background: var(--bg-card, #fff); border-left: 3px solid var(--primary, #4f6ef7); border-radius: 8px; padding: 7px 9px; margin-bottom: 7px; display: flex; flex-direction: column; gap: 2px; font-size: .85rem; }

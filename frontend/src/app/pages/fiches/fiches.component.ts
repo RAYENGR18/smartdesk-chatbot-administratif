@@ -88,6 +88,8 @@ export class FichesComponent implements OnInit {
       next: (f) => {
         this.fiche = f;
         this.chargementFiche = false;
+        // Remonte en haut de la fiche (utile quand on choisit quelqu'un en bas de la liste)
+        setTimeout(() => document.querySelector('.fiche')?.scrollIntoView({ block: 'start', behavior: 'smooth' }));
         if (f.type === 'PROFESSEUR' && this.type !== 'PROFESSEUR') { this.type = 'PROFESSEUR'; this.charger(0); }
         if (f.type === 'ETUDIANT' && this.type !== 'ETUDIANT') { this.type = 'ETUDIANT'; this.charger(0); }
       },
