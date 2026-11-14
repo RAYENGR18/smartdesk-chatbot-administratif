@@ -40,12 +40,14 @@ if ($envValues["NLP_URL"] -match ':(\d+)/?$') { $nlpPort = [int]$Matches[1] }
 $frontPort = 61748
 
 # Un port deja occupe empeche un service de demarrer : on le dit clairement
-function Test-PortLibre([int]$port, [string]$name) {
+function Test-PortLibre([int]$port, [string]$name, [switch]$Silencieux) {
     $conn = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
     if (-not $conn) { return $true }
-    $proc = Get-Process -Id $conn.OwningProcess -ErrorAction SilentlyContinue
-    $who = if ($proc) { "$($proc.ProcessName) (PID $($proc.Id))" } else { "PID $($conn.OwningProcess)" }
-    Write-Host "    [!] Le port $port ($name) est deja utilise par $who." -ForegroundColor Yellow
+    if (-not $Silencieux) {
+        $proc = Get-Process -Id $conn.OwningProcess -ErrorAction SilentlyContinue
+        $who = if ($proc) { "$($proc.ProcessName) (PID $($proc.Id))" } else { "PID $($conn.OwningProcess)" }
+        Write-Host "    [!] Le port $port ($name) est deja utilise par $who." -ForegroundColor Yellow
+    }
     return $false
 }
 
@@ -63,9 +65,9 @@ function Wait-Url([string]$url, [string]$name, [int]$timeoutSec) {
 }
 
 Write-Host "==> Verification des ports" -ForegroundColor Cyan
-$nlpLibre = Test-PortLibre $nlpPort "service NLP"
+$nlpLibre = Test-PortLibre $nlpPort "service NLP" -Silencieux
 $backendLibre = Test-PortLibre $backendPort "backend"
-$frontLibre = Test-PortLibre $frontPort "frontend"
+$frontLibre = Test-PortLibre $frontPort "frontend" -Silencieux
 if (-not $backendLibre) {
     Write-Host "    Si c'est l'ancienne fenetre 'SmartDesk - Backend', fermez-la puis relancez scripts\demarrer.cmd." -ForegroundColor Yellow
     Write-Host "    Sinon, choisissez un autre port pour le backend dans .env (SERVER_PORT=8096 par exemple)." -ForegroundColor Yellow
