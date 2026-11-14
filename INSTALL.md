@@ -88,5 +88,6 @@ npm start
 | « Ce numéro de CIN ne figure pas dans la base de l'établissement » | Le CIN n'est pas dans le registre : importez-le (Admin → Registre) ou chargez la démo |
 | L'import des notes ignore des lignes « aucun compte étudiant » | L'étudiant de ce CIN n'a pas encore créé son compte : il faut qu'il s'inscrive d'abord |
 | `pointage.cmd` : « Aucun port série détecté » | Branchez l'Arduino, fermez le moniteur série de l'IDE Arduino, ou indiquez le port : `pointage.cmd --port COM3` |
+| Mot de passe admin oublié | Mettez un nouveau mot de passe (8 caractères minimum) sur la ligne `ADMIN_PASSWORD=` du fichier `.env`, fermez la fenêtre « SmartDesk - Backend » et relancez `scripts\demarrer.cmd` |
 | « Trop de tentatives » à la connexion | Protection anti brute-force : attendez 15 minutes ou redémarrez le backend |
 | Mot de passe admin perdu | Dans psql (base `chatbot_db`) : `DELETE FROM chat_messages WHERE user_id = (SELECT id FROM users WHERE username='admin'); DELETE FROM documents WHERE user_id = (SELECT id FROM users WHERE username='admin'); DELETE FROM users WHERE username='admin';` puis redémarrez le backend : le compte est recréé avec `ADMIN_PASSWORD` du `.env` |

@@ -66,15 +66,15 @@ Write-Host "==> Verification des ports" -ForegroundColor Cyan
 $nlpLibre = Test-PortLibre $nlpPort "service NLP"
 $backendLibre = Test-PortLibre $backendPort "backend"
 $frontLibre = Test-PortLibre $frontPort "frontend"
-if (-not $backendLibre -or -not $frontLibre) {
-    Write-Host "    Si ce sont d'anciennes fenetres SmartDesk, fermez-les puis relancez scripts\demarrer.cmd." -ForegroundColor Yellow
-    if (-not $backendLibre) {
-        Write-Host "    Sinon, choisissez un autre port pour le backend dans .env (SERVER_PORT=8096 par exemple)." -ForegroundColor Yellow
-    }
+if (-not $backendLibre) {
+    Write-Host "    Si c'est l'ancienne fenetre 'SmartDesk - Backend', fermez-la puis relancez scripts\demarrer.cmd." -ForegroundColor Yellow
+    Write-Host "    Sinon, choisissez un autre port pour le backend dans .env (SERVER_PORT=8096 par exemple)." -ForegroundColor Yellow
     try { Stop-Transcript | Out-Null } catch { }
     exit 1
 }
+# Pour redemarrer seulement le backend : fermez sa fenetre et relancez demarrer.cmd
 if (-not $nlpLibre) { Write-Host "    (le service NLP tourne deja : il ne sera pas relance)" -ForegroundColor Gray }
+if (-not $frontLibre) { Write-Host "    (le frontend tourne deja : il ne sera pas relance)" -ForegroundColor Gray }
 
 if ($nlpLibre) {
 Write-Host "==> Demarrage du service NLP (le premier lancement telecharge le modele, ~500 Mo)" -ForegroundColor Cyan

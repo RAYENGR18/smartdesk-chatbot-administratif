@@ -71,7 +71,7 @@ et corrections apportées dans cette version.
 
 ## Tests automatisés
 
-- Backend : 21 tests (MockMvc + H2) couvrant l'inscription par CIN, l'import des notes (CSV/Excel),
+- Backend : 22 tests (MockMvc + H2) couvrant l'inscription par CIN, l'import des notes (CSV/Excel),
   les emplois du temps par filière/niveau, le pointage RFID, et l'accès anonyme, les tokens falsifiés,
   les droits par rôle, l'accès aux données d'autrui, l'usurpation dans le chat,
   le brute-force, la traversée de répertoire, les documents, les notifications.

@@ -48,7 +48,8 @@ app:
   documents:
     dir: ${DOCUMENTS_DIR:./documents}
   admin:
-    # Compte admin créé au premier démarrage seulement (jamais écrasé ensuite)
+    # Compte admin créé au premier démarrage. Modifier ADMIN_PASSWORD puis redémarrer
+    # le backend change le mot de passe du compte (sinon il n'est jamais touché).
     username: ${ADMIN_USERNAME:admin}
     email: ${ADMIN_EMAIL:admin@fpst.tn}
     password: ${ADMIN_PASSWORD:}

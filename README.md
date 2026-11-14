@@ -115,7 +115,7 @@ Il contient les secrets (mot de passe de la base, clé JWT, clé Groq…) et **n
 ## Tests
 
 ```powershell
-# Backend : 21 tests (sécurité, inscription par CIN, notes, emplois du temps, RFID — base H2 en mémoire)
+# Backend : 22 tests (sécurité, compte admin, inscription par CIN, notes, emplois du temps, RFID — base H2 en mémoire)
 cd backend; .\mvnw.cmd test
 
 # Service NLP : 10 tests (clé d'API, chemins de fichiers, base de connaissances)
